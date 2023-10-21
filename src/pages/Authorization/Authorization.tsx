@@ -1,13 +1,21 @@
 import { Button, Form, Space, Typography } from "antd";
 
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import TransparentInput from "@components/TransparentInput/TransparentInput";
 
 import styles from "./Authorization.module.scss";
+import { fetchPostTest } from "../../api/test/apiTest";
+import { Post } from "../../api/test/types";
 
 export const Authorization: React.FC = () => {
   const [form] = Form.useForm();
+
+  const [post, setPost] = useState<Post>();
+
+  useEffect(() => {
+    fetchPostTest({ id: 1 }).then((data) => setPost(data));
+  }, []);
 
   const onFormChanged = useCallback(() => {}, []);
 
@@ -46,6 +54,7 @@ export const Authorization: React.FC = () => {
           </Button>
         </Form.Item>
       </Form>
+      {post && post.title}
     </div>
   );
 };
