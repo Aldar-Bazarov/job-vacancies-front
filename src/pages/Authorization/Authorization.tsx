@@ -2,9 +2,8 @@ import { Button, Form, Space, Typography } from "antd";
 
 import { useCallback } from "react";
 
-import TransparentInput from "../../components/TransparentInput/TransparentInput";
-
 import styles from "./Authorization.module.scss";
+import TransparentInput from "../../components/TransparentInput/TransparentInput";
 
 export const Authorization: React.FC = () => {
   const [form] = Form.useForm();
@@ -19,7 +18,7 @@ export const Authorization: React.FC = () => {
         labelWrap
         size="small"
         labelAlign="left"
-        className={styles["authorization__form"]}
+        className={styles["authorization-form"]}
         onValuesChange={onFormChanged}
         layout={"vertical"}
       >
@@ -40,7 +39,7 @@ export const Authorization: React.FC = () => {
           <Button
             type="primary"
             block
-            className={styles["authorization__form__button"]}
+            className={styles["authorization-form-button"]}
           >
             Войти
           </Button>

@@ -1,6 +1,6 @@
 import { ConfigProvider } from "antd";
-
 import ReactDOM from "react-dom/client";
+
 import React from "react";
 import { BrowserRouter } from "react-router-dom";
 

@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 
-import { Registration } from "./pages/Registration/Registration";
 import { Authorization } from "./pages/Authorization/Authorization";
+import { Registration } from "./pages/Registration/Registration";
 
 const App: React.FC = () => {
   return (

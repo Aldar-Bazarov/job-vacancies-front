@@ -2,9 +2,8 @@ import { Button, Checkbox, Form, Space, Typography } from "antd";
 
 import { useCallback } from "react";
 
-import TransparentInput from "../../components/TransparentInput/TransparentInput";
-
 import styles from "./Registration.module.scss";
+import TransparentInput from "../../components/TransparentInput/TransparentInput";
 
 export const Registration: React.FC = () => {
   const [form] = Form.useForm();
@@ -19,7 +18,7 @@ export const Registration: React.FC = () => {
         labelWrap
         size="small"
         labelAlign="left"
-        className={styles["registration__form"]}
+        className={styles["registration-form"]}
         onValuesChange={onFormChanged}
         layout={"vertical"}
       >
@@ -49,7 +48,7 @@ export const Registration: React.FC = () => {
           <Button
             type="primary"
             block
-            className={styles["registration__form__button"]}
+            className={styles["registration-form-button"]}
           >
             Зарегистрироваться
           </Button>
