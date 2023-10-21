@@ -27,14 +27,19 @@ module.exports = {
     "import/order": [
       "error",
       {
-        groups: ["builtin", "external", "internal", ["parent", "sibling"]],
         pathGroups: [
           {
             pattern: "react*",
             group: "external",
             position: "after",
           },
+          {
+            pattern: "@*/**",
+            group: "external",
+            position: "after",
+          },
         ],
+        groups: ["builtin", "external", "internal", ["parent", "sibling"], "index"],
         pathGroupsExcludedImportTypes: ["react"],
         "newlines-between": "always",
         alphabetize: {

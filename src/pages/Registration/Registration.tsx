@@ -2,8 +2,9 @@ import { Button, Checkbox, Form, Space, Typography } from "antd";
 
 import { useCallback } from "react";
 
+import TransparentInput from "@components/TransparentInput/TransparentInput";
+
 import styles from "./Registration.module.scss";
-import TransparentInput from "../../components/TransparentInput/TransparentInput";
 
 export const Registration: React.FC = () => {
   const [form] = Form.useForm();
