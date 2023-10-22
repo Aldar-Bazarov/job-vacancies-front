@@ -7,8 +7,12 @@ export default defineConfig({
   plugins: [react(), eslint()],
   resolve: {
     alias: {
+      "@api": "/src/api",
+      "@hoc": "/src/hoc",
+      "@hooks": "/src/hooks",
+      "@pages": "/src/pages",
       "@components": "/src/components",
-      "@pages": "/src/pages"
+      "@infrastructure": "/src/infrastructure"
     }
   }
 });

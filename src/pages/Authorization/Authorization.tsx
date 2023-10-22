@@ -1,35 +1,51 @@
-import { Button, Form, Space, Typography } from "antd";
+import { Button, Form, Space, Typography, message } from "antd";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
+import { authorizeApplicant } from "@api/auth/auth.api";
+import Loader from "@components/Loader/Loader";
 import TransparentInput from "@components/TransparentInput/TransparentInput";
+import { setAuthenticate } from "@infrastructure/axios/auth";
 
 import styles from "./Authorization.module.scss";
-import { fetchPostTest } from "../../api/test/apiTest";
-import { Post } from "../../api/test/types";
 
 export const Authorization: React.FC = () => {
-  const [form] = Form.useForm();
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  const [post, setPost] = useState<Post>();
+  const fromPage = location.state?.from?.pathname || "/";
 
-  useEffect(() => {
-    fetchPostTest({ id: 1 }).then((data) => setPost(data));
-  }, []);
+  const [authorizationForm] = Form.useForm();
+  const [loading, setLoading] = useState(false);
 
-  const onFormChanged = useCallback(() => {}, []);
+  const onFinish = useCallback(() => {
+    setLoading(true);
+    const userData = authorizationForm.getFieldsValue();
+    authorizeApplicant(userData)
+      .then((data) => {
+        localStorage.setItem("access_token", data.access_token);
+        localStorage.setItem("refresh_token", data.refresh_token);
+        setAuthenticate();
+        navigate(fromPage, { replace: true });
+      })
+      .catch((error) => {
+        message.error(error.message);
+      })
+      .finally(() => setLoading(false));
+  }, [authorizationForm, fromPage, navigate]);
 
   return (
     <div className={styles["authorization"]}>
       <Form
-        form={form}
+        form={authorizationForm}
         colon={false}
         labelWrap
         size="small"
         labelAlign="left"
         className={styles["authorization-form"]}
-        onValuesChange={onFormChanged}
         layout={"vertical"}
+        onFinish={onFinish}
       >
         <Typography.Title>Авторизация</Typography.Title>
         <Space direction="vertical">
@@ -38,23 +54,32 @@ export const Authorization: React.FC = () => {
             Вы можете <a>Зарегистрироваться здесь!</a>
           </Typography>
         </Space>
-        <Form.Item label="Email">
-          <TransparentInput placeholder="Введите почту" />
+        <Form.Item
+          label="Username"
+          name="username"
+          rules={[{ required: true, message: "Поле логин обязательно!" }]}
+        >
+          <TransparentInput placeholder="Введите логин" />
         </Form.Item>
-        <Form.Item label="Password">
+        <Form.Item
+          label="Password"
+          name="password"
+          rules={[{ required: true, message: "Поле пароль обязательно!" }]}
+        >
           <TransparentInput placeholder="Введите пароль" />
         </Form.Item>
         <Form.Item>
           <Button
-            type="primary"
             block
+            type="primary"
+            htmlType="submit"
             className={styles["authorization-form-button"]}
           >
             Войти
           </Button>
         </Form.Item>
       </Form>
-      {post && post.title}
+      <Loader active={loading} />
     </div>
   );
 };

@@ -22,8 +22,12 @@
 
     "baseUrl": "./src",
     "paths": {
+      "@api/*": ["api/*"],
+      "@hoc/*": ["hoc/*"],
+      "@hooks/*": ["hooks/*"],
       "@pages/*": ["pages/*"],
-      "@components/*": ["components/*"]
+      "@components/*": ["components/*"],
+      "@infrastructure/*": ["infrastructure/*"],
     }
   },
   "include": ["src"],

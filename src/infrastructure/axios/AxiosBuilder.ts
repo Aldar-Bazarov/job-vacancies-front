@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 
+import { ClearAuthenticate } from "./auth";
 import { getBaseApi } from "../config";
 
 export default class AxiosBuilder {
@@ -33,6 +34,17 @@ export default class AxiosBuilder {
   addBusinessErrorHandler(): AxiosBuilder {
     this.errorInterceptors.push((error: any) => {
       if (error.response && error.response.status === 500) {
+        return Promise.reject(error.response.data);
+      }
+      return Promise.resolve(error);
+    });
+    return this;
+  }
+
+  addUnauthorizedHandler(): AxiosBuilder {
+    this.errorInterceptors.push((error: any) => {
+      if (error.response && error.response.status === 401) {
+        ClearAuthenticate();
         return Promise.reject(error.response.data);
       }
       return Promise.resolve(error);
