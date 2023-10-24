@@ -27,6 +27,7 @@
       "@hooks/*": ["hooks/*"],
       "@pages/*": ["pages/*"],
       "@components/*": ["components/*"],
+      "@interfaces/*": ["interfaces/*"],
       "@infrastructure/*": ["infrastructure/*"],
     }
   },

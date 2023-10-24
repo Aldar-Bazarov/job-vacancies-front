@@ -12,6 +12,7 @@ export default defineConfig({
       "@hooks": "/src/hooks",
       "@pages": "/src/pages",
       "@components": "/src/components",
+      "@interfaces": "/src/interfaces",
       "@infrastructure": "/src/infrastructure"
     }
   }

@@ -1,25 +1,28 @@
 import { Route, Routes } from "react-router-dom";
 
+import { Layout } from "@components/Layout/Layout";
 import { RequireAuth } from "@hoc/RequireAuth";
 import { Authorization } from "@pages/Authorization/Authorization";
 import { Home } from "@pages/Home/Home";
+import { MyProfile } from "@pages/MyProfile/MyProfile";
 import { Registration } from "@pages/Registration/Registration";
-import { UserInfo } from "@pages/UserInfo/UserInfo";
 
 const App: React.FC = () => {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="registration" element={<Registration />} />
+      <Route path="/" element={<Layout />}>
+        <Route index element={<Home />} />
+        <Route
+          path="profile"
+          element={
+            <RequireAuth>
+              <MyProfile />
+            </RequireAuth>
+          }
+        />
+      </Route>
+      <Route path="register" element={<Registration />} />
       <Route path="auth" element={<Authorization />} />
-      <Route
-        path="user"
-        element={
-          <RequireAuth>
-            <UserInfo />
-          </RequireAuth>
-        }
-      />
     </Routes>
   );
 };

@@ -1,0 +1,14 @@
+    .header {
+        display: flex;
+        justify-content: space-between;
+        text-align: center;
+        height: 64px;
+        padding-inline: 50px;
+        line-height: 64px;
+        background-color: #fff;
+
+        .header-buttons {
+            display: flex;
+            column-gap: 20px;
+        }
+    }

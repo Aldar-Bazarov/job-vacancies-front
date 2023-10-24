@@ -1,6 +1,7 @@
+import { AxiosBuilder, unpack } from "@infrastructure/index";
+
 import { AuthorizeError, LogoutError, RefreshError } from "./errors";
 import { AuthInfo, AuthContext } from "./types";
-import { AxiosBuilder, unpack } from "../../infrastructure";
 
 const axios = new AxiosBuilder()
   .addBusinessErrorHandler()
@@ -37,7 +38,7 @@ export async function authorizeRecruiter(
   }
 }
 
-export async function refreshToken(): Promise<AuthInfo> {
+export async function refreshTokenRequest(): Promise<AuthInfo> {
   try {
     const response = await axios.put<AuthInfo>("/auth/tokens");
     return unpack(response);

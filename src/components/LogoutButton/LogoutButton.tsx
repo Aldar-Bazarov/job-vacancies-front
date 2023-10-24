@@ -4,15 +4,15 @@ import React, { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { logout } from "@api/auth/auth.api";
-import { ClearAuthenticate } from "@infrastructure/axios/auth";
+import { clearAuthenticate } from "@infrastructure/axios/auth";
 
-const Logout: React.FunctionComponent = () => {
+const LogoutButton: React.FunctionComponent = () => {
   const navigate = useNavigate();
 
   const click = useCallback(async () => {
+    clearAuthenticate();
     await logout()
       .then(() => {
-        ClearAuthenticate();
         navigate("/", { replace: true });
       })
       .catch((error) => {
@@ -21,10 +21,10 @@ const Logout: React.FunctionComponent = () => {
   }, [navigate]);
 
   return (
-    <Button onClick={click} type="link">
+    <Button onClick={click} type="primary">
       Выйти
     </Button>
   );
 };
 
-export default Logout;
+export default LogoutButton;

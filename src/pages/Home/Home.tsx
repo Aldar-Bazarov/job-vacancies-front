@@ -1,24 +1,15 @@
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+
+import { isAuthenticated } from "@infrastructure/axios/auth";
 
 import styles from "./Home.module.scss";
 
 export const Home: React.FC = () => {
-  return (
-    <div className={styles["home"]}>
-      Домашнаяя страница приложения
-      <nav>
-        <ul>
-          <li>
-            <Link to={`auth`}>Войти</Link>
-          </li>
-          <li>
-            <Link to={`registration`}>Зарегистрироваться</Link>
-          </li>
-          <li>
-            <Link to={`user`}>Пользователь</Link>
-          </li>
-        </ul>
-      </nav>
-    </div>
-  );
+  const [isAuth, setAuth] = useState(isAuthenticated());
+
+  useEffect(() => {
+    setAuth(isAuthenticated());
+  }, [isAuth]);
+
+  return <div className={styles["home"]}>Тут будет инфа о нашем сервисе</div>;
 };

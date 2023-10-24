@@ -1,4 +1,5 @@
 import { Button, Form, Space, Typography, message } from "antd";
+import Cookies from "js-cookie";
 
 import { useCallback, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -24,9 +25,8 @@ export const Authorization: React.FC = () => {
     const userData = authorizationForm.getFieldsValue();
     authorizeApplicant(userData)
       .then((data) => {
-        localStorage.setItem("access_token", data.access_token);
-        localStorage.setItem("refresh_token", data.refresh_token);
-        setAuthenticate();
+        setAuthenticate(data.access_token);
+        Cookies.set("refreshToken", data.refresh_token);
         navigate(fromPage, { replace: true });
       })
       .catch((error) => {
