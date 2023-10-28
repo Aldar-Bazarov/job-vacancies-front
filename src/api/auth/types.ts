@@ -1,6 +1,9 @@
+import { Role } from "@interfaces/user";
+
 export interface AuthContext {
   username: string;
   password: string;
+  role: Role;
 }
 
 export interface RefreshContext {

@@ -1,5 +1,6 @@
 import { Button } from "antd";
 
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import LogoutButton from "@components/LogoutButton/LogoutButton";
@@ -7,8 +8,12 @@ import { isAuthenticated } from "@infrastructure/axios/auth";
 
 import styles from "./Header.module.scss";
 
-export const Header = () => {
-  const isAuth = isAuthenticated();
+export const Header: React.FC = () => {
+  const [isAuth, setAuth] = useState<boolean>();
+
+  useEffect(() => {
+    setAuth(isAuthenticated());
+  }, []);
 
   return (
     <div className={styles["header"]}>
@@ -24,7 +29,7 @@ export const Header = () => {
               <Button type="primary">Мой профиль</Button>
             </Link>
             <Link to={"/"}>
-              <LogoutButton />
+              <LogoutButton setAuth={setAuth} />
             </Link>
           </>
         )}

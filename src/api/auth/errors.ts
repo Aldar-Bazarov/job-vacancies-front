@@ -1,10 +1,8 @@
 import { ApplicationError } from "@infrastructure/index";
 
-import { AuthContext } from "./types";
-
 export class AuthorizeError extends ApplicationError {
-  constructor(context: AuthContext, error: Error) {
-    super(`Ошибка при получении токенов: ${JSON.stringify(context)}`, error);
+  constructor(error: Error) {
+    super(`Ошибка при входе`, error);
   }
 }
 

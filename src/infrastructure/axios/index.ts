@@ -1,1 +1,5 @@
-export { default as AxiosBuilder, unpack } from "./AxiosBuilder";
+export {
+  default as AxiosBuilder,
+  unpack,
+  authInterceptor
+} from "./AxiosBuilder";

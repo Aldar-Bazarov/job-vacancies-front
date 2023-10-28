@@ -2,11 +2,11 @@ import { useLocation, Navigate } from "react-router-dom";
 
 import { isAuthenticated } from "@infrastructure/axios/auth";
 
-interface RequireAuthProps {
+interface IRequireAuthProps {
   children: React.ReactNode;
 }
 
-export const RequireAuth: React.FC<RequireAuthProps> = ({ children }) => {
+export const RequireAuth: React.FC<IRequireAuthProps> = ({ children }) => {
   const location = useLocation();
 
   if (!isAuthenticated()) {

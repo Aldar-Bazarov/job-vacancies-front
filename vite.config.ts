@@ -15,5 +15,9 @@ export default defineConfig({
       "@interfaces": "/src/interfaces",
       "@infrastructure": "/src/infrastructure"
     }
+  },
+  server: {
+    port: 5173,
+    host: "127.0.0.1"
   }
 });

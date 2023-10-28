@@ -3,7 +3,7 @@ export enum Role {
   Applicants = "applicants"
 }
 
-export interface ProfileInfo {
+export interface IProfileInfo {
   userId: number;
   statusId?: 0 | 1;
   user: {

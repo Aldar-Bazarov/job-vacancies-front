@@ -1,12 +1,11 @@
-import { Button, Form, Space, Typography, message } from "antd";
-import Cookies from "js-cookie";
+import { Button, Form, Radio, Space, Typography, message } from "antd";
 
 import { useCallback, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-import { authorizeApplicant } from "@api/auth/auth.api";
+import { authApi } from "@api/auth/auth.api";
 import Loader from "@components/Loader/Loader";
-import TransparentInput from "@components/TransparentInput/TransparentInput";
+import { TransparentInput } from "@components/TransparentInput/TransparentInput";
 import { setAuthenticate } from "@infrastructure/axios/auth";
 
 import styles from "./Authorization.module.scss";
@@ -23,10 +22,10 @@ export const Authorization: React.FC = () => {
   const onFinish = useCallback(() => {
     setLoading(true);
     const userData = authorizationForm.getFieldsValue();
-    authorizeApplicant(userData)
+    authApi
+      .authorize(userData)
       .then((data) => {
         setAuthenticate(data.access_token);
-        Cookies.set("refreshToken", data.refresh_token);
         navigate(fromPage, { replace: true });
       })
       .catch((error) => {
@@ -55,18 +54,27 @@ export const Authorization: React.FC = () => {
           </Typography>
         </Space>
         <Form.Item
-          label="Username"
+          label="Логин"
           name="username"
           rules={[{ required: true, message: "Поле логин обязательно!" }]}
         >
           <TransparentInput placeholder="Введите логин" />
         </Form.Item>
         <Form.Item
-          label="Password"
+          label="Пароль"
           name="password"
           rules={[{ required: true, message: "Поле пароль обязательно!" }]}
         >
-          <TransparentInput placeholder="Введите пароль" />
+          <TransparentInput type="password" placeholder="Введите пароль" />
+        </Form.Item>
+        <Form.Item
+          name="role"
+          rules={[{ required: true, message: "Тип пользователя обязателен!" }]}
+        >
+          <Radio.Group>
+            <Radio value={"applicants"}>Соискатель</Radio>
+            <Radio value={"recruiters"}>Рекрутёр</Radio>
+          </Radio.Group>
         </Form.Item>
         <Form.Item>
           <Button

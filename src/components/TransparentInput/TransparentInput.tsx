@@ -4,6 +4,6 @@ import styles from "./TransparentInput.module.scss";
 
 type TransparentInputProps = InputProps & React.RefAttributes<InputRef>;
 
-export default function TransparentInput(props: TransparentInputProps) {
+export const TransparentInput: React.FC<TransparentInputProps> = (props) => {
   return <Input className={styles["input-transparent"]} {...props} />;
-}
+};

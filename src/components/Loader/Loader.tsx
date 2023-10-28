@@ -4,11 +4,11 @@ import React from "react";
 
 import styles from "./Loader.module.scss";
 
-export interface LoaderProps {
+interface ILoaderProps {
   active: boolean;
 }
 
-const Loader: React.FC<LoaderProps> = ({ active }) => {
+const Loader: React.FC<ILoaderProps> = ({ active }) => {
   if (!active) {
     return null;
   }

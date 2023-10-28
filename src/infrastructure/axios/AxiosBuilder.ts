@@ -1,8 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
-import Cookies from "js-cookie";
+import axios, {
+  AxiosInstance,
+  AxiosRequestConfig,
+  AxiosResponse,
+  InternalAxiosRequestConfig
+} from "axios";
 
-import { refreshTokenRequest } from "@api/auth/auth.api";
+import { authApi } from "@api/auth/auth.api";
 
 import { clearAuthenticate, setAuthenticate } from "./auth";
 import { getBaseApi } from "../config";
@@ -47,36 +51,20 @@ export default class AxiosBuilder {
   addUnauthorizedHandler(): AxiosBuilder {
     this.errorInterceptors.push(async (error: any) => {
       if (error.response && error.response.status === 401) {
-        const refreshToken = Cookies.get("refreshToken");
-        if (refreshToken) {
-          try {
-            const { access_token } = await refreshTokenRequest();
-            setAuthenticate(access_token);
-          } catch (err) {
-            clearAuthenticate();
-            return Promise.reject(error.response.data);
-          }
-        } else {
+        try {
+          const { access_token } = await authApi.refresh();
+          setAuthenticate(access_token);
+          this.options.headers = this.options.headers || {};
+          this.options.headers.Authorization = `Bearer ${access_token}`;
+          const config = { ...error.config, headers: this.options.headers };
+          return axios(config);
+        } catch (err) {
           clearAuthenticate();
           return Promise.reject(error.response.data);
         }
       }
       return Promise.resolve(error);
     });
-    return this;
-  }
-
-  addAuthorizationInterceptor(): AxiosBuilder {
-    this.errorInterceptors.push((error: any) => {
-      return Promise.resolve(error);
-    });
-    const token = localStorage.getItem("access_token");
-    if (token) {
-      if (!this.options.headers) {
-        this.options.headers = {};
-      }
-      this.options.headers.Authorization = `Bearer ${token}`;
-    }
     return this;
   }
 
@@ -136,6 +124,15 @@ export default class AxiosBuilder {
   private static reject(error: any) {
     return Promise.reject(error);
   }
+}
+
+export function authInterceptor(
+  config: InternalAxiosRequestConfig<any>
+): InternalAxiosRequestConfig<any> {
+  config.headers.authorization = `Bearer ${localStorage.getItem(
+    "access_token"
+  )}`;
+  return config;
 }
 
 export function unpack<T>(response: AxiosResponse<T>): T {

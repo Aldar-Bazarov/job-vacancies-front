@@ -3,22 +3,28 @@ import { Button, message } from "antd";
 import React, { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { logout } from "@api/auth/auth.api";
+import { authApi } from "@api/auth/auth.api";
 import { clearAuthenticate } from "@infrastructure/axios/auth";
 
-const LogoutButton: React.FunctionComponent = () => {
+interface ILogoutProps {
+  readonly setAuth: (isAuth: boolean) => void;
+}
+
+const LogoutButton: React.FC<ILogoutProps> = ({ setAuth }) => {
   const navigate = useNavigate();
 
   const click = useCallback(async () => {
     clearAuthenticate();
-    await logout()
+    await authApi
+      .logout()
       .then(() => {
         navigate("/", { replace: true });
+        setAuth(false);
       })
       .catch((error) => {
         message.error(error.message);
       });
-  }, [navigate]);
+  }, [navigate, setAuth]);
 
   return (
     <Button onClick={click} type="primary">

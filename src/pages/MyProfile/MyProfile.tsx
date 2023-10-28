@@ -3,15 +3,19 @@ import { Typography } from "antd";
 
 import { useEffect, useState } from "react";
 
-import { getMyProfile } from "@api/user/user.api";
+import { userApi } from "@api/user/user.api";
 import { Role } from "@interfaces/user";
 
 export const MyProfile = () => {
   const [profileData, setProfileData] = useState<any>();
+
   useEffect(() => {
-    getMyProfile({ role: Role.Applicants }).then((data) => {
-      setProfileData(data);
-    });
+    userApi
+      .getMyProfile({ role: Role.Applicants })
+      .then((data) => {
+        setProfileData(data);
+      })
+      .catch();
   }, []);
 
   return (
