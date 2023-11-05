@@ -12,14 +12,7 @@ const App: React.FC = () => {
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route index element={<Home />} />
-        <Route
-          path="profile"
-          element={
-            <RequireAuth>
-              <MyProfile />
-            </RequireAuth>
-          }
-        />
+        <Route path="profile" element={<MyProfile />} />
       </Route>
       <Route path="register" element={<Registration />} />
       <Route path="auth" element={<Authorization />} />
