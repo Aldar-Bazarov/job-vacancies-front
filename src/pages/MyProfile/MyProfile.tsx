@@ -4,6 +4,8 @@ import { Button, Form, Input } from "antd";
 import { useEffect, useState } from "react";
 
 import { ProfileInfoDto, userApi } from "@api/user/user.api";
+import { TransparentInput } from "@components/TransparentInput/TransparentInput";
+import { TransparentTextArea } from "@components/TransparentTextArea/TransparentTextArea";
 //import { Role } from "@interfaces/user";
 
 import styles from "./MyProfile.module.scss";
@@ -43,19 +45,19 @@ export const MyProfile = () => {
       className={styles["authorization"]}
     >
       <Form.Item label="Имя">
-        <Input value={profileData?.user.first_name} />
+        <TransparentInput value={profileData?.user.first_name} />
       </Form.Item>
       <Form.Item label="Фамилия">
-        <Input value={profileData?.user.last_name} />
+        <TransparentInput value={profileData?.user.last_name} />
       </Form.Item>
       <Form.Item label="Почта">
-        <Input value={profileData?.user.email} readOnly />
+        <TransparentInput value={profileData?.user.email} readOnly />
       </Form.Item>
       <Form.Item label="Образование">
-        <Input placeholder="Soon..." />
+        <TransparentInput placeholder="Soon..." />
       </Form.Item>
       <Form.Item label="О себе">
-        <Input />
+        <TransparentTextArea rows={4} style={{ height: 120, resize: "none" }} />
       </Form.Item>
       <Form.Item {...buttonItemLayout}>
         <Button type="primary">Сохранить</Button>
