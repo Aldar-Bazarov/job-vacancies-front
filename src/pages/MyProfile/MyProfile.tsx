@@ -1,5 +1,6 @@
 import { Button, Form, Col, Row } from "antd";
-import { message, Upload, Avatar, Space } from "antd";
+import { message, Upload, Avatar, Flex } from "antd";
+import { Typography } from "antd";
 import { UploadChangeParam } from "antd/es/upload";
 import { RcFile, UploadFile, UploadProps } from "antd/es/upload/interface";
 
@@ -87,41 +88,59 @@ export const MyProfile = () => {
   return (
     <Form
       {...formItemLayout}
-      layout={"horizontal"}
+      layout={"vertical"}
       initialValues={{ layout: "horizontal" }}
-      className={styles["authorization"]}
+      className={styles["profile-form"]}
     >
-      <Row>
-        <Col span={24}>
-          <Upload
-            showUploadList={false}
-            customRequest={dummyRequest}
-            beforeUpload={beforeUpload}
-            onChange={handleChange}
-          >
-            <Button icon={<UploadOutlined />}>Добавить фото</Button>
-          </Upload>
-        </Col>
-      </Row>
-
+      <Typography.Title>Пользователь</Typography.Title>
       <Row>
         <Col span={24}>
           <Row>
-            <Col span={6}>
-              <div className="avatar-container">
-                <Space align="center">
-                  <Avatar size={200} src={imageUrl ?? defaultProfilePhotoUrl} />
-                </Space>
-              </div>
+            <Col span={4}>
+              <Avatar size={200} src={imageUrl ?? defaultProfilePhotoUrl} />
             </Col>
 
-            <Col span={18}>
-              <Form.Item label="Имя">
-                <TransparentInput value={profileData?.user.first_name} />
-              </Form.Item>
-              <Form.Item label="Фамилия">
-                <TransparentInput value={profileData?.user.last_name} />
-              </Form.Item>
+            <Col span={20}>
+              <Row>
+                <Col span={8}>
+                  <Form.Item label="Имя">
+                    <TransparentInput value={profileData?.user.first_name} />
+                  </Form.Item>
+                  <Form.Item label="Фамилия">
+                    <TransparentInput value={profileData?.user.last_name} />
+                  </Form.Item>
+                </Col>
+                <Col span={14}>
+                  <Flex
+                    style={{ width: "100%" }}
+                    justify={"end"}
+                    align={"end"}
+                    gap={10}
+                  >
+                    <Upload
+                      showUploadList={false}
+                      customRequest={dummyRequest}
+                      beforeUpload={beforeUpload}
+                      onChange={handleChange}
+                    >
+                      <Button
+                        icon={<UploadOutlined />}
+                        type="primary"
+                        size="large"
+                      >
+                        Добавить фото
+                      </Button>
+                    </Upload>
+                    <Button
+                      danger
+                      style={{ backgroundColor: "white" }}
+                      size="large"
+                    >
+                      Удалить
+                    </Button>
+                  </Flex>
+                </Col>
+              </Row>
               <Form.Item label="Должность">
                 <TransparentInput placeholder="Soon..." />
               </Form.Item>
@@ -135,19 +154,9 @@ export const MyProfile = () => {
           <Form.Item label="Почта">
             <TransparentInput value={profileData?.user.email} readOnly />
           </Form.Item>
-        </Col>
-      </Row>
-
-      <Row>
-        <Col span={24}>
           <Form.Item label="Образование">
             <TransparentInput placeholder="Soon..." />
           </Form.Item>
-        </Col>
-      </Row>
-
-      <Row>
-        <Col span={24}>
           <Form.Item label="О себе">
             <TransparentTextArea
               rows={4}
@@ -157,9 +166,11 @@ export const MyProfile = () => {
         </Col>
       </Row>
 
-      <Form.Item {...buttonItemLayout}>
-        <Button type="primary">Сохранить</Button>
-      </Form.Item>
+      <Flex style={{ width: "100%" }} justify={"end"} align={"end"}>
+        <Form.Item {...buttonItemLayout}>
+          <Button type="primary">Сохранить</Button>
+        </Form.Item>
+      </Flex>
     </Form>
   );
 };
