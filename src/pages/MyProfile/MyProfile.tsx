@@ -1,4 +1,4 @@
-import { Button, Form, Col, Row } from "antd";
+import { Button, Form, Col, Row, Space } from "antd";
 import { message, Upload, Avatar, Flex } from "antd";
 import { Typography } from "antd";
 import { UploadChangeParam } from "antd/es/upload";
@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 
 import { UploadOutlined } from "@ant-design/icons";
 import { ProfileInfoDto, userApi } from "@api/user/user.api";
+import { TagPool } from "@components/TagPool/TagPool";
 import { TransparentInput } from "@components/TransparentInput/TransparentInput";
 import { TransparentTextArea } from "@components/TransparentTextArea/TransparentTextArea";
 //import { Role } from "@interfaces/user";
@@ -17,6 +18,7 @@ import styles from "./MyProfile.module.scss";
 export const MyProfile = () => {
   const [profileData, setProfileData] = useState<ProfileInfoDto>();
   const [loading, setLoading] = useState(false);
+  const [tags, setTags] = useState(["PHP", "JS", "React"]);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [defaultProfilePhotoUrl, setDefaultProfilePhotoUrl] = useState(
     "https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg"
@@ -165,6 +167,12 @@ export const MyProfile = () => {
           </Form.Item>
         </Col>
       </Row>
+
+      <Form.Item label="Ключевые навыки">
+        <Space size={[0, 8]} wrap>
+          <TagPool tags={tags} setTags={setTags} />
+        </Space>
+      </Form.Item>
 
       <Flex style={{ width: "100%" }} justify={"end"} align={"end"}>
         <Form.Item {...buttonItemLayout}>
