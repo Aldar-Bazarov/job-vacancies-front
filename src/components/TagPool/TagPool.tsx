@@ -8,9 +8,14 @@ import { PlusOutlined } from "@ant-design/icons";
 interface ITagPoolProps {
   tags: string[];
   setTags: React.Dispatch<SetStateAction<string[]>>;
+  readOnly?: boolean;
 }
 
-export const TagPool: React.FC<ITagPoolProps> = ({ tags, setTags }) => {
+export const TagPool: React.FC<ITagPoolProps> = ({
+  tags,
+  setTags,
+  readOnly
+}) => {
   const { token } = theme.useToken();
   const [inputVisible, setInputVisible] = useState(false);
   const [inputValue, setInputValue] = useState("");
@@ -30,8 +35,10 @@ export const TagPool: React.FC<ITagPoolProps> = ({ tags, setTags }) => {
   }, [editInputValue]);
 
   const handleClose = (removedTag: string) => {
-    const newTags = tags.filter((tag) => tag !== removedTag);
-    setTags(newTags);
+    if (!readOnly) {
+      const newTags = tags.filter((tag) => tag !== removedTag);
+      setTags(newTags);
+    }
   };
 
   const showInput = () => {
@@ -39,7 +46,9 @@ export const TagPool: React.FC<ITagPoolProps> = ({ tags, setTags }) => {
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
+    if (!readOnly) {
+      setInputValue(e.target.value);
+    }
   };
 
   const handleInputConfirm = () => {
@@ -51,15 +60,19 @@ export const TagPool: React.FC<ITagPoolProps> = ({ tags, setTags }) => {
   };
 
   const handleEditInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEditInputValue(e.target.value);
+    if (!readOnly) {
+      setEditInputValue(e.target.value);
+    }
   };
 
   const handleEditInputConfirm = () => {
-    const newTags = [...tags];
-    newTags[editInputIndex] = editInputValue;
-    setTags(newTags);
-    setEditInputIndex(-1);
-    setEditInputValue("");
+    if (!readOnly) {
+      const newTags = [...tags];
+      newTags[editInputIndex] = editInputValue;
+      setTags(newTags);
+      setEditInputIndex(-1);
+      setEditInputValue("");
+    }
   };
 
   const tagInputStyle: React.CSSProperties = {
@@ -96,13 +109,13 @@ export const TagPool: React.FC<ITagPoolProps> = ({ tags, setTags }) => {
         const tagElem = (
           <Tag
             key={tag}
-            closable={index !== 0}
+            closable={!readOnly}
             style={{ userSelect: "none" }}
             onClose={() => handleClose(tag)}
           >
             <span
               onDoubleClick={(e) => {
-                if (index !== 0) {
+                if (!readOnly) {
                   setEditInputIndex(index);
                   setEditInputValue(tag);
                   e.preventDefault();
@@ -121,22 +134,25 @@ export const TagPool: React.FC<ITagPoolProps> = ({ tags, setTags }) => {
           tagElem
         );
       })}
-      {inputVisible ? (
-        <Input
-          ref={inputRef}
-          type="text"
-          size="large"
-          style={tagInputStyle}
-          value={inputValue}
-          onChange={handleInputChange}
-          onBlur={handleInputConfirm}
-          onPressEnter={handleInputConfirm}
-        />
-      ) : (
-        <Tag style={tagPlusStyle} icon={<PlusOutlined />} onClick={showInput}>
-          Добавить
-        </Tag>
-      )}
+
+      {!readOnly &&
+        (inputVisible ? (
+          <Input
+            ref={inputRef}
+            type="text"
+            size="large"
+            style={tagInputStyle}
+            value={inputValue}
+            onChange={handleInputChange}
+            onBlur={handleInputConfirm}
+            onPressEnter={handleInputConfirm}
+            readOnly={readOnly}
+          />
+        ) : (
+          <Tag style={tagPlusStyle} icon={<PlusOutlined />} onClick={showInput}>
+            Добавить
+          </Tag>
+        ))}
     </Space>
   );
 };

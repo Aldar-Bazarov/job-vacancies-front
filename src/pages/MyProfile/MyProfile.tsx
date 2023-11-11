@@ -170,7 +170,7 @@ export const MyProfile = () => {
 
       <Form.Item label="Ключевые навыки">
         <Space size={[0, 8]} wrap>
-          <TagPool tags={tags} setTags={setTags} />
+          <TagPool tags={tags} setTags={setTags} readOnly />
         </Space>
       </Form.Item>
 
