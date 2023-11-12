@@ -5,21 +5,23 @@ import { UploadChangeParam } from "antd/es/upload";
 import { RcFile, UploadFile, UploadProps } from "antd/es/upload/interface";
 
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
 import { UploadOutlined } from "@ant-design/icons";
 import { ProfileInfoDto, userApi } from "@api/user/user.api";
 import { TagPool } from "@components/TagPool/TagPool";
 import { TransparentInput } from "@components/TransparentInput/TransparentInput";
 import { TransparentTextArea } from "@components/TransparentTextArea/TransparentTextArea";
-//import { Role } from "@interfaces/user";
+import { Role } from "@interfaces/user";
 
-import styles from "./MyProfile.module.scss";
+import styles from "./Profile.module.scss";
 
-export const MyProfile = () => {
-  const [profileData, setProfileData] = useState<ProfileInfoDto>();
+export const Profile = () => {
+  const [profileData, setProfileData] = useState<ProfileInfoDto | null>(null);
+  const { profileId } = useParams();
   const [loading, setLoading] = useState(false);
   const [isReadOnly, setIsReadOnly] = useState(false);
-  const [tags, setTags] = useState(["PHP", "JS", "React"]);
+  const [tags, setTags] = useState(["Placeholder1", "Placeholder2"]);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [defaultProfilePhotoUrl, setDefaultProfilePhotoUrl] = useState(
     "https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg"
@@ -29,25 +31,20 @@ export const MyProfile = () => {
   const buttonItemLayout = { wrapperCol: { span: 14, offset: 4 } };
 
   useEffect(() => {
-    // userApi
-    //   .getMyProfile({ role: Role.Applicants })
-    //   .then((data) => {
-    //     setProfileData(data);
-    //   })
-    //   .catch();
-    const mockProfile: ProfileInfoDto = {
-      user_id: 1,
-      status_id: 0,
-      user: {
-        id: 1,
-        email: "user1@example.com",
-        first_name: "user_first_name",
-        last_name: "user_last_name",
-        username: "user1_username"
-      }
-    };
-    setProfileData(mockProfile);
-  }, []);
+    if (profileId === undefined) {
+      userApi
+        .getMyProfile({ role: Role.Applicants })
+        .then((data) => {
+          setProfileData(data);
+          setIsReadOnly(false);
+        })
+        .catch((e) => {
+          message.error(e.Message);
+        });
+    } else {
+      setIsReadOnly(true);
+    }
+  }, [profileId]);
 
   const getBase64 = (img: RcFile, callback: (url: string) => void) => {
     const reader = new FileReader();
@@ -81,14 +78,18 @@ export const MyProfile = () => {
       });
     }
   };
-  const dummyRequest = ({ onSuccess }) => {
+  const dummyRequest = (options: UploadRequestOption) => {
     // Пока что сделать заглушку для upload фото на сервер
     setTimeout(() => {
-      onSuccess("ok");
+      options.onSuccess("ok");
     }, 0);
   };
 
-  return (
+  return !profileData ? (
+    <div style={{ padding: "1rem" }}>
+      <Typography.Title>Пользователь не найден.</Typography.Title>
+    </div>
+  ) : (
     <Form
       {...formItemLayout}
       layout={"vertical"}
