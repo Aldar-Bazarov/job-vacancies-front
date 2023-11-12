@@ -28,9 +28,6 @@ export const Profile = () => {
   const [isReadOnly, setIsReadOnly] = useState(true);
   const [tags, setTags] = useState(["Placeholder1", "Placeholder2"]);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
-  const [defaultProfilePhotoUrl, setDefaultProfilePhotoUrl] = useState(
-    "https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg"
-  );
 
   const formItemLayout = { labelCol: { span: 4 }, wrapperCol: { span: 14 } };
   const buttonItemLayout = { wrapperCol: { span: 14, offset: 4 } };
@@ -87,11 +84,28 @@ export const Profile = () => {
       });
     }
   };
-  const dummyRequest = (options: UploadRequestOption) => {
+  // eslint-disable-next-line
+  const dummyRequest = (options: any) => { 
     // Пока что сделать заглушку для upload фото на сервер
     setTimeout(() => {
       options.onSuccess("ok");
     }, 0);
+  };
+
+  const handleSave = () => {
+    setIsLoading(true);
+    // userApi
+    //   .getMyProfile({ role: Role.Applicants })
+    //   .then((data) => {
+    //     setProfileData(data);
+    //     setIsReadOnly(false);
+    //   })
+    //   .catch((e: UpdateProfileError) => {
+    //     message.error(e.message);
+    //   })
+    //   .finally(() => {
+    //     setIsLoading(false);
+    //   });
   };
 
   return (
@@ -116,7 +130,7 @@ export const Profile = () => {
                   <Col flex="210px">
                     <Avatar
                       size={200}
-                      src={imageUrl ?? defaultProfilePhotoUrl}
+                      src={imageUrl ?? "images/default-avatar.jpg"}
                     />
                   </Col>
 
@@ -225,7 +239,7 @@ export const Profile = () => {
             {!isReadOnly && (
               <Flex style={{ width: "100%" }} justify={"end"} align={"end"}>
                 <Form.Item {...buttonItemLayout}>
-                  <Button type="primary" size="large">
+                  <Button type="primary" size="large" onClick={handleSave}>
                     Сохранить
                   </Button>
                 </Form.Item>
