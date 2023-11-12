@@ -46,7 +46,7 @@ export const userApi = {
         requestData.status_id = 0;
       }
       const response = await axios.post<ProfileInfoDto>(
-        `/users/${role}}`,
+        `/users/${role}`,
         requestData
       );
       return unpack(response);
