@@ -4,7 +4,7 @@ import { Typography } from "antd";
 import { UploadChangeParam } from "antd/es/upload";
 import { RcFile, UploadFile, UploadProps } from "antd/es/upload/interface";
 
-import { useEffect, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { UploadOutlined } from "@ant-design/icons";
@@ -21,8 +21,48 @@ import { Role } from "@interfaces/user";
 
 import styles from "./Profile.module.scss";
 
+type ProfileReducerAction = {
+  type: "set_user" | "change_last_name" | "change_first_name"; // eslint-disable-next-line
+  value?: any;
+};
+function reducer(
+  state: ProfileInfoDto | null,
+  action: ProfileReducerAction
+): ProfileInfoDto | null {
+  let data = null;
+  if (state !== null) data = { ...state, user: { ...state.user } };
+  switch (action.type) {
+    case "set_user": {
+      if (action.value === undefined)
+        throw Error(
+          `action.value must be not null for action.type === ${action.type}`
+        );
+      data = { ...action.value };
+      return data;
+    }
+    case "change_first_name": {
+      if (action.value === undefined)
+        throw Error(
+          `action.value must be not null for action.type === ${action.type}`
+        );
+      if (data === null) throw Error(`state must be not null`);
+      data.user.first_name = action.value;
+      return data;
+    }
+    case "change_last_name": {
+      if (action.value === undefined)
+        throw Error(
+          `action.value must be not null for action.type === ${action.type}`
+        );
+      if (data === null) throw Error(`state must be not null`);
+      data.user.last_name = action.value;
+      return data;
+    }
+  }
+}
+
 export const Profile = () => {
-  const [profileData, setProfileData] = useState<ProfileInfoDto | null>(null);
+  const [profileData, dispatch] = useReducer(reducer, null);
   const { profileId } = useParams();
   const [isLoading, setIsLoading] = useState(false);
   const [isReadOnly, setIsReadOnly] = useState(true);
@@ -38,7 +78,10 @@ export const Profile = () => {
       userApi
         .getMyProfile({ role: Role.Applicants })
         .then((data) => {
-          setProfileData(data);
+          dispatch({
+            type: "set_user",
+            value: data
+          });
           setIsReadOnly(false);
         })
         .catch((e: UpdateProfileError) => {
@@ -85,7 +128,7 @@ export const Profile = () => {
     }
   };
   // eslint-disable-next-line
-  const dummyRequest = (options: any) => { 
+  const dummyRequest = (options: any) => {
     // Пока что сделать заглушку для upload фото на сервер
     setTimeout(() => {
       options.onSuccess("ok");
@@ -93,19 +136,29 @@ export const Profile = () => {
   };
 
   const handleSave = () => {
+    if (!profileData) return;
     setIsLoading(true);
-    // userApi
-    //   .getMyProfile({ role: Role.Applicants })
-    //   .then((data) => {
-    //     setProfileData(data);
-    //     setIsReadOnly(false);
-    //   })
-    //   .catch((e: UpdateProfileError) => {
-    //     message.error(e.message);
-    //   })
-    //   .finally(() => {
-    //     setIsLoading(false);
-    //   });
+    userApi
+      .updateMyProfile({
+        id: profileData.user_id,
+        statusId: profileData.status_id ?? 0,
+        role: Role.Applicants,
+        firstName: profileData.user.first_name,
+        lastName: profileData.user.last_name
+      })
+      .then((data) => {
+        dispatch({
+          type: "set_user",
+          value: data
+        });
+        setIsReadOnly(false);
+      })
+      .catch((e: UpdateProfileError) => {
+        message.error(e.message);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   return (
@@ -140,12 +193,24 @@ export const Profile = () => {
                         <Form.Item label="Имя">
                           <TransparentInput
                             value={profileData?.user.first_name}
+                            onChange={(e) =>
+                              dispatch({
+                                type: "change_first_name",
+                                value: e.target.value
+                              })
+                            }
                             readOnly={isReadOnly}
                           />
                         </Form.Item>
                         <Form.Item label="Фамилия">
                           <TransparentInput
                             value={profileData?.user.last_name}
+                            onChange={(e) =>
+                              dispatch({
+                                type: "change_last_name",
+                                value: e.target.value
+                              })
+                            }
                             readOnly={isReadOnly}
                           />
                         </Form.Item>
