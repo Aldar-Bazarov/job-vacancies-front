@@ -18,6 +18,7 @@ import styles from "./MyProfile.module.scss";
 export const MyProfile = () => {
   const [profileData, setProfileData] = useState<ProfileInfoDto>();
   const [loading, setLoading] = useState(false);
+  const [isReadOnly, setIsReadOnly] = useState(false);
   const [tags, setTags] = useState(["PHP", "JS", "React"]);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [defaultProfilePhotoUrl, setDefaultProfilePhotoUrl] = useState(
@@ -106,45 +107,53 @@ export const MyProfile = () => {
               <Row justify="space-between">
                 <Col span={8}>
                   <Form.Item label="Имя">
-                    <TransparentInput value={profileData?.user.first_name} />
+                    <TransparentInput
+                      value={profileData?.user.first_name}
+                      readOnly={isReadOnly}
+                    />
                   </Form.Item>
                   <Form.Item label="Фамилия">
-                    <TransparentInput value={profileData?.user.last_name} />
+                    <TransparentInput
+                      value={profileData?.user.last_name}
+                      readOnly={isReadOnly}
+                    />
                   </Form.Item>
                 </Col>
                 <Col span={14}>
-                  <Flex
-                    style={{ width: "100%" }}
-                    justify={"end"}
-                    align={"end"}
-                    gap={10}
-                  >
-                    <Upload
-                      showUploadList={false}
-                      customRequest={dummyRequest}
-                      beforeUpload={beforeUpload}
-                      onChange={handleChange}
+                  {!isReadOnly && (
+                    <Flex
+                      style={{ width: "100%" }}
+                      justify={"end"}
+                      align={"end"}
+                      gap={10}
                     >
+                      <Upload
+                        showUploadList={false}
+                        customRequest={dummyRequest}
+                        beforeUpload={beforeUpload}
+                        onChange={handleChange}
+                      >
+                        <Button
+                          icon={<UploadOutlined />}
+                          type="primary"
+                          size="large"
+                        >
+                          Добавить фото
+                        </Button>
+                      </Upload>
                       <Button
-                        icon={<UploadOutlined />}
-                        type="primary"
+                        danger
+                        style={{ backgroundColor: "white" }}
                         size="large"
                       >
-                        Добавить фото
+                        Удалить
                       </Button>
-                    </Upload>
-                    <Button
-                      danger
-                      style={{ backgroundColor: "white" }}
-                      size="large"
-                    >
-                      Удалить
-                    </Button>
-                  </Flex>
+                    </Flex>
+                  )}
                 </Col>
               </Row>
               <Form.Item label="Должность">
-                <TransparentInput placeholder="Soon..." />
+                <TransparentInput placeholder="Soon..." readOnly={isReadOnly} />
               </Form.Item>
             </Col>
           </Row>
@@ -154,21 +163,25 @@ export const MyProfile = () => {
       <Row>
         <Col span={24}>
           <Form.Item label="Почта">
-            <TransparentInput value={profileData?.user.email} readOnly />
+            <TransparentInput
+              value={profileData?.user.email}
+              readOnly={isReadOnly}
+            />
           </Form.Item>
           <Form.Item label="Номер телефона">
-            <TransparentInput placeholder="Soon..." />
+            <TransparentInput placeholder="Soon..." readOnly={isReadOnly} />
           </Form.Item>
           <Form.Item label="Telegram">
-            <TransparentInput placeholder="Soon..." />
+            <TransparentInput placeholder="Soon..." readOnly={isReadOnly} />
           </Form.Item>
           <Form.Item label="Образование">
-            <TransparentInput placeholder="Soon..." />
+            <TransparentInput placeholder="Soon..." readOnly={isReadOnly} />
           </Form.Item>
           <Form.Item label="О себе">
             <TransparentTextArea
               rows={4}
               style={{ height: 120, resize: "none" }}
+              readOnly={isReadOnly}
             />
           </Form.Item>
         </Col>
@@ -176,17 +189,19 @@ export const MyProfile = () => {
 
       <Form.Item label="Ключевые навыки">
         <Space size={[0, 8]} wrap>
-          <TagPool tags={tags} setTags={setTags} />
+          <TagPool tags={tags} setTags={setTags} readOnly={isReadOnly} />
         </Space>
       </Form.Item>
 
-      <Flex style={{ width: "100%" }} justify={"end"} align={"end"}>
-        <Form.Item {...buttonItemLayout}>
-          <Button type="primary" size="large">
-            Сохранить
-          </Button>
-        </Form.Item>
-      </Flex>
+      {!isReadOnly && (
+        <Flex style={{ width: "100%" }} justify={"end"} align={"end"}>
+          <Form.Item {...buttonItemLayout}>
+            <Button type="primary" size="large">
+              Сохранить
+            </Button>
+          </Form.Item>
+        </Flex>
+      )}
     </Form>
   );
 };
