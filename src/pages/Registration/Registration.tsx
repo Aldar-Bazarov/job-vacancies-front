@@ -1,27 +1,45 @@
-import { Button, Form, Radio, Space, Typography } from "antd";
+import { Button, Form, Radio, Space, Typography, message } from "antd";
 
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
+import { userApi } from "@api/user/user.api";
+import { Loader } from "@components/Loader/Loader";
 import { TransparentInput } from "@components/TransparentInput/TransparentInput";
 
 import styles from "./Registration.module.scss";
 
 export const Registration: React.FC = () => {
-  const [form] = Form.useForm();
+  const navigate = useNavigate();
 
-  const onFormChanged = useCallback(() => {}, []);
+  const [registrationForm] = Form.useForm();
+  const [loading, setLoading] = useState(false);
+
+  const onFinish = useCallback(() => {
+    setLoading(true);
+    const userData = registrationForm.getFieldsValue();
+    userApi
+      .register(userData)
+      .then(() => {
+        navigate("/auth", { replace: true });
+      })
+      .catch((error) => {
+        message.error(error.message);
+      })
+      .finally(() => setLoading(false));
+  }, [registrationForm, navigate]);
 
   return (
     <div className={styles["registration"]}>
       <Form
-        form={form}
+        form={registrationForm}
         colon={false}
         labelWrap
         size="small"
         labelAlign="left"
         className={styles["registration-form"]}
-        onValuesChange={onFormChanged}
         layout={"vertical"}
+        onFinish={onFinish}
       >
         <Typography.Title>Регистрация</Typography.Title>
         <Space direction="vertical">
@@ -30,6 +48,20 @@ export const Registration: React.FC = () => {
             Вы можете <a>Войти здесь!</a>
           </Typography>
         </Space>
+        <Form.Item
+          label="Имя"
+          name="firstName"
+          rules={[{ required: true, message: "Поле имя обязательно!" }]}
+        >
+          <TransparentInput placeholder="Введите имя" />
+        </Form.Item>
+        <Form.Item
+          label="Фамилия"
+          name="lastName"
+          rules={[{ required: true, message: "Поле фамилия обязательно!" }]}
+        >
+          <TransparentInput placeholder="Введите фамилию" />
+        </Form.Item>
         <Form.Item
           label="Email"
           name="email"
@@ -47,18 +79,37 @@ export const Registration: React.FC = () => {
           <TransparentInput placeholder="Введите почту" type="email" />
         </Form.Item>
         <Form.Item
+          label="Логин"
+          name="username"
+          rules={[{ required: true, message: "Поле логин обязательно!" }]}
+        >
+          <TransparentInput placeholder="Введите логин" />
+        </Form.Item>
+        <Form.Item
           label="Пароль"
           name="password"
           rules={[{ required: true, message: "Поле пароль обязательно!" }]}
         >
-          <TransparentInput placeholder="Введите пароль" />
+          <TransparentInput type="password" placeholder="Введите пароль" />
         </Form.Item>
         <Form.Item
           label="Повторите пароль"
           name="confirmPassword"
-          rules={[{ required: true, message: "Повторите пароль!" }]}
+          dependencies={["password"]}
+          hasFeedback
+          rules={[
+            { required: true, message: "Повторите пароль!" },
+            ({ getFieldValue }) => ({
+              validator(_, value) {
+                if (!value || getFieldValue("password") === value) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(new Error("Пароли не совпадают!"));
+              }
+            })
+          ]}
         >
-          <TransparentInput placeholder="Повторите пароль" />
+          <TransparentInput type="password" placeholder="Повторите пароль" />
         </Form.Item>
         <Form.Item
           name="role"
@@ -80,6 +131,7 @@ export const Registration: React.FC = () => {
           </Button>
         </Form.Item>
       </Form>
+      <Loader active={loading} />
     </div>
   );
 };

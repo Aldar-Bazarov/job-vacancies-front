@@ -4,13 +4,13 @@ export interface GetProfileContext {
   role: Role;
 }
 
-export interface RegisterProfileContext extends GetProfileContext {
+export interface RegisterContext extends GetProfileContext {
   username: string;
   password: string;
   email: string;
   firstName: string;
   lastName: string;
-  statusId: 0 | 1;
+  statusId?: 0 | 1;
 }
 
 export interface UpdateProfileContext extends GetProfileContext {

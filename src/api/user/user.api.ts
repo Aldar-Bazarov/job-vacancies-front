@@ -1,4 +1,5 @@
 import { AxiosBuilder, unpack, authInterceptor } from "@infrastructure/index";
+import { Role } from "@interfaces/user";
 
 import {
   GetProfileError,
@@ -8,7 +9,7 @@ import {
 import {
   GetProfileContext,
   ProfileInfoDto,
-  RegisterProfileContext,
+  RegisterContext,
   UpdateProfileContext
 } from "./types";
 
@@ -24,20 +25,30 @@ const axios = new AxiosBuilder()
 axios.interceptors.request.use(authInterceptor);
 
 export const userApi = {
-  async registerAccount(
-    context: RegisterProfileContext
-  ): Promise<ProfileInfoDto> {
-    const { firstName, lastName, statusId, username, password, email, role } =
-      context;
+  async register(context: RegisterContext): Promise<ProfileInfoDto> {
+    const { firstName, lastName, username, password, email, role } = context;
     try {
-      const response = await axios.post<ProfileInfoDto>(`/users/${role}}`, {
+      const requestData: {
+        username: string;
+        password: string;
+        email: string;
+        first_name: string;
+        last_name: string;
+        status_id?: number;
+      } = {
         username,
         password,
         email,
         first_name: firstName,
-        last_name: lastName,
-        status_id: statusId
-      });
+        last_name: lastName
+      };
+      if (role === Role.Applicants) {
+        requestData.status_id = 0;
+      }
+      const response = await axios.post<ProfileInfoDto>(
+        `/users/${role}}`,
+        requestData
+      );
       return unpack(response);
     } catch (err) {
       throw new RegisterProfileError(err as Error);

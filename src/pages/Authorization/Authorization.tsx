@@ -4,7 +4,7 @@ import { useCallback, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { authApi } from "@api/auth/auth.api";
-import Loader from "@components/Loader/Loader";
+import { Loader } from "@components/Loader/Loader";
 import { TransparentInput } from "@components/TransparentInput/TransparentInput";
 import { setAuthenticate } from "@infrastructure/axios/auth";
 

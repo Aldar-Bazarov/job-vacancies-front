@@ -8,7 +8,7 @@ interface ILoaderProps {
   active: boolean;
 }
 
-const Loader: React.FC<ILoaderProps> = ({ active }) => {
+export const Loader: React.FC<ILoaderProps> = ({ active }) => {
   if (!active) {
     return null;
   }
@@ -18,5 +18,3 @@ const Loader: React.FC<ILoaderProps> = ({ active }) => {
     </div>
   );
 };
-
-export default Loader;
