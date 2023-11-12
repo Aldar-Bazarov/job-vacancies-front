@@ -156,6 +156,12 @@ export const MyProfile = () => {
           <Form.Item label="Почта">
             <TransparentInput value={profileData?.user.email} readOnly />
           </Form.Item>
+          <Form.Item label="Номер телефона">
+            <TransparentInput placeholder="Soon..." />
+          </Form.Item>
+          <Form.Item label="Telegram">
+            <TransparentInput placeholder="Soon..." />
+          </Form.Item>
           <Form.Item label="Образование">
             <TransparentInput placeholder="Soon..." />
           </Form.Item>
