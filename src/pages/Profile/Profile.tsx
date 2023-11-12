@@ -8,7 +8,12 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { UploadOutlined } from "@ant-design/icons";
-import { ProfileInfoDto, userApi } from "@api/user/user.api";
+import {
+  ProfileInfoDto,
+  UpdateProfileError,
+  userApi
+} from "@api/user/user.api";
+import { Loader } from "@components/Loader/Loader";
 import { TagPool } from "@components/TagPool/TagPool";
 import { TransparentInput } from "@components/TransparentInput/TransparentInput";
 import { TransparentTextArea } from "@components/TransparentTextArea/TransparentTextArea";
@@ -19,8 +24,8 @@ import styles from "./Profile.module.scss";
 export const Profile = () => {
   const [profileData, setProfileData] = useState<ProfileInfoDto | null>(null);
   const { profileId } = useParams();
-  const [loading, setLoading] = useState(false);
-  const [isReadOnly, setIsReadOnly] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isReadOnly, setIsReadOnly] = useState(true);
   const [tags, setTags] = useState(["Placeholder1", "Placeholder2"]);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [defaultProfilePhotoUrl, setDefaultProfilePhotoUrl] = useState(
@@ -32,14 +37,18 @@ export const Profile = () => {
 
   useEffect(() => {
     if (profileId === undefined) {
+      setIsLoading(true);
       userApi
         .getMyProfile({ role: Role.Applicants })
         .then((data) => {
           setProfileData(data);
           setIsReadOnly(false);
         })
-        .catch((e) => {
-          message.error(e.Message);
+        .catch((e: UpdateProfileError) => {
+          message.error(e.message);
+        })
+        .finally(() => {
+          setIsLoading(false);
         });
     } else {
       setIsReadOnly(true);
@@ -68,12 +77,12 @@ export const Profile = () => {
     info: UploadChangeParam<UploadFile>
   ) => {
     if (info.file.status === "uploading") {
-      setLoading(true);
+      setIsLoading(true);
       return;
     }
     if (info.file.status === "done") {
       getBase64(info.file.originFileObj as RcFile, (url) => {
-        setLoading(false);
+        setIsLoading(false);
         setImageUrl(url);
       });
     }
@@ -85,124 +94,145 @@ export const Profile = () => {
     }, 0);
   };
 
-  return !profileData ? (
-    <div style={{ padding: "1rem" }}>
-      <Typography.Title>Пользователь не найден.</Typography.Title>
-    </div>
-  ) : (
-    <Form
-      {...formItemLayout}
-      layout={"vertical"}
-      initialValues={{ layout: "horizontal" }}
-      className={styles["profile-form"]}
-    >
-      <Typography.Title>Пользователь</Typography.Title>
-      <Row>
-        <Col span={24}>
-          <Row align="middle">
-            <Col flex="210px">
-              <Avatar size={200} src={imageUrl ?? defaultProfilePhotoUrl} />
-            </Col>
-
-            <Col flex="auto">
-              <Row justify="space-between">
-                <Col span={8}>
-                  <Form.Item label="Имя">
-                    <TransparentInput
-                      value={profileData?.user.first_name}
-                      readOnly={isReadOnly}
+  return (
+    <>
+      <Loader active={isLoading} />
+      {!isLoading &&
+        (!profileData ? (
+          <div style={{ padding: "1rem" }}>
+            <Typography.Title>Пользователь не найден.</Typography.Title>
+          </div>
+        ) : (
+          <Form
+            {...formItemLayout}
+            layout={"vertical"}
+            initialValues={{ layout: "horizontal" }}
+            className={styles["profile-form"]}
+          >
+            <Typography.Title>Пользователь</Typography.Title>
+            <Row>
+              <Col span={24}>
+                <Row align="middle">
+                  <Col flex="210px">
+                    <Avatar
+                      size={200}
+                      src={imageUrl ?? defaultProfilePhotoUrl}
                     />
-                  </Form.Item>
-                  <Form.Item label="Фамилия">
-                    <TransparentInput
-                      value={profileData?.user.last_name}
-                      readOnly={isReadOnly}
-                    />
-                  </Form.Item>
-                </Col>
-                <Col span={14}>
-                  {!isReadOnly && (
-                    <Flex
-                      style={{ width: "100%" }}
-                      justify={"end"}
-                      align={"end"}
-                      gap={10}
-                    >
-                      <Upload
-                        showUploadList={false}
-                        customRequest={dummyRequest}
-                        beforeUpload={beforeUpload}
-                        onChange={handleChange}
-                      >
-                        <Button
-                          icon={<UploadOutlined />}
-                          type="primary"
-                          size="large"
-                        >
-                          Добавить фото
-                        </Button>
-                      </Upload>
-                      <Button
-                        danger
-                        style={{ backgroundColor: "white" }}
-                        size="large"
-                      >
-                        Удалить
-                      </Button>
-                    </Flex>
-                  )}
-                </Col>
-              </Row>
-              <Form.Item label="Должность">
-                <TransparentInput placeholder="Soon..." readOnly={isReadOnly} />
-              </Form.Item>
-            </Col>
-          </Row>
-        </Col>
-      </Row>
+                  </Col>
 
-      <Row>
-        <Col span={24}>
-          <Form.Item label="Почта">
-            <TransparentInput
-              value={profileData?.user.email}
-              readOnly={isReadOnly}
-            />
-          </Form.Item>
-          <Form.Item label="Номер телефона">
-            <TransparentInput placeholder="Soon..." readOnly={isReadOnly} />
-          </Form.Item>
-          <Form.Item label="Telegram">
-            <TransparentInput placeholder="Soon..." readOnly={isReadOnly} />
-          </Form.Item>
-          <Form.Item label="Образование">
-            <TransparentInput placeholder="Soon..." readOnly={isReadOnly} />
-          </Form.Item>
-          <Form.Item label="О себе">
-            <TransparentTextArea
-              rows={4}
-              style={{ height: 120, resize: "none" }}
-              readOnly={isReadOnly}
-            />
-          </Form.Item>
-        </Col>
-      </Row>
+                  <Col flex="auto">
+                    <Row justify="space-between">
+                      <Col span={8}>
+                        <Form.Item label="Имя">
+                          <TransparentInput
+                            value={profileData?.user.first_name}
+                            readOnly={isReadOnly}
+                          />
+                        </Form.Item>
+                        <Form.Item label="Фамилия">
+                          <TransparentInput
+                            value={profileData?.user.last_name}
+                            readOnly={isReadOnly}
+                          />
+                        </Form.Item>
+                      </Col>
+                      <Col span={14}>
+                        {!isReadOnly && (
+                          <Flex
+                            style={{ width: "100%" }}
+                            justify={"end"}
+                            align={"end"}
+                            gap={10}
+                          >
+                            <Upload
+                              showUploadList={false}
+                              customRequest={dummyRequest}
+                              beforeUpload={beforeUpload}
+                              onChange={handleChange}
+                            >
+                              <Button
+                                icon={<UploadOutlined />}
+                                type="primary"
+                                size="large"
+                              >
+                                Добавить фото
+                              </Button>
+                            </Upload>
+                            <Button
+                              danger
+                              style={{ backgroundColor: "white" }}
+                              size="large"
+                            >
+                              Удалить
+                            </Button>
+                          </Flex>
+                        )}
+                      </Col>
+                    </Row>
+                    <Form.Item label="Должность">
+                      <TransparentInput
+                        placeholder="Soon..."
+                        readOnly={isReadOnly}
+                      />
+                    </Form.Item>
+                  </Col>
+                </Row>
+              </Col>
+            </Row>
 
-      <Form.Item label="Ключевые навыки">
-        <Space size={[0, 8]} wrap>
-          <TagPool tags={tags} setTags={setTags} readOnly={isReadOnly} />
-        </Space>
-      </Form.Item>
+            <Row>
+              <Col span={24}>
+                <Form.Item label="Почта">
+                  <TransparentInput
+                    value={profileData?.user.email}
+                    readOnly={isReadOnly}
+                  />
+                </Form.Item>
+                <Form.Item label="Номер телефона">
+                  <TransparentInput
+                    placeholder="Soon..."
+                    readOnly={isReadOnly}
+                  />
+                </Form.Item>
+                <Form.Item label="Telegram">
+                  <TransparentInput
+                    placeholder="Soon..."
+                    readOnly={isReadOnly}
+                  />
+                </Form.Item>
+                <Form.Item label="Образование">
+                  <TransparentInput
+                    placeholder="Soon..."
+                    readOnly={isReadOnly}
+                  />
+                </Form.Item>
+                <Form.Item label="О себе">
+                  <TransparentTextArea
+                    rows={4}
+                    style={{ height: 120, resize: "none" }}
+                    readOnly={isReadOnly}
+                  />
+                </Form.Item>
+              </Col>
+            </Row>
 
-      {!isReadOnly && (
-        <Flex style={{ width: "100%" }} justify={"end"} align={"end"}>
-          <Form.Item {...buttonItemLayout}>
-            <Button type="primary" size="large">
-              Сохранить
-            </Button>
-          </Form.Item>
-        </Flex>
-      )}
-    </Form>
+            <Form.Item label="Ключевые навыки">
+              <Space size={[0, 8]} wrap>
+                <TagPool tags={tags} setTags={setTags} readOnly={isReadOnly} />
+              </Space>
+            </Form.Item>
+
+            {!isReadOnly && (
+              <Flex style={{ width: "100%" }} justify={"end"} align={"end"}>
+                <Form.Item {...buttonItemLayout}>
+                  <Button type="primary" size="large">
+                    Сохранить
+                  </Button>
+                </Form.Item>
+              </Flex>
+            )}
+          </Form>
+        ))}
+    </>
   );
 };
