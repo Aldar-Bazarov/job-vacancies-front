@@ -1,9 +1,11 @@
 import type { InputRef } from "antd";
-import { Input, Space, Tag, theme, Tooltip } from "antd";
+import { Input, Space, Tag, Tooltip } from "antd";
 
 import React, { useEffect, useRef, useState, SetStateAction } from "react";
 
 import { PlusOutlined } from "@ant-design/icons";
+
+import styles from "./TagPool.module.scss";
 
 interface ITagPoolProps {
   tags: string[];
@@ -16,7 +18,6 @@ export const TagPool: React.FC<ITagPoolProps> = ({
   setTags,
   readOnly
 }) => {
-  const { token } = theme.useToken();
   const [inputVisible, setInputVisible] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [editInputIndex, setEditInputIndex] = useState(-1);
@@ -75,19 +76,6 @@ export const TagPool: React.FC<ITagPoolProps> = ({
     }
   };
 
-  const tagInputStyle: React.CSSProperties = {
-    width: 64,
-    height: 22,
-    marginInlineEnd: 8,
-    verticalAlign: "top"
-  };
-
-  const tagPlusStyle: React.CSSProperties = {
-    height: 22,
-    background: token.colorBgContainer,
-    borderStyle: "dashed"
-  };
-
   return (
     <Space size={[0, 8]} wrap>
       {tags.map((tag, index) => {
@@ -96,8 +84,8 @@ export const TagPool: React.FC<ITagPoolProps> = ({
             <Input
               ref={editInputRef}
               key={tag}
-              size="large"
-              style={tagInputStyle}
+              size="small"
+              className={styles["tagInput"]}
               value={editInputValue}
               onChange={handleEditInputChange}
               onBlur={handleEditInputConfirm}
@@ -140,8 +128,8 @@ export const TagPool: React.FC<ITagPoolProps> = ({
           <Input
             ref={inputRef}
             type="text"
-            size="large"
-            style={tagInputStyle}
+            size="small"
+            className={styles["tagInput"]}
             value={inputValue}
             onChange={handleInputChange}
             onBlur={handleInputConfirm}
@@ -149,7 +137,11 @@ export const TagPool: React.FC<ITagPoolProps> = ({
             readOnly={readOnly}
           />
         ) : (
-          <Tag style={tagPlusStyle} icon={<PlusOutlined />} onClick={showInput}>
+          <Tag
+            className={styles["tagPlus"]}
+            icon={<PlusOutlined />}
+            onClick={showInput}
+          >
             Добавить
           </Tag>
         ))}

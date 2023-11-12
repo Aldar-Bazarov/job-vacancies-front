@@ -97,13 +97,13 @@ export const MyProfile = () => {
       <Typography.Title>Пользователь</Typography.Title>
       <Row>
         <Col span={24}>
-          <Row>
-            <Col span={4}>
+          <Row align="middle">
+            <Col flex="210px">
               <Avatar size={200} src={imageUrl ?? defaultProfilePhotoUrl} />
             </Col>
 
-            <Col span={20}>
-              <Row>
+            <Col flex="auto">
+              <Row justify="space-between">
                 <Col span={8}>
                   <Form.Item label="Имя">
                     <TransparentInput value={profileData?.user.first_name} />
@@ -176,13 +176,15 @@ export const MyProfile = () => {
 
       <Form.Item label="Ключевые навыки">
         <Space size={[0, 8]} wrap>
-          <TagPool tags={tags} setTags={setTags} readOnly />
+          <TagPool tags={tags} setTags={setTags} />
         </Space>
       </Form.Item>
 
       <Flex style={{ width: "100%" }} justify={"end"} align={"end"}>
         <Form.Item {...buttonItemLayout}>
-          <Button type="primary">Сохранить</Button>
+          <Button type="primary" size="large">
+            Сохранить
+          </Button>
         </Form.Item>
       </Flex>
     </Form>
