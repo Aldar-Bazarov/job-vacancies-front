@@ -17,6 +17,7 @@ import { Loader } from "@components/Loader/Loader";
 import { TagPool } from "@components/TagPool/TagPool";
 import { TransparentInput } from "@components/TransparentInput/TransparentInput";
 import { TransparentTextArea } from "@components/TransparentTextArea/TransparentTextArea";
+import { getBase64, beforeUpload } from "@infrastructure/image-upload";
 import { Role } from "@interfaces/user";
 
 import styles from "./Profile.module.scss";
@@ -67,7 +68,7 @@ export const Profile = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isReadOnly, setIsReadOnly] = useState(true);
   const [tags, setTags] = useState(["Placeholder1", "Placeholder2"]);
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [imageUrl, setImageUrl] = useState<string | null>(null); //eslint-disable-next-line
 
   useEffect(() => {
     if (profileId === undefined) {
@@ -92,36 +93,18 @@ export const Profile = () => {
     }
   }, [profileId]);
 
-  const getBase64 = (img: RcFile, callback: (url: string) => void) => {
-    const reader = new FileReader();
-    reader.addEventListener("load", () => callback(reader.result as string));
-    reader.readAsDataURL(img);
-  };
-
-  const beforeUpload = (file: RcFile) => {
-    const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
-    if (!isJpgOrPng) {
-      message.error("Вы можете загружать фото только в формате JPG/PNG.");
-    }
-    const isLt2M = file.size / 1024 / 1024 < 2;
-    if (!isLt2M) {
-      message.error("Размер фото должен быть меньше 2MB.");
-    }
-    return isJpgOrPng && isLt2M;
-  };
-
   const handleChange: UploadProps["onChange"] = (
     info: UploadChangeParam<UploadFile>
   ) => {
     if (info.file.status === "uploading") {
       setIsLoading(true);
-      return;
-    }
-    if (info.file.status === "done") {
+    } else if (info.file.status === "done") {
       getBase64(info.file.originFileObj as RcFile, (url) => {
-        setIsLoading(false);
         setImageUrl(url);
+        setIsLoading(false);
       });
+    } else {
+      setIsLoading(false);
     }
   };
   // eslint-disable-next-line
@@ -161,151 +144,141 @@ export const Profile = () => {
   return (
     <>
       <Loader active={isLoading} />
-      {!isLoading &&
-        (!profileData ? (
-          <div style={{ padding: "1rem" }}>
-            <Typography.Title>Пользователь не найден.</Typography.Title>
-          </div>
-        ) : (
-          <Form
-            layout={"vertical"}
-            initialValues={{ layout: "horizontal" }}
-            className={styles["profile-form"]}
-          >
-            <Typography.Title>Пользователь</Typography.Title>
-            <Row>
-              <Col span={24}>
-                <Row align="middle">
-                  <Col flex="210px">
-                    <Avatar
-                      size={200}
-                      src={imageUrl ?? "images/default-avatar.jpg"}
-                    />
-                  </Col>
+      {!profileData ? (
+        <div style={{ padding: "1rem" }}>
+          <Typography.Title>Пользователь не найден.</Typography.Title>
+        </div>
+      ) : (
+        <Form
+          layout={"vertical"}
+          initialValues={{ layout: "horizontal" }}
+          className={styles["profile-form"]}
+        >
+          <Typography.Title>Пользователь</Typography.Title>
+          <Row>
+            <Col span={24}>
+              <Row align="middle">
+                <Col flex="210px">
+                  <Avatar
+                    size={200}
+                    src={imageUrl ?? "images/default-avatar.jpg"}
+                  />
+                </Col>
 
-                  <Col flex="auto">
-                    <Row justify="space-between">
-                      <Col span={8}>
-                        <Form.Item label="Имя">
-                          <TransparentInput
-                            value={profileData?.user.first_name}
-                            onChange={(e) =>
-                              dispatch({
-                                type: "change_first_name",
-                                value: e.target.value
-                              })
-                            }
-                            readOnly={isReadOnly}
-                          />
-                        </Form.Item>
-                        <Form.Item label="Фамилия">
-                          <TransparentInput
-                            value={profileData?.user.last_name}
-                            onChange={(e) =>
-                              dispatch({
-                                type: "change_last_name",
-                                value: e.target.value
-                              })
-                            }
-                            readOnly={isReadOnly}
-                          />
-                        </Form.Item>
-                      </Col>
-                      <Col span={14}>
-                        {!isReadOnly && (
-                          <Flex
-                            style={{ width: "100%" }}
-                            justify={"end"}
-                            align={"end"}
-                            gap={10}
+                <Col flex="auto">
+                  <Row justify="space-between">
+                    <Col span={8}>
+                      <Form.Item label="Имя">
+                        <TransparentInput
+                          value={profileData?.user.first_name}
+                          onChange={(e) =>
+                            dispatch({
+                              type: "change_first_name",
+                              value: e.target.value
+                            })
+                          }
+                          readOnly={isReadOnly}
+                        />
+                      </Form.Item>
+                      <Form.Item label="Фамилия">
+                        <TransparentInput
+                          value={profileData?.user.last_name}
+                          onChange={(e) =>
+                            dispatch({
+                              type: "change_last_name",
+                              value: e.target.value
+                            })
+                          }
+                          readOnly={isReadOnly}
+                        />
+                      </Form.Item>
+                    </Col>
+                    <Col span={14}>
+                      {!isReadOnly && (
+                        <Flex
+                          style={{ width: "100%" }}
+                          justify={"end"}
+                          align={"end"}
+                          gap={10}
+                        >
+                          <Upload
+                            showUploadList={false}
+                            customRequest={dummyRequest}
+                            beforeUpload={beforeUpload}
+                            onChange={handleChange}
                           >
-                            <Upload
-                              showUploadList={false}
-                              customRequest={dummyRequest}
-                              beforeUpload={beforeUpload}
-                              onChange={handleChange}
-                            >
-                              <Button
-                                icon={<UploadOutlined />}
-                                type="primary"
-                                size="large"
-                              >
-                                Добавить фото
-                              </Button>
-                            </Upload>
                             <Button
-                              danger
-                              style={{ backgroundColor: "white" }}
+                              icon={<UploadOutlined />}
+                              type="primary"
                               size="large"
                             >
-                              Удалить
+                              Добавить фото
                             </Button>
-                          </Flex>
-                        )}
-                      </Col>
-                    </Row>
-                    <Form.Item label="Должность">
-                      <TransparentInput
-                        placeholder="Soon..."
-                        readOnly={isReadOnly}
-                      />
-                    </Form.Item>
-                  </Col>
-                </Row>
-              </Col>
-            </Row>
+                          </Upload>
+                          <Button
+                            danger
+                            style={{ backgroundColor: "white" }}
+                            size="large"
+                          >
+                            Удалить
+                          </Button>
+                        </Flex>
+                      )}
+                    </Col>
+                  </Row>
+                  <Form.Item label="Должность">
+                    <TransparentInput
+                      placeholder="Soon..."
+                      readOnly={isReadOnly}
+                    />
+                  </Form.Item>
+                </Col>
+              </Row>
+            </Col>
+          </Row>
 
-            <Row>
-              <Col span={24}>
-                <Form.Item label="Почта">
-                  <TransparentInput
-                    value={profileData?.user.email}
-                    readOnly={isReadOnly}
-                  />
-                </Form.Item>
-                <Form.Item label="Номер телефона">
-                  <TransparentInput
-                    placeholder="Soon..."
-                    readOnly={isReadOnly}
-                  />
-                </Form.Item>
-                <Form.Item label="Telegram">
-                  <TransparentInput
-                    placeholder="Soon..."
-                    readOnly={isReadOnly}
-                  />
-                </Form.Item>
-                <Form.Item label="Образование">
-                  <TransparentInput
-                    placeholder="Soon..."
-                    readOnly={isReadOnly}
-                  />
-                </Form.Item>
-                <Form.Item label="О себе">
-                  <TransparentTextArea
-                    rows={4}
-                    style={{ height: 120, resize: "none" }}
-                    readOnly={isReadOnly}
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
+          <Row>
+            <Col span={24}>
+              <Form.Item label="Почта">
+                <TransparentInput
+                  value={profileData?.user.email}
+                  readOnly={isReadOnly}
+                />
+              </Form.Item>
+              <Form.Item label="Номер телефона">
+                <TransparentInput placeholder="Soon..." readOnly={isReadOnly} />
+              </Form.Item>
+              <Form.Item label="Telegram">
+                <TransparentInput placeholder="Soon..." readOnly={isReadOnly} />
+              </Form.Item>
+              <Form.Item label="Образование">
+                <TransparentInput placeholder="Soon..." readOnly={isReadOnly} />
+              </Form.Item>
+              <Form.Item label="О себе">
+                <TransparentTextArea
+                  rows={4}
+                  style={{ height: 120, resize: "none" }}
+                  readOnly={isReadOnly}
+                />
+              </Form.Item>
+            </Col>
+          </Row>
 
-            <Form.Item label="Ключевые навыки">
-              <TagPool tags={tags} setTags={setTags} readOnly={isReadOnly} />
-            </Form.Item>
+          <Form.Item label="Ключевые навыки">
+            <TagPool tags={tags} setTags={setTags} readOnly={isReadOnly} />
+          </Form.Item>
 
-            {!isReadOnly && (
-              <Flex style={{ width: "100%" }} justify={"end"} align={"end"}>
-                <Form.Item>
-                  <Button type="primary" size="large" onClick={handleSave}>
-                    Сохранить
-                  </Button>
-                </Form.Item>
-              </Flex>
-            )}
-          </Form>
-        ))}
+          {!isReadOnly && (
+            <Flex style={{ width: "100%" }} justify={"end"} align={"end"}>
+              <Form.Item>
+                <Button type="primary" size="large" onClick={handleSave}>
+                  Сохранить
+                </Button>
+              </Form.Item>
+            </Flex>
+          )}
+        </Form>
+      )}
     </>
   );
 };
