@@ -1,4 +1,4 @@
-import { Button, Form, Col, Row, Space } from "antd";
+import { Button, Form, Col, Row } from "antd";
 import { message, Upload, Avatar, Flex } from "antd";
 import { Typography } from "antd";
 import { UploadChangeParam } from "antd/es/upload";
@@ -68,9 +68,6 @@ export const Profile = () => {
   const [isReadOnly, setIsReadOnly] = useState(true);
   const [tags, setTags] = useState(["Placeholder1", "Placeholder2"]);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
-
-  const formItemLayout = { labelCol: { span: 4 }, wrapperCol: { span: 14 } };
-  const buttonItemLayout = { wrapperCol: { span: 14, offset: 4 } };
 
   useEffect(() => {
     if (profileId === undefined) {
@@ -171,7 +168,6 @@ export const Profile = () => {
           </div>
         ) : (
           <Form
-            {...formItemLayout}
             layout={"vertical"}
             initialValues={{ layout: "horizontal" }}
             className={styles["profile-form"]}
@@ -296,14 +292,12 @@ export const Profile = () => {
             </Row>
 
             <Form.Item label="Ключевые навыки">
-              <Space size={[0, 8]} wrap>
-                <TagPool tags={tags} setTags={setTags} readOnly={isReadOnly} />
-              </Space>
+              <TagPool tags={tags} setTags={setTags} readOnly={isReadOnly} />
             </Form.Item>
 
             {!isReadOnly && (
               <Flex style={{ width: "100%" }} justify={"end"} align={"end"}>
-                <Form.Item {...buttonItemLayout}>
+                <Form.Item>
                   <Button type="primary" size="large" onClick={handleSave}>
                     Сохранить
                   </Button>
