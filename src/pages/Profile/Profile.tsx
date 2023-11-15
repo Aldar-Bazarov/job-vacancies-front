@@ -68,7 +68,7 @@ export const Profile = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isReadOnly, setIsReadOnly] = useState(true);
   const [tags, setTags] = useState(["Placeholder1", "Placeholder2"]);
-  const [imageUrl, setImageUrl] = useState<string | null>(null); //eslint-disable-next-line
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
 
   useEffect(() => {
     if (profileId === undefined) {
@@ -161,7 +161,7 @@ export const Profile = () => {
                 <Col flex="210px">
                   <Avatar
                     size={200}
-                    src={imageUrl ?? "images/default-avatar.jpg"}
+                    src={imageUrl ?? "/images/default-avatar.jpg"}
                   />
                 </Col>
 
