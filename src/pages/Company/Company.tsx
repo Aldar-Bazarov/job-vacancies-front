@@ -4,6 +4,7 @@ import {
   Col,
   Flex,
   Form,
+  List,
   Row,
   Typography,
   Upload,
@@ -14,9 +15,13 @@ import {
 import { RcFile, UploadChangeParam } from "antd/es/upload";
 
 import { useEffect, useState, useReducer } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
-import { UploadOutlined } from "@ant-design/icons";
+import {
+  EyeOutlined,
+  ShoppingOutlined,
+  UploadOutlined
+} from "@ant-design/icons";
 import {
   CompanyInfoDto,
   GetCompanyError,
@@ -30,14 +35,18 @@ import { beforeUpload, getBase64 } from "@infrastructure/image-upload";
 
 import styles from "./Company.module.scss";
 
+type MockTempType = CompanyInfoDto & {
+  vacancies: { id: number; name: string; watches: number }[];
+};
+
 type CompanyReducerAction = {
   type: "set_company" | "change_name" | "change_description"; // eslint-disable-next-line
   value?: any;
 };
 function reducer(
-  state: CompanyInfoDto | null,
+  state: MockTempType | null,
   action: CompanyReducerAction
-): CompanyInfoDto | null {
+): MockTempType | null {
   let data = null;
   if (state !== null) data = { ...state };
   switch (action.type) {
@@ -80,12 +89,17 @@ export const Company = () => {
   useEffect(() => {
     if (companyId !== undefined) {
       setIsLoading(true);
-      const mock: CompanyInfoDto = {
+      const mock: MockTempType = {
         created_at: new Date(),
         description: "description",
         id: 0,
         name: "name",
-        owner_id: 0
+        owner_id: 0,
+        vacancies: [
+          { id: 0, name: "Vacancy 1", watches: 10 },
+          { id: 1, name: "Vacancy 2", watches: 20 },
+          { id: 2, name: "Vacancy 3", watches: 30 }
+        ]
       };
       dispatch({
         type: "set_company",
@@ -262,6 +276,35 @@ export const Company = () => {
                   style={{ height: 120, resize: "none" }}
                   readOnly={isReadOnly}
                 />
+              </Form.Item>
+              <Form.Item label="Вакансии" wrapperCol={{ span: 16 }}>
+                <List
+                  itemLayout="horizontal"
+                  dataSource={companyData?.vacancies}
+                  renderItem={(item) => (
+                    <List.Item>
+                      <List.Item.Meta
+                        avatar={<Avatar icon={<ShoppingOutlined />} />}
+                        title={
+                          <Link to={`/vacancy/${item.id}`}>{item.name}</Link>
+                        }
+                      />
+                      <div>
+                        <span
+                          className={styles["vacancies-list__watches-count"]}
+                        >
+                          Просмотрено: {item.watches}
+                        </span>
+                        <EyeOutlined />
+                      </div>
+                    </List.Item>
+                  )}
+                />
+                <Link to={"/vacancy/new"}>
+                  <Button type="default" size="middle">
+                    Добавить
+                  </Button>
+                </Link>
               </Form.Item>
             </Col>
           </Row>
