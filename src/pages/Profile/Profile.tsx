@@ -1,6 +1,7 @@
-import { Button, Form, Col, Row } from "antd";
+import { Button, Form, Col, Row, Input } from "antd";
 import { message, Upload, Avatar, Flex } from "antd";
 import { Typography } from "antd";
+import TextArea from "antd/es/input/TextArea";
 import { UploadChangeParam } from "antd/es/upload";
 import { RcFile, UploadFile, UploadProps } from "antd/es/upload/interface";
 
@@ -15,8 +16,6 @@ import {
 } from "@api/user/user.api";
 import { Loader } from "@components/Loader/Loader";
 import { TagPool } from "@components/TagPool/TagPool";
-import { TransparentInput } from "@components/TransparentInput/TransparentInput";
-import { TransparentTextArea } from "@components/TransparentTextArea/TransparentTextArea";
 import { getBase64, beforeUpload } from "@infrastructure/image-upload";
 import { Role } from "@interfaces/user";
 
@@ -169,7 +168,7 @@ export const Profile = () => {
                   <Row justify="space-between">
                     <Col span={8}>
                       <Form.Item label="Имя">
-                        <TransparentInput
+                        <Input
                           value={profileData?.user.first_name}
                           onChange={(e) =>
                             dispatch({
@@ -181,7 +180,7 @@ export const Profile = () => {
                         />
                       </Form.Item>
                       <Form.Item label="Фамилия">
-                        <TransparentInput
+                        <Input
                           value={profileData?.user.last_name}
                           onChange={(e) =>
                             dispatch({
@@ -227,10 +226,7 @@ export const Profile = () => {
                     </Col>
                   </Row>
                   <Form.Item label="Должность">
-                    <TransparentInput
-                      placeholder="Soon..."
-                      readOnly={isReadOnly}
-                    />
+                    <Input placeholder="Soon..." readOnly={isReadOnly} />
                   </Form.Item>
                 </Col>
               </Row>
@@ -240,22 +236,19 @@ export const Profile = () => {
           <Row>
             <Col span={24}>
               <Form.Item label="Почта">
-                <TransparentInput
-                  value={profileData?.user.email}
-                  readOnly={isReadOnly}
-                />
+                <Input value={profileData?.user.email} readOnly={isReadOnly} />
               </Form.Item>
               <Form.Item label="Номер телефона">
-                <TransparentInput placeholder="Soon..." readOnly={isReadOnly} />
+                <Input placeholder="Soon..." readOnly={isReadOnly} />
               </Form.Item>
               <Form.Item label="Telegram">
-                <TransparentInput placeholder="Soon..." readOnly={isReadOnly} />
+                <Input placeholder="Soon..." readOnly={isReadOnly} />
               </Form.Item>
               <Form.Item label="Образование">
-                <TransparentInput placeholder="Soon..." readOnly={isReadOnly} />
+                <Input placeholder="Soon..." readOnly={isReadOnly} />
               </Form.Item>
               <Form.Item label="О себе">
-                <TransparentTextArea
+                <TextArea
                   rows={4}
                   style={{ height: 120, resize: "none" }}
                   readOnly={isReadOnly}

@@ -4,6 +4,7 @@ import {
   Col,
   Flex,
   Form,
+  Input,
   Row,
   Typography,
   Upload,
@@ -11,6 +12,7 @@ import {
   UploadProps,
   message
 } from "antd";
+import TextArea from "antd/es/input/TextArea";
 import { RcFile, UploadChangeParam } from "antd/es/upload";
 
 import { useEffect, useState, useReducer } from "react";
@@ -24,8 +26,6 @@ import {
   companyApi
 } from "@api/company/company.api";
 import { Loader } from "@components/Loader/Loader";
-import { TransparentInput } from "@components/TransparentInput/TransparentInput";
-import { TransparentTextArea } from "@components/TransparentTextArea/TransparentTextArea";
 import { beforeUpload, getBase64 } from "@infrastructure/image-upload";
 
 import styles from "./Company.module.scss";
@@ -188,7 +188,7 @@ export const Company = () => {
                   <Row justify="space-between">
                     <Col span={8}>
                       <Form.Item label="Название">
-                        <TransparentInput
+                        <Input
                           value={companyData?.name}
                           onChange={(e) =>
                             dispatch({
@@ -241,16 +241,16 @@ export const Company = () => {
           <Row>
             <Col span={24}>
               <Form.Item label="Почта">
-                <TransparentInput placeholder="Soon..." readOnly={isReadOnly} />
+                <Input placeholder="Soon..." readOnly={isReadOnly} />
               </Form.Item>
               <Form.Item label="Номер телефона">
-                <TransparentInput placeholder="Soon..." readOnly={isReadOnly} />
+                <Input placeholder="Soon..." readOnly={isReadOnly} />
               </Form.Item>
               <Form.Item label="Telegram">
-                <TransparentInput placeholder="Soon..." readOnly={isReadOnly} />
+                <Input placeholder="Soon..." readOnly={isReadOnly} />
               </Form.Item>
               <Form.Item label="О компании">
-                <TransparentTextArea
+                <TextArea
                   value={companyData?.description}
                   onChange={(e) =>
                     dispatch({
