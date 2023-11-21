@@ -1,14 +1,38 @@
-    .header {
-        display: flex;
-        justify-content: space-between;
-        text-align: center;
-        height: 64px;
-        padding-inline: 50px;
-        line-height: 64px;
-        background-color: #fff;
+.header {
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+    height: 72px;
+    padding-inline: 50px;
+    line-height: 72px;
+    background-color: #212121;
+    border-bottom: 2px solid rgba(217, 217, 217, 0.2);
 
-        .header-buttons {
-            display: flex;
-            column-gap: 20px;
+    .items {
+        display: flex;
+        text-align: center;
+        column-gap: 30px;
+
+        .logo {
+            letter-spacing: 10px;
+            background: -webkit-linear-gradient(#39CD7D, #00642E);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 72px;
+        }
+
+        .item {
+            line-height: 72px;
+            font-weight: 500;
+
+            &:hover {
+                color: #fff;
+            }
         }
     }
+
+    .profile {
+        line-height: 72px;
+    }
+}
