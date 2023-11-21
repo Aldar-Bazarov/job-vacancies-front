@@ -1,4 +1,4 @@
-import { Button, message } from "antd";
+import { Typography, message } from "antd";
 
 import React, { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
@@ -27,9 +27,9 @@ const LogoutButton: React.FC<ILogoutProps> = ({ setAuth }) => {
   }, [navigate, setAuth]);
 
   return (
-    <Button onClick={click} type="primary">
+    <Typography onClick={click} style={{ cursor: "pointer" }}>
       Выйти
-    </Button>
+    </Typography>
   );
 };
 
