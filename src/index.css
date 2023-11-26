@@ -29,3 +29,8 @@ input:-webkit-autofill:active{
 a {
   text-decoration: none;
 }
+
+.ant-card-body,
+.ant-card-head{
+  padding: 0 !important;
+}
