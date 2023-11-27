@@ -3,6 +3,9 @@
     height: 100%;
 
     .content {
-        min-height: calc(100vh - 64px);
+        min-height: calc(100vh - 74px);
+        margin: 0 auto;
+        max-width: 1720px;
+        padding: 50px 100px;
     }
 }

@@ -26,12 +26,19 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             Input: {
               lineWidth: 1,
               colorBorder: "rgba(255, 255, 255, 0.14)",
-              colorBgBase: "#212121",
+              colorBgContainer: "#252525",
+              hoverBg: "#252525",
+              activeBg: "#252525",
               colorTextPlaceholder: "#C9C9C9"
             },
             Button: {
               primaryShadow: "none",
               primaryColor: "#FFF"
+            },
+            Select: {
+              colorBorder: "rgba(255, 255, 255, 0.14)",
+              selectorBg: "#252525",
+              optionSelectedBg: "#252525"
             }
           }
         }}

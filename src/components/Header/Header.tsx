@@ -51,7 +51,7 @@ export const Header: React.FC = () => {
             Вакансии
           </Typography.Title>
         </Link>
-        <Link to={"/executors"}>
+        <Link to={"/applicants"}>
           <Typography.Title level={5} className={styles["item"]}>
             Исполнители
           </Typography.Title>

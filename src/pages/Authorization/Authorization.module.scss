@@ -33,7 +33,7 @@
         text-align: center;
         border-radius: 40px;
         background-color: #282828;
-        box-shadow: 18px 18px 8px 0px rgba(0, 0, 0, 0.2);
+        box-shadow: 18px 18px 8px 0 rgb(0 0 0 / 20%);
         padding: 20px 80px;
         position: relative;
 
@@ -41,7 +41,6 @@
             letter-spacing: 10px;
             background: -webkit-linear-gradient(#39CD7D, #00642E);
             background-clip: text;
-            -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
