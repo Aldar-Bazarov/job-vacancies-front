@@ -1,11 +1,13 @@
-import { Button, Typography, Input, Row, Col, Flex } from "antd";
+import { Typography, Row, Col, Flex } from "antd";
 
 import { useEffect, useState } from "react";
 
+import { Search } from "@components/Search/Search";
 import { isAuthenticated } from "@infrastructure/axios/auth";
 
 import { CompanyCard } from "./CompanyCard/CompanyCard";
 import styles from "./Home.module.scss";
+import mainLogo from "./MainLogo.png";
 
 //TODO исправить на запрос за данными
 //Там фильтруем по количеству откликов и берем 6 самых рейтинговых
@@ -17,7 +19,7 @@ const mainCards = [
     link: "apple.com",
     raiting: 5.0,
     responses: 20000,
-    imgSrc: "img"
+    imgSrc: "https://cdn-icons-png.flaticon.com/512/154/154870.png"
   },
   {
     id: 1,
@@ -25,7 +27,7 @@ const mainCards = [
     link: "link",
     raiting: 5.0,
     responses: 20000,
-    imgSrc: "img"
+    imgSrc: "https://cdn-icons-png.flaticon.com/512/154/154870.png"
   },
   {
     id: 2,
@@ -33,7 +35,7 @@ const mainCards = [
     link: "link",
     raiting: 5.0,
     responses: 20000,
-    imgSrc: "img"
+    imgSrc: "https://cdn-icons-png.flaticon.com/512/154/154870.png"
   },
   {
     id: 3,
@@ -41,7 +43,7 @@ const mainCards = [
     link: "link",
     raiting: 5.0,
     responses: 20000,
-    imgSrc: "img"
+    imgSrc: "https://cdn-icons-png.flaticon.com/512/154/154870.png"
   },
   {
     id: 4,
@@ -49,7 +51,7 @@ const mainCards = [
     link: "link",
     raiting: 5.0,
     responses: 20000,
-    imgSrc: "img"
+    imgSrc: "https://cdn-icons-png.flaticon.com/512/154/154870.png"
   },
   {
     id: 5,
@@ -57,7 +59,7 @@ const mainCards = [
     link: "link",
     raiting: 5.0,
     responses: 20000,
-    imgSrc: "img"
+    imgSrc: "https://cdn-icons-png.flaticon.com/512/154/154870.png"
   }
 ];
 
@@ -74,30 +76,25 @@ export const Home: React.FC = () => {
     //в качестве queryparam - inputValue
   };
 
-  const homeInputPlaceholder = "Профессия, должность или компания...";
   return (
-    <Flex align="center" className={styles["container"]}>
+    <Flex align="center">
       <div className={styles["home"]}>
         <Typography.Title className={styles["title"]}>
           Работа найдется для каждого
         </Typography.Title>
-        <div className={styles["search"]}>
-          <Input
-            className={styles["search-input"]}
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            placeholder={homeInputPlaceholder}
-          />
-          <Button className={styles["search-btn"]} onClick={handleSearch}>
-            Искать
-          </Button>
-        </div>
+        <Search
+          size="large"
+          inputPlaceholder="Профессия, должность или компания..."
+          inputValue={inputValue}
+          setInputValue={setInputValue}
+          handleSearch={handleSearch}
+        />
         <Typography.Title level={2} className={styles["second-title"]}>
           Лучшие работодатели
         </Typography.Title>
-        <Row gutter={[32, 32]}>
+        <Row gutter={[32, 32]} className={styles["companies"]}>
           {mainCards.map((el) => (
-            <Col span={8}>
+            <Col span={8} key={el.id}>
               <CompanyCard
                 link={el.link}
                 name={el.name}
@@ -109,6 +106,7 @@ export const Home: React.FC = () => {
             </Col>
           ))}
         </Row>
+        <img src={mainLogo} alt="logo" className={styles["hero-img"]} />
       </div>
     </Flex>
   );

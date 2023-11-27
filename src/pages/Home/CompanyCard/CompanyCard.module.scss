@@ -1,8 +1,12 @@
-.header,
-.card-inner {
-    padding: 10px 20px;
-}
+.card {
+    max-width: 276px;
 
-.metric {
-    font-size: 15px;
+    .header,
+    .card-inner {
+        padding: 10px 20px;
+    }
+
+    .metric {
+        font-size: 15px;
+    }
 }

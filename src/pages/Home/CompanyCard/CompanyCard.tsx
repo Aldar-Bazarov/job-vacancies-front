@@ -26,7 +26,7 @@ export const CompanyCard = ({
     </Flex>
   );
   return (
-    <Card title={titleComponent}>
+    <Card title={titleComponent} className={styles["card"]}>
       <Flex justify="space-between" className={styles["card-inner"]}>
         <Typography className={styles["metric"]}>
           {responses} откликов
