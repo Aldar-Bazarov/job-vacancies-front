@@ -1,7 +1,7 @@
-import { Button, Col, Flex, Row } from "antd";
+import { Button } from "antd";
 import { Typography } from "antd";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import { EditOutlined } from "@ant-design/icons";
 
