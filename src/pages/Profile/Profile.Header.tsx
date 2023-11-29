@@ -1,34 +1,33 @@
-import { Button, Form, Col, Row, Input, Space } from "antd";
+import { Button, Form, Col, Row, Input, Space, Typography } from "antd";
 import { Upload } from "antd";
 import { UploadChangeParam } from "antd/es/upload";
 import { RcFile, UploadFile, UploadProps } from "antd/es/upload/interface";
 
+import React from "react";
+
 import { UploadOutlined } from "@ant-design/icons";
 import { getBase64, beforeUpload } from "@infrastructure/image-upload";
 
-import { IEditableHeaderProps } from "./Profile.Types";
+import { ProfileContext } from "./Profile";
+import { IEditableHeaderProps, IReadonlyHeaderProps } from "./Profile.Types";
 
 export const EditableHeader: React.FC<IEditableHeaderProps> = ({
-  dispatch,
-  first_name,
-  last_name,
-  email,
-  isReadOnly,
-  setIsLoading,
   setImageUrl
 }) => {
+  const context = React.useContext(ProfileContext);
   const handleChange: UploadProps["onChange"] = (
     info: UploadChangeParam<UploadFile>
   ) => {
+    if (context == undefined) return;
     if (info.file.status === "uploading") {
-      setIsLoading(true);
+      context.setIsLoading(true);
     } else if (info.file.status === "done") {
       getBase64(info.file.originFileObj as RcFile, (url) => {
         setImageUrl(url);
-        setIsLoading(false);
+        context.setIsLoading(false);
       });
     } else {
-      setIsLoading(false);
+      context.setIsLoading(false);
     }
   };
   // eslint-disable-next-line
@@ -44,42 +43,45 @@ export const EditableHeader: React.FC<IEditableHeaderProps> = ({
       <Col span={8}>
         <Form.Item label="Имя">
           <Input
-            value={first_name}
+            value={context?.profileData.user.first_name}
             onChange={(e) =>
-              dispatch({
+              context?.dispatch({
                 type: "change_first_name",
                 value: e.target.value
               })
             }
-            readOnly={isReadOnly}
+            readOnly={context?.isReadOnly}
           />
         </Form.Item>
         <Form.Item label="Фамилия">
           <Input
-            value={last_name}
+            value={context?.profileData.user.last_name}
             onChange={(e) =>
-              dispatch({
+              context?.dispatch({
                 type: "change_last_name",
                 value: e.target.value
               })
             }
-            readOnly={isReadOnly}
+            readOnly={context?.isReadOnly}
           />
         </Form.Item>
         <Form.Item label="Telegram">
-          <Input placeholder="Soon..." readOnly={isReadOnly} />
+          <Input placeholder="Soon..." readOnly={context?.isReadOnly} />
         </Form.Item>
       </Col>
       <Col span={8}>
         <Form.Item label="Почта">
-          <Input value={email} readOnly={isReadOnly} />
+          <Input
+            value={context?.profileData.user.email}
+            readOnly={context?.isReadOnly}
+          />
         </Form.Item>
         <Form.Item label="Номер телефона">
-          <Input placeholder="Soon..." readOnly={isReadOnly} />
+          <Input placeholder="Soon..." readOnly={context?.isReadOnly} />
         </Form.Item>
       </Col>
       <Col span={8}>
-        {!isReadOnly && (
+        {!context?.isReadOnly && (
           <Space
             direction="vertical"
             size={10}
@@ -101,6 +103,33 @@ export const EditableHeader: React.FC<IEditableHeaderProps> = ({
             </Button>
           </Space>
         )}
+      </Col>
+    </Row>
+  );
+};
+
+export const ReadonlyHeader: React.FC<IReadonlyHeaderProps> = () => {
+  const context = React.useContext(ProfileContext);
+  return (
+    <Row>
+      <Col span={6}>
+        <Space direction="vertical" size={1}>
+          <Typography.Text>{"Некий пол, некая дата рождения"}</Typography.Text>
+          <Typography.Text>
+            {context?.profileData.status_id === 0
+              ? "Ищет работу"
+              : "Не ищет работу"}
+          </Typography.Text>
+        </Space>
+      </Col>
+      <Col span={6}>
+        <Space direction="vertical" size={1}>
+          <Typography.Text>{"Адрес: Некий адрес"}</Typography.Text>
+          <Typography.Text>{"Телефон: Некий номер телефона"}</Typography.Text>
+          <Typography.Text>
+            {"Почта: " + context?.profileData.user.email}
+          </Typography.Text>
+        </Space>
       </Col>
     </Row>
   );
