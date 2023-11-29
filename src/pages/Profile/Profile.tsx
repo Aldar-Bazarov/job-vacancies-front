@@ -14,6 +14,7 @@ import {
   UpdateProfileError,
   userApi
 } from "@api/user/user.api";
+import { EditableFormItem } from "@components/EditableFormItem/EditableFormItem";
 import { Loader } from "@components/Loader/Loader";
 import { TagPool } from "@components/TagPool/TagPool";
 import { getBase64, beforeUpload } from "@infrastructure/image-upload";
@@ -153,81 +154,94 @@ export const Profile = () => {
           initialValues={{ layout: "horizontal" }}
           className={styles["profile-form"]}
         >
-          <Typography.Title>Пользователь</Typography.Title>
           <Row>
             <Col span={24}>
               <Row align="middle">
-                <Col flex="210px">
+                <Col flex="110px">
                   <Avatar
-                    size={200}
+                    size={100}
                     src={imageUrl ?? "/images/default-avatar.jpg"}
                   />
                 </Col>
-
                 <Col flex="auto">
-                  <Row justify="space-between">
-                    <Col span={8}>
-                      <Form.Item label="Имя">
-                        <Input
-                          value={profileData?.user.first_name}
-                          onChange={(e) =>
-                            dispatch({
-                              type: "change_first_name",
-                              value: e.target.value
-                            })
-                          }
-                          readOnly={isReadOnly}
-                        />
-                      </Form.Item>
-                      <Form.Item label="Фамилия">
-                        <Input
-                          value={profileData?.user.last_name}
-                          onChange={(e) =>
-                            dispatch({
-                              type: "change_last_name",
-                              value: e.target.value
-                            })
-                          }
-                          readOnly={isReadOnly}
-                        />
-                      </Form.Item>
-                    </Col>
-                    <Col span={14}>
-                      {!isReadOnly && (
-                        <Flex
-                          style={{ width: "100%" }}
-                          justify={"end"}
-                          align={"end"}
-                          gap={10}
-                        >
-                          <Upload
-                            showUploadList={false}
-                            customRequest={dummyRequest}
-                            beforeUpload={beforeUpload}
-                            onChange={handleChange}
-                          >
-                            <Button
-                              icon={<UploadOutlined />}
-                              type="primary"
-                              size="large"
+                  <EditableFormItem
+                    icon={<></>}
+                    title={
+                      profileData?.user.last_name +
+                      " " +
+                      profileData?.user.first_name
+                    }
+                    readonly={isReadOnly}
+                  >
+                    <EditableFormItem.EditablePart>
+                      <Row justify="space-between">
+                        <Col span={8}>
+                          <Form.Item label="Имя">
+                            <Input
+                              value={profileData?.user.first_name}
+                              onChange={(e) =>
+                                dispatch({
+                                  type: "change_first_name",
+                                  value: e.target.value
+                                })
+                              }
+                              readOnly={isReadOnly}
+                            />
+                          </Form.Item>
+                          <Form.Item label="Фамилия">
+                            <Input
+                              value={profileData?.user.last_name}
+                              onChange={(e) =>
+                                dispatch({
+                                  type: "change_last_name",
+                                  value: e.target.value
+                                })
+                              }
+                              readOnly={isReadOnly}
+                            />
+                          </Form.Item>
+                        </Col>
+                        <Col span={14}>
+                          {!isReadOnly && (
+                            <Flex
+                              style={{ width: "100%" }}
+                              justify={"end"}
+                              align={"end"}
+                              gap={10}
                             >
-                              Добавить фото
-                            </Button>
-                          </Upload>
-                          <Button
-                            danger
-                            style={{ backgroundColor: "white" }}
-                            size="large"
-                          >
-                            Удалить
-                          </Button>
-                        </Flex>
-                      )}
-                    </Col>
-                  </Row>
-                  <Form.Item label="Должность">
-                    <Input placeholder="Soon..." readOnly={isReadOnly} />
-                  </Form.Item>
+                              <Upload
+                                showUploadList={false}
+                                customRequest={dummyRequest}
+                                beforeUpload={beforeUpload}
+                                onChange={handleChange}
+                              >
+                                <Button
+                                  icon={<UploadOutlined />}
+                                  type="primary"
+                                  size="large"
+                                >
+                                  Добавить фото
+                                </Button>
+                              </Upload>
+                              <Button
+                                danger
+                                style={{ backgroundColor: "white" }}
+                                size="large"
+                              >
+                                Удалить
+                              </Button>
+                            </Flex>
+                          )}
+                        </Col>
+                      </Row>
+                      <Form.Item label="Должность">
+                        <Input placeholder="Soon..." readOnly={isReadOnly} />
+                      </Form.Item>
+                    </EditableFormItem.EditablePart>
+                    <EditableFormItem.ReadOnlyPart>
+                      data
+                    </EditableFormItem.ReadOnlyPart>
+                  </EditableFormItem>
                 </Col>
               </Row>
             </Col>
