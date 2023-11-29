@@ -1,4 +1,4 @@
-import { Button, Form, Col, Row, Input } from "antd";
+import { Button, Form, Col, Row, Input, Space, Divider } from "antd";
 import { message, Upload, Avatar, Flex } from "antd";
 import { Typography } from "antd";
 import TextArea from "antd/es/input/TextArea";
@@ -15,6 +15,7 @@ import {
   userApi
 } from "@api/user/user.api";
 import { EditableFormItem } from "@components/EditableFormItem/EditableFormItem";
+import { InfoIcon } from "@components/Icons/InfoIcon";
 import { Loader } from "@components/Loader/Loader";
 import { TagPool } from "@components/TagPool/TagPool";
 import { getBase64, beforeUpload } from "@infrastructure/image-upload";
@@ -156,8 +157,8 @@ export const Profile = () => {
         >
           <Row>
             <Col span={24}>
-              <Row align="middle">
-                <Col flex="110px">
+              <Row align="middle" justify="start">
+                <Col flex="110px" style={{ marginBottom: "auto" }}>
                   <Avatar
                     size={100}
                     src={imageUrl ?? "/images/default-avatar.jpg"}
@@ -174,7 +175,7 @@ export const Profile = () => {
                     readonly={isReadOnly}
                   >
                     <EditableFormItem.EditablePart>
-                      <Row justify="space-between">
+                      <Row gutter={[12, 12]}>
                         <Col span={8}>
                           <Form.Item label="Имя">
                             <Input
@@ -200,8 +201,28 @@ export const Profile = () => {
                               readOnly={isReadOnly}
                             />
                           </Form.Item>
+                          <Form.Item label="Telegram">
+                            <Input
+                              placeholder="Soon..."
+                              readOnly={isReadOnly}
+                            />
+                          </Form.Item>
                         </Col>
-                        <Col span={14}>
+                        <Col span={8}>
+                          <Form.Item label="Почта">
+                            <Input
+                              value={profileData?.user.email}
+                              readOnly={isReadOnly}
+                            />
+                          </Form.Item>
+                          <Form.Item label="Номер телефона">
+                            <Input
+                              placeholder="Soon..."
+                              readOnly={isReadOnly}
+                            />
+                          </Form.Item>
+                        </Col>
+                        <Col span={8}>
                           {!isReadOnly && (
                             <Flex
                               style={{ width: "100%" }}
@@ -234,28 +255,43 @@ export const Profile = () => {
                           )}
                         </Col>
                       </Row>
-                      <Form.Item label="Должность">
-                        <Input placeholder="Soon..." readOnly={isReadOnly} />
-                      </Form.Item>
                     </EditableFormItem.EditablePart>
                     <EditableFormItem.ReadOnlyPart>
-                      data
+                      <Row>
+                        <Col span={6}>
+                          <Space direction="vertical" size={1}>
+                            <Typography.Text>
+                              {"Некий пол, некая дата рождения"}
+                            </Typography.Text>
+                            <Typography.Text>
+                              {profileData.status_id === 0
+                                ? "Ищет работу"
+                                : "Не ищет работу"}
+                            </Typography.Text>
+                          </Space>
+                        </Col>
+                        <Col span={6}>
+                          <Space direction="vertical" size={1}>
+                            <Typography.Text>{"Некий адрес"}</Typography.Text>
+                            <Typography.Text>
+                              {"Некий номер телефона"}
+                            </Typography.Text>
+                            <Typography.Text>
+                              {profileData?.user.email}
+                            </Typography.Text>
+                          </Space>
+                        </Col>
+                      </Row>
                     </EditableFormItem.ReadOnlyPart>
                   </EditableFormItem>
                 </Col>
               </Row>
             </Col>
           </Row>
-
+          <Divider style={{ borderColor: "#7E7E7E66" }} />
           <Row>
             <Col span={24}>
-              <Form.Item label="Почта">
-                <Input value={profileData?.user.email} readOnly={isReadOnly} />
-              </Form.Item>
-              <Form.Item label="Номер телефона">
-                <Input placeholder="Soon..." readOnly={isReadOnly} />
-              </Form.Item>
-              <Form.Item label="Telegram">
+              <Form.Item label="Должность">
                 <Input placeholder="Soon..." readOnly={isReadOnly} />
               </Form.Item>
               <Form.Item label="Образование">
