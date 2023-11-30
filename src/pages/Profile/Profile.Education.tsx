@@ -2,11 +2,11 @@ import { Form, Col, Row, Input, Space, Typography } from "antd";
 
 import React from "react";
 
-import { ProfileContext } from "./Profile";
 import {
   IEditableEducationProps,
   IReadonlyEducationProps
 } from "./Profile.Types";
+import { ProfileContext } from "./ProfileContext";
 
 export const EditableEducation: React.FC<IEditableEducationProps> = () => {
   const context = React.useContext(ProfileContext);

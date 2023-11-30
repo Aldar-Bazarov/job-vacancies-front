@@ -7,21 +7,20 @@ import { useParams } from "react-router-dom";
 
 import { UpdateProfileError, userApi } from "@api/user/user.api";
 import { EditableFormItem } from "@components/EditableFormItem/EditableFormItem";
+import { EducationIcon } from "@components/Icons/EducationIcon";
 import { InfoIcon } from "@components/Icons/InfoIcon";
+import { SkillsIcon } from "@components/Icons/SkillsIcon";
 import { Loader } from "@components/Loader/Loader";
-import { TagPool } from "@components/TagPool/TagPool";
 import { Role } from "@interfaces/user";
 
 import { EditableEducation, ReadonlyEducation } from "./Profile.Education";
 import { EditableHeader, ReadonlyHeader } from "./Profile.Header";
 //import { EditableMainInfo, ReadonlyMainInfo } from "./Profile.MainInfo";
 import styles from "./Profile.module.scss";
-import { IProfileCompound, IProfileContext } from "./Profile.Types";
+import { HardSkills } from "./Profile.Skills";
+import { IProfileCompound } from "./Profile.Types";
+import { ProfileContext } from "./ProfileContext";
 import { ProfileReducer } from "./ProfileReducer";
-
-export const ProfileContext = React.createContext<IProfileContext | undefined>(
-  undefined
-);
 
 export const Profile: React.FC & IProfileCompound = () => {
   const [profileData, dispatch] = useReducer(ProfileReducer, null);
@@ -131,7 +130,7 @@ export const Profile: React.FC & IProfileCompound = () => {
             <Row>
               <Col span={12}>
                 <EditableFormItem
-                  icon={<InfoIcon />}
+                  icon={<EducationIcon />}
                   title={"Образование"}
                   readonly={isReadOnly}
                 >
@@ -141,6 +140,18 @@ export const Profile: React.FC & IProfileCompound = () => {
                   <EditableFormItem.ReadOnlyPart>
                     <Profile.ReadonlyEducation />
                   </EditableFormItem.ReadOnlyPart>
+                </EditableFormItem>
+              </Col>
+              <Col span={12}>
+                <EditableFormItem
+                  icon={<SkillsIcon />}
+                  title={"Ключевые навыки"}
+                  readonly={isReadOnly}
+                  notAlternate={true}
+                >
+                  <EditableFormItem.NotAlternatePart>
+                    <Profile.HardSkills setTags={setTags} tags={tags} />
+                  </EditableFormItem.NotAlternatePart>
                 </EditableFormItem>
               </Col>
             </Row>
@@ -154,9 +165,6 @@ export const Profile: React.FC & IProfileCompound = () => {
                 style={{ height: 120, resize: "none" }}
                 readOnly={isReadOnly}
               />
-            </Form.Item>
-            <Form.Item label="Ключевые навыки">
-              <TagPool tags={tags} setTags={setTags} readOnly={isReadOnly} />
             </Form.Item>
 
             {!isReadOnly && (
@@ -181,3 +189,4 @@ Profile.ReadonlyHeader = ReadonlyHeader;
 // Profile.ReadonlyMainInfo = ReadonlyMainInfo;
 Profile.EditableEducation = EditableEducation;
 Profile.ReadonlyEducation = ReadonlyEducation;
+Profile.HardSkills = HardSkills;

@@ -6,11 +6,13 @@ import React, { useState } from "react";
 import { EditOutlined } from "@ant-design/icons";
 
 import styles from "./EditableFormItem.module.scss";
+import { EditableFormItemContext } from "./EditableFormItemContext";
 
 interface IEditableFormItemProps {
   icon: React.ReactNode;
   title: string;
   readonly: boolean;
+  notAlternate?: boolean;
   children: React.ReactNode;
 }
 
@@ -25,18 +27,17 @@ interface IEditableFormItemEditablePart {
 interface IEditableFormItemCompound {
   ReadOnlyPart: React.FC<IEditableFormItemReadOnlyPart>;
   EditablePart: React.FC<IEditableFormItemEditablePart>;
+  NotAlternatePart: React.FC<IEditableFormItemEditablePart>;
 }
-
-interface IEditableFormItemContext {
-  mode: "edit" | "readonly";
-}
-
-const EditableFormItemContext = React.createContext<IEditableFormItemContext>({
-  mode: "readonly"
-});
 
 export const EditableFormItem: React.FC<IEditableFormItemProps> &
-  IEditableFormItemCompound = ({ icon, title, readonly, children }) => {
+  IEditableFormItemCompound = ({
+  icon,
+  title,
+  readonly,
+  notAlternate,
+  children
+}) => {
   const [mode, setMode] = useState<"edit" | "readonly">("readonly");
 
   const handleChangeMode = () => {
@@ -62,7 +63,9 @@ export const EditableFormItem: React.FC<IEditableFormItemProps> &
         </div>
       </header>
       <article>
-        <EditableFormItemContext.Provider value={{ mode }}>
+        <EditableFormItemContext.Provider
+          value={{ mode, notAlternate: notAlternate ?? false }}
+        >
           {children}
         </EditableFormItemContext.Provider>
       </article>
@@ -74,15 +77,33 @@ const ReadOnlyPart: React.FC<IEditableFormItemReadOnlyPart> = ({
   children
 }) => {
   const context = React.useContext(EditableFormItemContext);
-  return context.mode === "readonly" ? <>{children}</> : <></>;
+  return !context.notAlternate && context.mode === "readonly" ? (
+    <>{children}</>
+  ) : (
+    <></>
+  );
 };
 
 const EditablePart: React.FC<IEditableFormItemEditablePart> = ({
   children
 }) => {
   const context = React.useContext(EditableFormItemContext);
-  return context.mode === "edit" ? <>{children}</> : <></>;
+  return !context.notAlternate && context.mode === "edit" ? (
+    <>{children}</>
+  ) : (
+    <></>
+  );
+};
+
+const NotAlternatePart: React.FC<IEditableFormItemEditablePart> = ({
+  children
+}) => {
+  const context = React.useContext(EditableFormItemContext);
+  return context.notAlternate ? <>{children}</> : <></>;
 };
 
 EditableFormItem.ReadOnlyPart = ReadOnlyPart;
 EditableFormItem.EditablePart = EditablePart;
+EditableFormItem.NotAlternatePart = NotAlternatePart;
+
+EditableFormItem.defaultProps = { notAlternate: false };

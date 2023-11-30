@@ -13,6 +13,10 @@ export type ProfileReducerAction = {
 export interface IEditableHeaderProps {
   setImageUrl: React.Dispatch<React.SetStateAction<string | null>>;
 }
+export interface IHardSkillsProps {
+  setTags: React.Dispatch<React.SetStateAction<string[]>>;
+  tags: string[];
+}
 export interface IReadonlyHeaderProps {}
 export interface IReadonlyMainInfoProps {}
 export interface IEditableMainInfoProps {}
@@ -26,6 +30,7 @@ export interface IProfileCompound {
   // ReadonlyMainInfo: React.FC<IReadonlyMainInfoProps>;
   EditableEducation: React.FC<IEditableEducationProps>;
   ReadonlyEducation: React.FC<IReadonlyEducationProps>;
+  HardSkills: React.FC<IHardSkillsProps>;
 }
 
 export interface IProfileContext {

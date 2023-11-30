@@ -97,6 +97,7 @@ export const TagPool: React.FC<ITagPoolProps> = ({
         const tagElem = (
           <Tag
             key={tag}
+            className={styles["tag"]}
             closable={!readOnly}
             style={{ userSelect: "none" }}
             onClose={() => handleClose(tag)}

@@ -8,8 +8,8 @@ import React from "react";
 import { UploadOutlined } from "@ant-design/icons";
 import { getBase64, beforeUpload } from "@infrastructure/image-upload";
 
-import { ProfileContext } from "./Profile";
 import { IEditableHeaderProps, IReadonlyHeaderProps } from "./Profile.Types";
+import { ProfileContext } from "./ProfileContext";
 
 export const EditableHeader: React.FC<IEditableHeaderProps> = ({
   setImageUrl
