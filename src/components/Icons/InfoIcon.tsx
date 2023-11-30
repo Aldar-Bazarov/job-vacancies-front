@@ -17,4 +17,4 @@ export const InfoIcon: React.FC<{ size?: number }> = ({ size }) => {
   );
 };
 
-InfoIcon.defaultProps = { size: 25 };
+InfoIcon.defaultProps = { size: 20 };

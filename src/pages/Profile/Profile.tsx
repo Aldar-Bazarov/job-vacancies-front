@@ -12,10 +12,12 @@ import { Loader } from "@components/Loader/Loader";
 import { TagPool } from "@components/TagPool/TagPool";
 import { Role } from "@interfaces/user";
 
+import { EditableEducation, ReadonlyEducation } from "./Profile.Education";
 import { EditableHeader, ReadonlyHeader } from "./Profile.Header";
+//import { EditableMainInfo, ReadonlyMainInfo } from "./Profile.MainInfo";
 import styles from "./Profile.module.scss";
 import { IProfileCompound, IProfileContext } from "./Profile.Types";
-import { ProfileReducer } from "./ProfileReductor";
+import { ProfileReducer } from "./ProfileReducer";
 
 export const ProfileContext = React.createContext<IProfileContext | undefined>(
   undefined
@@ -127,23 +129,32 @@ export const Profile: React.FC & IProfileCompound = () => {
             <Divider style={{ borderColor: "#7E7E7E66" }} />
 
             <Row>
-              <Col span={24}>
-                <Form.Item label="Должность">
-                  <Input placeholder="Soon..." readOnly={isReadOnly} />
-                </Form.Item>
-                <Form.Item label="Образование">
-                  <Input placeholder="Soon..." readOnly={isReadOnly} />
-                </Form.Item>
-                <Form.Item label="О себе">
-                  <TextArea
-                    rows={4}
-                    style={{ height: 120, resize: "none" }}
-                    readOnly={isReadOnly}
-                  />
-                </Form.Item>
+              <Col span={12}>
+                <EditableFormItem
+                  icon={<InfoIcon />}
+                  title={"Образование"}
+                  readonly={isReadOnly}
+                >
+                  <EditableFormItem.EditablePart>
+                    <Profile.EditableEducation />
+                  </EditableFormItem.EditablePart>
+                  <EditableFormItem.ReadOnlyPart>
+                    <Profile.ReadonlyEducation />
+                  </EditableFormItem.ReadOnlyPart>
+                </EditableFormItem>
               </Col>
             </Row>
 
+            <Form.Item label="Должность">
+              <Input placeholder="Soon..." readOnly={isReadOnly} />
+            </Form.Item>
+            <Form.Item label="О себе">
+              <TextArea
+                rows={4}
+                style={{ height: 120, resize: "none" }}
+                readOnly={isReadOnly}
+              />
+            </Form.Item>
             <Form.Item label="Ключевые навыки">
               <TagPool tags={tags} setTags={setTags} readOnly={isReadOnly} />
             </Form.Item>
@@ -166,3 +177,7 @@ export const Profile: React.FC & IProfileCompound = () => {
 
 Profile.EditableHeader = EditableHeader;
 Profile.ReadonlyHeader = ReadonlyHeader;
+// Profile.EditableMainInfo = EditableMainInfo;
+// Profile.ReadonlyMainInfo = ReadonlyMainInfo;
+Profile.EditableEducation = EditableEducation;
+Profile.ReadonlyEducation = ReadonlyEducation;

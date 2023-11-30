@@ -29,5 +29,7 @@ export interface ProfileInfoDto {
     email: string;
     first_name: string;
     last_name: string;
+    education: string;
+    institution: string;
   };
 }

@@ -47,9 +47,11 @@ export const EditableFormItem: React.FC<IEditableFormItemProps> &
   return (
     <section className={styles["editable-form"]}>
       <header>
-        <div style={{ display: "flex", flexDirection: "row" }}>
+        <div className={styles["editable-form_header"]}>
           {icon}
-          <Typography.Title level={3}>{title}</Typography.Title>
+          <Typography.Title level={3} style={{ marginBottom: "0" }}>
+            {title}
+          </Typography.Title>
           {!readonly && (
             <Button
               type="text"
