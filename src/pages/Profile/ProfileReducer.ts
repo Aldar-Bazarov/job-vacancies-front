@@ -43,6 +43,10 @@ export function ProfileReducer(
       data!.user.job = action.value;
       break;
     }
+    case "change_about": {
+      data!.user.about = action.value;
+      break;
+    }
   }
   return data;
 }

@@ -8,6 +8,7 @@ export type ProfileReducerAction = {
     | "change_education"
     | "change_status"
     | "change_job"
+    | "change_about"
     | "change_institution"; // eslint-disable-next-line
   value?: any;
 };
@@ -24,8 +25,8 @@ export interface IReadonlyMainInfoProps {}
 export interface IEditableMainInfoProps {}
 export interface IReadonlyEducationProps {}
 export interface IEditableEducationProps {}
-export interface IEditableMainInfoProps {}
-export interface IEditableMainInfoProps {}
+export interface IReadonlyAboutProps {}
+export interface IEditableAboutProps {}
 
 export interface IProfileContext {
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;

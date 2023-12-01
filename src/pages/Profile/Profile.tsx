@@ -1,18 +1,19 @@
-import { Button, Form, Col, Row, Input, Divider } from "antd";
+import { Button, Form, Col, Row, Divider } from "antd";
 import { message, Avatar, Flex } from "antd";
-import TextArea from "antd/es/input/TextArea";
 
 import React, { useEffect, useReducer, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { UpdateProfileError, userApi } from "@api/user/user.api";
 import { EditableFormItem } from "@components/EditableFormItem/EditableFormItem";
+import { AboutIcon } from "@components/Icons/AboutIcon";
 import { EducationIcon } from "@components/Icons/EducationIcon";
 import { InfoIcon } from "@components/Icons/InfoIcon";
 import { SkillsIcon } from "@components/Icons/SkillsIcon";
 import { Loader } from "@components/Loader/Loader";
 import { Role } from "@interfaces/user";
 
+import { EditableAbout, ReadonlyAbout } from "./Profile.About";
 import { EditableEducation, ReadonlyEducation } from "./Profile.Education";
 import { EditableHeader, ReadonlyHeader } from "./Profile.Header";
 //import { EditableMainInfo, ReadonlyMainInfo } from "./Profile.MainInfo";
@@ -173,14 +174,25 @@ export const Profile: React.FC = () => {
                 </EditableFormItem>
               </Col>
             </Row>
+            <Divider style={{ borderColor: "#7E7E7E66" }} />
 
-            <Form.Item label="О себе">
-              <TextArea
-                rows={4}
-                style={{ height: 120, resize: "none" }}
-                readOnly={isReadOnly}
-              />
-            </Form.Item>
+            <Row>
+              <Col span={24}>
+                <EditableFormItem
+                  icon={<AboutIcon />}
+                  title={"Обо мне"}
+                  readonly={isReadOnly}
+                >
+                  <EditableFormItem.EditablePart>
+                    <EditableAbout />
+                  </EditableFormItem.EditablePart>
+                  <EditableFormItem.ReadOnlyPart>
+                    <ReadonlyAbout />
+                  </EditableFormItem.ReadOnlyPart>
+                </EditableFormItem>
+              </Col>
+            </Row>
+            <Divider style={{ borderColor: "#7E7E7E66" }} />
 
             {!isReadOnly && (
               <Flex style={{ width: "100%" }} justify={"end"} align={"end"}>
