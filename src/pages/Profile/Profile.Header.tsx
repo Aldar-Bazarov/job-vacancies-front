@@ -1,4 +1,4 @@
-import { Button, Form, Col, Row, Input, Space, Typography } from "antd";
+import { Button, Form, Col, Row, Input, Space, Typography, Radio } from "antd";
 import { Upload } from "antd";
 import { UploadChangeParam } from "antd/es/upload";
 import { RcFile, UploadFile, UploadProps } from "antd/es/upload/interface";
@@ -79,6 +79,23 @@ export const EditableHeader: React.FC<IEditableHeaderProps> = ({
         <Form.Item label="Номер телефона">
           <Input placeholder="Soon..." readOnly={context?.isReadOnly} />
         </Form.Item>
+        <Form.Item label="Статус">
+          <Radio.Group
+            value={context?.profileData.status_id}
+            onChange={(e) =>
+              context?.dispatch({
+                type: "change_status",
+                value: e.target.value
+              })
+            }
+          >
+            <Space direction="vertical">
+              <Radio value={0}>Ищет работу</Radio>
+              <Radio value={1}>Рассматривает предложения</Radio>
+              <Radio value={2}>Не ищет работу</Radio>
+            </Space>
+          </Radio.Group>
+        </Form.Item>
       </Col>
       <Col span={8}>
         {!context?.isReadOnly && (
@@ -110,15 +127,26 @@ export const EditableHeader: React.FC<IEditableHeaderProps> = ({
 
 export const ReadonlyHeader: React.FC<IReadonlyHeaderProps> = () => {
   const context = React.useContext(ProfileContext);
+
+  const getStatusTitle = (status_id: number) => {
+    switch (status_id) {
+      case 0:
+        return "Ищет работу";
+      case 1:
+        return "Рассматривает предложения";
+      case 2:
+        return "Не ищет работу";
+    }
+    return "-";
+  };
+
   return (
     <Row>
       <Col span={6}>
         <Space direction="vertical" size={1}>
           <Typography.Text>{"Некий пол, некая дата рождения"}</Typography.Text>
           <Typography.Text>
-            {context?.profileData.status_id === 0
-              ? "Ищет работу"
-              : "Не ищет работу"}
+            {getStatusTitle(context?.profileData.status_id ?? 2)}
           </Typography.Text>
         </Space>
       </Col>

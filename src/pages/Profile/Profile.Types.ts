@@ -6,6 +6,8 @@ export type ProfileReducerAction = {
     | "change_last_name"
     | "change_first_name"
     | "change_education"
+    | "change_status"
+    | "change_job"
     | "change_institution"; // eslint-disable-next-line
   value?: any;
 };
@@ -22,16 +24,8 @@ export interface IReadonlyMainInfoProps {}
 export interface IEditableMainInfoProps {}
 export interface IReadonlyEducationProps {}
 export interface IEditableEducationProps {}
-
-export interface IProfileCompound {
-  EditableHeader: React.FC<IEditableHeaderProps>;
-  ReadonlyHeader: React.FC<IReadonlyHeaderProps>;
-  // EditableMainInfo: React.FC<IEditableMainInfoProps>;
-  // ReadonlyMainInfo: React.FC<IReadonlyMainInfoProps>;
-  EditableEducation: React.FC<IEditableEducationProps>;
-  ReadonlyEducation: React.FC<IReadonlyEducationProps>;
-  HardSkills: React.FC<IHardSkillsProps>;
-}
+export interface IEditableMainInfoProps {}
+export interface IEditableMainInfoProps {}
 
 export interface IProfileContext {
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;

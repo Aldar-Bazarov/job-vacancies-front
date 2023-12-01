@@ -35,6 +35,14 @@ export function ProfileReducer(
       data!.user.institution = action.value;
       break;
     }
+    case "change_status": {
+      data!.status_id = action.value;
+      break;
+    }
+    case "change_job": {
+      data!.user.job = action.value;
+      break;
+    }
   }
   return data;
 }

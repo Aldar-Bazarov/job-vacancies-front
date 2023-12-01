@@ -16,13 +16,13 @@ import { Role } from "@interfaces/user";
 import { EditableEducation, ReadonlyEducation } from "./Profile.Education";
 import { EditableHeader, ReadonlyHeader } from "./Profile.Header";
 //import { EditableMainInfo, ReadonlyMainInfo } from "./Profile.MainInfo";
+import { EditableMainInfo, ReadonlyMainInfo } from "./Profile.MainInfo";
 import styles from "./Profile.module.scss";
 import { HardSkills } from "./Profile.Skills";
-import { IProfileCompound } from "./Profile.Types";
 import { ProfileContext } from "./ProfileContext";
 import { ProfileReducer } from "./ProfileReducer";
 
-export const Profile: React.FC & IProfileCompound = () => {
+export const Profile: React.FC = () => {
   const [profileData, dispatch] = useReducer(ProfileReducer, null);
   const { profileId } = useParams();
   const [isLoading, setIsLoading] = useState(false);
@@ -88,10 +88,10 @@ export const Profile: React.FC & IProfileCompound = () => {
       {profileData && (
         <ProfileContext.Provider
           value={{
-            dispatch: dispatch,
-            isReadOnly: isReadOnly,
-            profileData: profileData,
-            setIsLoading: setIsLoading
+            dispatch,
+            isReadOnly,
+            profileData,
+            setIsLoading
           }}
         >
           <Form
@@ -115,14 +115,32 @@ export const Profile: React.FC & IProfileCompound = () => {
                       readonly={isReadOnly}
                     >
                       <EditableFormItem.EditablePart>
-                        <Profile.EditableHeader setImageUrl={setImageUrl} />
+                        <EditableHeader setImageUrl={setImageUrl} />
                       </EditableFormItem.EditablePart>
                       <EditableFormItem.ReadOnlyPart>
-                        <Profile.ReadonlyHeader />
+                        <ReadonlyHeader />
                       </EditableFormItem.ReadOnlyPart>
                     </EditableFormItem>
                   </Col>
                 </Row>
+              </Col>
+            </Row>
+            <Divider style={{ borderColor: "#7E7E7E66" }} />
+
+            <Row>
+              <Col span={12}>
+                <EditableFormItem
+                  icon={<InfoIcon />}
+                  title={"Основная информация"}
+                  readonly={isReadOnly}
+                >
+                  <EditableFormItem.EditablePart>
+                    <EditableMainInfo />
+                  </EditableFormItem.EditablePart>
+                  <EditableFormItem.ReadOnlyPart>
+                    <ReadonlyMainInfo />
+                  </EditableFormItem.ReadOnlyPart>
+                </EditableFormItem>
               </Col>
             </Row>
             <Divider style={{ borderColor: "#7E7E7E66" }} />
@@ -135,30 +153,27 @@ export const Profile: React.FC & IProfileCompound = () => {
                   readonly={isReadOnly}
                 >
                   <EditableFormItem.EditablePart>
-                    <Profile.EditableEducation />
+                    <EditableEducation />
                   </EditableFormItem.EditablePart>
                   <EditableFormItem.ReadOnlyPart>
-                    <Profile.ReadonlyEducation />
+                    <ReadonlyEducation />
                   </EditableFormItem.ReadOnlyPart>
                 </EditableFormItem>
               </Col>
               <Col span={12}>
                 <EditableFormItem
                   icon={<SkillsIcon />}
-                  title={"Ключевые навыки"}
+                  title={"Ключ. навыки"}
                   readonly={isReadOnly}
                   notAlternate={true}
                 >
                   <EditableFormItem.NotAlternatePart>
-                    <Profile.HardSkills setTags={setTags} tags={tags} />
+                    <HardSkills setTags={setTags} tags={tags} />
                   </EditableFormItem.NotAlternatePart>
                 </EditableFormItem>
               </Col>
             </Row>
 
-            <Form.Item label="Должность">
-              <Input placeholder="Soon..." readOnly={isReadOnly} />
-            </Form.Item>
             <Form.Item label="О себе">
               <TextArea
                 rows={4}
@@ -182,11 +197,3 @@ export const Profile: React.FC & IProfileCompound = () => {
     </>
   );
 };
-
-Profile.EditableHeader = EditableHeader;
-Profile.ReadonlyHeader = ReadonlyHeader;
-// Profile.EditableMainInfo = EditableMainInfo;
-// Profile.ReadonlyMainInfo = ReadonlyMainInfo;
-Profile.EditableEducation = EditableEducation;
-Profile.ReadonlyEducation = ReadonlyEducation;
-Profile.HardSkills = HardSkills;

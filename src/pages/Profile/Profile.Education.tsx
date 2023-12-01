@@ -47,7 +47,7 @@ export const ReadonlyEducation: React.FC<IReadonlyEducationProps> = () => {
   const context = React.useContext(ProfileContext);
   return (
     <Row gutter={[12, 12]} style={{ minHeight: "172px" }}>
-      <Col span={12}>
+      <Col span={8}>
         <Space direction="vertical" size={1}>
           <Typography.Title level={5}>Образование, год</Typography.Title>
           <Typography.Text>
@@ -55,7 +55,7 @@ export const ReadonlyEducation: React.FC<IReadonlyEducationProps> = () => {
           </Typography.Text>
         </Space>
       </Col>
-      <Col span={12}>
+      <Col span={8}>
         <Space direction="vertical" size={1}>
           <Typography.Title level={5}>Место получения</Typography.Title>
           <Typography.Text>
