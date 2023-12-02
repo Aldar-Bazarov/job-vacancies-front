@@ -1,0 +1,33 @@
+.tagPlus {
+  height: 24px;
+  background: inherit;
+  border-style: none;
+};
+
+.tagInput {
+  height: 24px;
+  background: #D9D9D91A;
+  margin-inline-end: 8px;
+  vertical-align: top;
+  border: none;
+};
+
+.tag {
+  height: 24px;
+  background: #D9D9D91A;
+  vertical-align: top;
+  border: none;
+  font-size: 12px;
+  border-radius: 6px;
+  display: flex;
+  justify-content: center;
+
+  & svg {
+    color: #C9C9C9;
+  }
+
+  & span {
+    margin-top: auto;
+    margin-bottom: auto;
+  }
+}
