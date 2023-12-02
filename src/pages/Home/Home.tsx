@@ -1,7 +1,11 @@
-import { Typography, Row, Col, Flex } from "antd";
+import { Typography, Row, Col, Flex, message } from "antd";
 
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
+import { companiesApi } from "@api/companies/companies.api";
+import { CompanyInfo } from "@api/companies/types";
+import { searchApi } from "@api/search/search.api";
 import { Search } from "@components/Search/Search";
 import { isAuthenticated } from "@infrastructure/axios/auth";
 
@@ -9,71 +13,39 @@ import { CompanyCard } from "./CompanyCard/CompanyCard";
 import styles from "./Home.module.scss";
 import mainLogo from "./MainLogo.png";
 
-//TODO исправить на запрос за данными
-//Там фильтруем по количеству откликов и берем 6 самых рейтинговых
-//Пока затычка, потому что не хочется в данный момент этим заниматься, извините:)
-const mainCards = [
-  {
-    id: 0,
-    name: "Apple",
-    link: "apple.com",
-    raiting: 5.0,
-    responses: 20000,
-    imgSrc: "https://cdn-icons-png.flaticon.com/512/154/154870.png"
-  },
-  {
-    id: 1,
-    name: "Gazprom",
-    link: "link",
-    raiting: 5.0,
-    responses: 20000,
-    imgSrc: "https://cdn-icons-png.flaticon.com/512/154/154870.png"
-  },
-  {
-    id: 2,
-    name: "Lukoil",
-    link: "link",
-    raiting: 5.0,
-    responses: 20000,
-    imgSrc: "https://cdn-icons-png.flaticon.com/512/154/154870.png"
-  },
-  {
-    id: 3,
-    name: "IBM",
-    link: "link",
-    raiting: 5.0,
-    responses: 20000,
-    imgSrc: "https://cdn-icons-png.flaticon.com/512/154/154870.png"
-  },
-  {
-    id: 4,
-    name: "Microsoft",
-    link: "link",
-    raiting: 5.0,
-    responses: 20000,
-    imgSrc: "https://cdn-icons-png.flaticon.com/512/154/154870.png"
-  },
-  {
-    id: 5,
-    name: "Tatneft",
-    link: "link",
-    raiting: 5.0,
-    responses: 20000,
-    imgSrc: "https://cdn-icons-png.flaticon.com/512/154/154870.png"
-  }
-];
-
 export const Home: React.FC = () => {
   const [isAuth, setAuth] = useState(isAuthenticated());
+  const [companies, setCompanies] = useState<CompanyInfo[]>([]);
   const [inputValue, setInputValue] = useState<string>("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     setAuth(isAuthenticated());
   }, [isAuth]);
 
+  useEffect(() => {
+    companiesApi
+      .getCompanies()
+      .then((data) => {
+        setCompanies(data.length < 7 ? data : data.slice(0, 6));
+      })
+      .catch((error) => message.error(error.message));
+  }, []);
+
   const handleSearch = () => {
-    //TODO линк на страницу с поиском вакансий
-    //в качестве queryparam - inputValue
+    searchApi
+      .getCompanyByProperties({
+        name: inputValue,
+        ownerId: 0,
+        description: "Cool"
+      })
+      .then((data) => {
+        navigate("/search", {
+          state: {
+            companies: data
+          }
+        });
+      });
   };
 
   return (
@@ -93,15 +65,13 @@ export const Home: React.FC = () => {
           Лучшие работодатели
         </Typography.Title>
         <Row gutter={[32, 32]} className={styles["companies"]}>
-          {mainCards.map((el) => (
+          {companies.map((el) => (
             <Col span={8} key={el.id}>
               <CompanyCard
-                link={el.link}
+                id={el.id}
+                description={el.description}
                 name={el.name}
-                raiting={el.raiting}
-                responses={el.responses}
                 key={el.id}
-                imgSrc={el.imgSrc}
               />
             </Col>
           ))}
