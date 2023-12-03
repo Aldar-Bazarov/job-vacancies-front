@@ -5,8 +5,10 @@ import { Link, useParams } from "react-router-dom";
 
 import { CompanyInfoDto } from "@api/company/types";
 import { EditableFormItem } from "@components/EditableFormItem/EditableFormItem";
+import { AboutCompanyIcon } from "@components/Icons/AboutCompanyIcon";
 import { Loader } from "@components/Loader/Loader";
 
+import { EditableAbout, ReadonlyAbout } from "./Company.About";
 import { EditableHeader, ReadonlyHeader } from "./Company.Header";
 import styles from "./Company.module.scss";
 import { CompanyContext } from "./CompanyContext";
@@ -139,6 +141,24 @@ export const Company = () => {
                     </EditableFormItem>
                   </Col>
                 </Row>
+              </Col>
+            </Row>
+            <Divider style={{ borderColor: "#7E7E7E66" }} />
+
+            <Row>
+              <Col span={24}>
+                <EditableFormItem
+                  icon={<AboutCompanyIcon />}
+                  title={"О компании"}
+                  readonly={isReadOnly}
+                >
+                  <EditableFormItem.EditablePart>
+                    <EditableAbout />
+                  </EditableFormItem.EditablePart>
+                  <EditableFormItem.ReadOnlyPart>
+                    <ReadonlyAbout />
+                  </EditableFormItem.ReadOnlyPart>
+                </EditableFormItem>
               </Col>
             </Row>
             <Divider style={{ borderColor: "#7E7E7E66" }} />
