@@ -1,3 +1,5 @@
+import { VacancyInfo } from "@api/vacancies/types";
+
 export interface UpdateCompanyContext {
   id: number;
   name: string;
@@ -11,4 +13,5 @@ export interface CompanyInfoDto {
   owner_id: number;
   description: string;
   created_at: Date;
+  vacancies: VacancyInfo[];
 }
