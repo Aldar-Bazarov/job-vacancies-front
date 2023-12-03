@@ -9,7 +9,6 @@ export * from "./errors";
 const axios = new AxiosBuilder()
   .addBusinessErrorHandler()
   .addNotFoundErrorHandler()
-  .addUnauthorizedHandler()
   .build();
 
 axios.interceptors.request.use(authInterceptor);
@@ -36,5 +35,10 @@ export const companyApi = {
     } catch (err) {
       throw new UpdateCompanyError(err as Error);
     }
+  },
+
+  async getCompanies() {
+    const response = await axios.get<CompanyInfoDto[]>("/companies");
+    return unpack(response);
   }
 };

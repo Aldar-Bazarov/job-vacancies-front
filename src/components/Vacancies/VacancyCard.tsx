@@ -2,8 +2,8 @@ import { Card, Flex, Typography } from "antd";
 
 import { useMemo, useState, useEffect } from "react";
 
-import { companiesApi } from "@api/companies/companies.api";
-import { CompanyInfo } from "@api/companies/types";
+import { companyApi } from "@api/company/company.api";
+import { CompanyInfoDto } from "@api/company/types";
 
 import styles from "./VacancyCard.module.scss";
 
@@ -18,12 +18,10 @@ export const VacancyCard = ({
   company_id,
   description
 }: IVacancyCardProps) => {
-  const [companyInfo, setCompanyInfo] = useState<CompanyInfo>();
+  const [companyInfo, setCompanyInfo] = useState<CompanyInfoDto>();
 
   useEffect(() => {
-    companiesApi
-      .getCompanyById(company_id)
-      .then((data) => setCompanyInfo(data));
+    companyApi.getCompany(company_id).then((data) => setCompanyInfo(data));
   }, [company_id]);
 
   const titleComponent = useMemo(() => {
