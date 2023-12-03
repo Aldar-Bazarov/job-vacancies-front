@@ -10,7 +10,6 @@ import { ProfileContext } from "./ProfileContext";
 
 export const EditableMainInfo: React.FC<IEditableMainInfoProps> = () => {
   const context = React.useContext(ProfileContext);
-
   return (
     <Row gutter={[12, 12]}>
       <Col span={24}>
