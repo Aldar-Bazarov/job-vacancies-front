@@ -1,0 +1,43 @@
+.card {
+    background: #252525;
+    border: 1px solid;
+    border-radius: 10px;
+    max-width: 850px;
+    padding: 30px;
+    box-shadow: 1px 1px 5px rgba($color: #000, $alpha: 10%);
+    border-color: rgb(255 255 255 / 14%);
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    flex-direction: row;
+    column-gap: 30px;
+
+    .avatar {
+        width: 80px;
+        height: 90px;
+        border-radius: 10px;
+        background-size: cover;
+        background-position: center;
+    }
+
+    .info {
+        max-width: calc(100% - 110px);
+
+        .title {
+            font-size: 25px;
+            line-height: 30.48px;
+        }
+
+        .sub-title {
+            font-weight: 600;
+        }
+
+        .property {
+            display: flex;
+            column-gap: 10px;
+            align-items: center;
+            size: 20px;
+            line-height: 24.38px;
+        }
+    }
+}

@@ -1,0 +1,11 @@
+.pagination {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: end;
+    margin-top: 30px;
+
+    .ellipsis {
+        color: #FFF;
+    }
+}

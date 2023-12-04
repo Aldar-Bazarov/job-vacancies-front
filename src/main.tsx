@@ -20,7 +20,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             colorText: "#C9C9C9",
             fontFamily: "Montserrat, Inter, system-ui, Helvetica, sans-serif",
             borderRadiusSM: 10,
-            colorIcon: "#C9C9C9"
+            colorIcon: "#C9C9C9",
+            colorSplit: "rgba(126, 126, 126, 0.4)",
+            colorPrimaryHover: "white"
           },
           components: {
             Input: {
@@ -39,6 +41,11 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
               colorBorder: "rgba(255, 255, 255, 0.14)",
               selectorBg: "#252525",
               optionSelectedBg: "#252525"
+            },
+            Pagination: {
+              colorPrimaryBorder: "rgba(255, 255, 255, 0.14)",
+              itemActiveBg: "#39CD7D",
+              colorPrimary: "white"
             }
           }
         }}

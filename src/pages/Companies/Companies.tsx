@@ -2,39 +2,32 @@ import { Col, Divider, Row } from "antd";
 
 import { useEffect, useState } from "react";
 
-import { ProfileInfoDto } from "@api/user/types";
+import { CompanyInfoDto } from "@api/company/types";
 import { Card } from "@components/Card";
 import { CustomPagination } from "@components/CustomPagination/Pagination";
-import { WorkIcon } from "@components/Icons";
+import { EmployeesIcon, ResponseIcon } from "@components/Icons";
 import { Search } from "@components/Search/Search";
 
-import styles from "./Applicants.module.scss";
-import data from "./mock-applicants.json";
+import styles from "./Companies.module.scss";
+import data from "./mock-companies.json";
 
-export const Applicants = () => {
+export const Companies = () => {
   const [inputValue, setInputValue] = useState<string>("");
 
-  const [applicants, setApplicants] = useState<ProfileInfoDto[]>([]);
+  const [companies, setCompanies] = useState<CompanyInfoDto[]>([]);
 
   useEffect(() => {
-    setApplicants(
-      data.map((applicant) => {
-        return {
-          ...applicant,
-          status_id: 1
-        };
-      })
-    );
+    setCompanies(data);
   }, []);
 
   const handleSearch = () => {
-    //TODO поиск исполнителей
+    //TODO поиск компаний
   };
 
   return (
-    <div className={styles["applicants"]}>
+    <div className={styles["companies"]}>
       <Search
-        inputPlaceholder="Начните вводить ФИО для поиска..."
+        inputPlaceholder="Начните вводить название для поиска..."
         inputValue={inputValue}
         setInputValue={setInputValue}
         handleSearch={handleSearch}
@@ -54,20 +47,21 @@ export const Applicants = () => {
       </Search>
       <Divider />
       <Row gutter={[48, 24]}>
-        {applicants.map((applicant) => {
+        {companies.map((company) => {
           return (
-            <Col span={12} key={applicant.user_id}>
-              <Card imageSrc={applicant.user.avatar}>
-                <Card.Title>
-                  {applicant.user.first_name + applicant.user.last_name}
-                </Card.Title>
+            <Col span={12} key={company.id}>
+              <Card imageSrc={company.logo}>
+                <Card.Title>{company.name}</Card.Title>
                 <Card.Title level="2">
-                  {applicant.user.salary} тыс. руб
+                  Средняя з/п {company.avarage_salary} тыс. руб
                 </Card.Title>
-                <Card.Property icon={<WorkIcon />}>
-                  {applicant.user.experience} года
+                <Card.Property icon={<EmployeesIcon />}>
+                  {company.employees_count} сотрудников
                 </Card.Property>
-                <Card.Content>{applicant.user.about}</Card.Content>
+                <Card.Property icon={<ResponseIcon />}>
+                  {company.response_count} откликов
+                </Card.Property>
+                <Card.Content>{company.description}</Card.Content>
               </Card>
             </Col>
           );

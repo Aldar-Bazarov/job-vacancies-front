@@ -5,6 +5,7 @@ import { Vacancies } from "@components/Vacancies/Vacancies";
 import { RequireAuth } from "@hoc/RequireAuth";
 import { Applicants } from "@pages/Applicants/Applicants";
 import { Authorization } from "@pages/Authorization/Authorization";
+import { Companies } from "@pages/Companies/Companies";
 import { Company } from "@pages/Company/Company";
 import { Home } from "@pages/Home/Home";
 import { Profile } from "@pages/Profile/Profile";
@@ -28,12 +29,13 @@ const App: React.FC = () => {
         <Route
           path="applicants"
           element={
-            <RequireAuth>
-              <Applicants />
-            </RequireAuth>
+            // <RequireAuth>
+            <Applicants />
+            // </RequireAuth>
           }
         />
         <Route path="vacancies" element={<Vacancies />} />
+        <Route path="companies" element={<Companies />} />
       </Route>
       <Route path="register" element={<Registration />} />
       <Route path="auth" element={<Authorization />} />

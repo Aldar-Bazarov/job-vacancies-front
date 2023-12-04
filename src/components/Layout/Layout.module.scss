@@ -1,9 +1,9 @@
 .layout {
     width: 100%;
-    height: 100%;
+    height: calc(100% - 72px);
 
     .content {
-        min-height: calc(100vh - 74px);
+        min-height: calc(100vh - 174px);
         margin: 0 auto;
         max-width: 1720px;
         padding: 50px 100px;
