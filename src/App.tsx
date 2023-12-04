@@ -8,6 +8,7 @@ import { Authorization } from "@pages/Authorization/Authorization";
 import { Companies } from "@pages/Companies/Companies";
 import { Company } from "@pages/Company/Company";
 import { Home } from "@pages/Home/Home";
+import { NotFound } from "@pages/NotFound/NotFound";
 import { Profile } from "@pages/Profile/Profile";
 import { Registration } from "@pages/Registration/Registration";
 
@@ -36,6 +37,7 @@ const App: React.FC = () => {
         />
         <Route path="vacancies" element={<Vacancies />} />
         <Route path="companies" element={<Companies />} />
+        <Route path="*" element={<NotFound />} />
       </Route>
       <Route path="register" element={<Registration />} />
       <Route path="auth" element={<Authorization />} />

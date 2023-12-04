@@ -59,7 +59,7 @@ export const Applicants = () => {
             <Col span={12} key={applicant.user_id}>
               <Card imageSrc={applicant.user.avatar}>
                 <Card.Title>
-                  {applicant.user.first_name + applicant.user.last_name}
+                  {applicant.user.first_name + " " + applicant.user.last_name}
                 </Card.Title>
                 <Card.Title level="2">
                   {applicant.user.salary} тыс. руб
