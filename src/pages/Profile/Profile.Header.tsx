@@ -92,9 +92,9 @@ export const EditableHeader: React.FC<IEditableHeaderProps> = ({
               }
             >
               <Space direction="vertical">
-                <Radio value={0}>Ищет работу</Radio>
-                <Radio value={1}>Рассматривает предложения</Radio>
-                <Radio value={2}>Не ищет работу</Radio>
+                <Radio value={1}>Ищет работу</Radio>
+                <Radio value={2}>Рассматривает предложения</Radio>
+                <Radio value={3}>Не ищет работу</Radio>
               </Space>
             </Radio.Group>
           </Form.Item>
@@ -130,11 +130,11 @@ export const ReadonlyHeader: React.FC<IReadonlyHeaderProps> = () => {
 
   const getStatusTitle = (status_id: number) => {
     switch (status_id) {
-      case 0:
-        return "Ищет работу";
       case 1:
-        return "Рассматривает предложения";
+        return "Ищет работу";
       case 2:
+        return "Рассматривает предложения";
+      case 3:
         return "Не ищет работу";
     }
     return "-";

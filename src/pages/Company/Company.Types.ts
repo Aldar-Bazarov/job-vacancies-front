@@ -1,7 +1,13 @@
 import { CompanyInfoDto } from "@api/company/types";
 
 export type CompanyReducerAction = {
-  type: "set_company" | "change_name" | "change_description"; // eslint-disable-next-line
+  type:
+    | "set_company"
+    | "change_name"
+    | "change_description"
+    | "change_address"
+    | "change_phone"
+    | "change_email"; // eslint-disable-next-line
   value?: any;
 };
 

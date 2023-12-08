@@ -1,7 +1,7 @@
 import { Button, Form, Col, Row, Divider } from "antd";
 import { message, Avatar, Flex } from "antd";
 
-import React, { useCallback, useEffect, useReducer, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { UpdateProfileError, userApi } from "@api/user/user.api";
@@ -16,7 +16,6 @@ import { Role } from "@interfaces/user";
 import { EditableAbout, ReadonlyAbout } from "./Profile.About";
 import { EditableEducation, ReadonlyEducation } from "./Profile.Education";
 import { EditableHeader, ReadonlyHeader } from "./Profile.Header";
-//import { EditableMainInfo, ReadonlyMainInfo } from "./Profile.MainInfo";
 import { EditableMainInfo, ReadonlyMainInfo } from "./Profile.MainInfo";
 import styles from "./Profile.module.scss";
 import { HardSkills } from "./Profile.Skills";
@@ -48,7 +47,7 @@ export const Profile: React.FC = () => {
     if (profileId === undefined) {
       setIsLoading(true);
       apiGetUser(Role.Applicants) // first try get as applicant
-        .catch((e) => {
+        .catch(() => {
           setUserIsApplicant(false);
           apiGetUser(Role.Recruiter) // second try get as recruiter
             .catch((e) => {
