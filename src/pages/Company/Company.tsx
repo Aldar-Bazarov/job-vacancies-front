@@ -6,6 +6,7 @@ import { Link, useParams } from "react-router-dom";
 import { CompanyInfoDto } from "@api/company/types";
 import { EditableFormItem } from "@components/EditableFormItem/EditableFormItem";
 import { AboutCompanyIcon } from "@components/Icons/AboutCompanyIcon";
+import { MultipleItemsIcon } from "@components/Icons/MultipleItemsIcon";
 import { Loader } from "@components/Loader/Loader";
 
 import { EditableAbout, ReadonlyAbout } from "./Company.About";
@@ -158,6 +159,21 @@ export const Company = () => {
                   <EditableFormItem.ReadOnlyPart>
                     <ReadonlyAbout />
                   </EditableFormItem.ReadOnlyPart>
+                </EditableFormItem>
+              </Col>
+            </Row>
+            <Divider style={{ borderColor: "#7E7E7E66" }} />
+
+            <Row>
+              <Col span={24}>
+                <EditableFormItem
+                  icon={<MultipleItemsIcon />}
+                  title={"Вакансии"}
+                  readonly={isReadOnly}
+                >
+                  <EditableFormItem.NotAlternatePart>
+                    <p>"Soon..."</p>
+                  </EditableFormItem.NotAlternatePart>
                 </EditableFormItem>
               </Col>
             </Row>
