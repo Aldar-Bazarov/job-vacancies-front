@@ -33,4 +33,5 @@ export interface IProfileContext {
   dispatch: React.Dispatch<ProfileReducerAction>;
   profileData: ProfileInfoDto;
   isReadOnly: boolean;
+  userIsApplicant: boolean;
 }

@@ -1,13 +1,16 @@
-import { Avatar, Button, Col, Divider, Flex, Form, Row } from "antd";
+import { Avatar, Button, Col, Divider, Flex, Form, Row, message } from "antd";
 
 import { useEffect, useState, useReducer } from "react";
 import { Link, useParams } from "react-router-dom";
 
+import { UpdateCompanyError, companyApi } from "@api/company/company.api";
 import { CompanyInfoDto } from "@api/company/types";
+import { userApi } from "@api/user/user.api";
 import { EditableFormItem } from "@components/EditableFormItem/EditableFormItem";
 import { AboutCompanyIcon } from "@components/Icons/AboutCompanyIcon";
 import { MultipleItemsIcon } from "@components/Icons/MultipleItemsIcon";
 import { Loader } from "@components/Loader/Loader";
+import { Role } from "@interfaces/user";
 
 import { EditableAbout, ReadonlyAbout } from "./Company.About";
 import { EditableHeader, ReadonlyHeader } from "./Company.Header";
@@ -26,53 +29,33 @@ export const Company = () => {
   useEffect(() => {
     if (companyId !== undefined) {
       setIsLoading(true);
-      const mock: CompanyInfoDto = {
-        created_at: new Date(),
-        description: "description",
-        id: 0,
-        name: "name",
-        owner_id: 0,
-        vacancies: [
-          {
-            id: 0,
-            description: "Vacancy 1",
-            created_at: new Date(),
-            company_id: 0,
-            status_id: 0
-          },
-          {
-            id: 1,
-            description: "Vacancy 2",
-            created_at: new Date(),
-            company_id: 0,
-            status_id: 1
-          }
-        ]
-      };
-      dispatch({
-        type: "set_company",
-        value: mock
-      });
-      setCompanyName(mock.name);
-      setIsReadOnly(false);
-      setIsLoading(false);
-      // companyApi
-      //   .getCompany(parseInt(companyId))
-      //   .then((data) => {
-      //     dispatch({
-      //       type: "set_company",
-      //       value: data
-      //     });
-      //     setIsReadOnly(false);
-      //   })
-      //   .catch((e: UpdateCompanyError) => {
-      //     message.error(e.message);
-      //   })
-      //   .finally(() => {
-      //     setIsLoading(false);
-      //   });
-    } else {
-      setIsReadOnly(true);
+      companyApi
+        .getCompany(parseInt(companyId))
+        .then((data) => {
+          dispatch({
+            type: "set_company",
+            value: data
+          });
+          setCompanyName(data.name);
+          userApi
+            .getMyProfile({ role: Role.Recruiter })
+            .then((user_data) => {
+              if (user_data.user_id === data.owner_id) {
+                setIsReadOnly(false);
+              } else {
+                setIsReadOnly(true);
+              }
+            })
+            .catch((e: Error) => {
+              message.error(e.message);
+            });
+        })
+        .catch((e: UpdateCompanyError) => {
+          message.error(e.message);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
     }
   }, [companyId]);
 
