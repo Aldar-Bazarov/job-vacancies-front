@@ -33,5 +33,8 @@ export interface ProfileInfoDto {
     institution: string;
     job: string;
     about: string;
+    avatar: string;
+    salary?: number;
+    experience?: number;
   };
 }

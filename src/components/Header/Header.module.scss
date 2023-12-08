@@ -15,10 +15,12 @@
 
         .logo {
             letter-spacing: 10px;
-            background: -webkit-linear-gradient(#39CD7D, #00642E);
+            background: linear-gradient(#39CD7D, #00642E);
             background-clip: text;
+            /* stylelint-disable property-no-vendor-prefix */
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            /* stylelint-enable property-no-vendor-prefix */
             line-height: 72px;
         }
 

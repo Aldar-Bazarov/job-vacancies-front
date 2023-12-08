@@ -11,7 +11,7 @@ import { isAuthenticated } from "@infrastructure/axios/auth";
 
 import { CompanyCard } from "./CompanyCard/CompanyCard";
 import styles from "./Home.module.scss";
-import mainLogo from "./MainLogo.png";
+import heroImage from "./MainLogo.png";
 
 export const Home: React.FC = () => {
   const [isAuth, setAuth] = useState(isAuthenticated());
@@ -76,7 +76,7 @@ export const Home: React.FC = () => {
             </Col>
           ))}
         </Row>
-        <img src={mainLogo} alt="logo" className={styles["hero-img"]} />
+        <img src={heroImage} alt="heroImage" className={styles["hero-img"]} />
       </div>
     </Flex>
   );
