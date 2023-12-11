@@ -1,0 +1,37 @@
+[
+    {
+        "id": 0,
+        "description": "Мы очень крутая компания",
+        "created_at": "01.12.2023",
+        "company_id": 0,
+        "status_id": 1
+    },
+    {
+        "id": 1,
+        "description": "Мы так себе компания, но есть чай",
+        "created_at": "02.12.2023",
+        "company_id": 0,
+        "status_id": 2
+    },
+    {
+        "id": 2,
+        "description": "Задержим зарплату в 9 из 10 случаев",
+        "created_at": "03.12.2023",
+        "company_id": 0,
+        "status_id": 1
+    },
+    {
+        "id": 3,
+        "description": "Стартап, зп не будет.",
+        "created_at": "04.12.2023",
+        "company_id": 0,
+        "status_id": 2
+    },
+    {
+        "id": 4,
+        "description": "У нас очень красивая девочка HR, помурчит на собеседовании!!!",
+        "created_at": "05.12.2023",
+        "company_id": 0,
+        "status_id": 1
+    }
+]
