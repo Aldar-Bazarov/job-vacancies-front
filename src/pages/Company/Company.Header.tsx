@@ -53,16 +53,43 @@ export const EditableHeader: React.FC<IEditableHeaderProps> = ({
             readOnly={context?.isReadOnly}
           />
         </Form.Item>
-        <Form.Item label="Telegram">
-          <Input placeholder="Soon..." readOnly={context?.isReadOnly} />
+        <Form.Item label="Почта">
+          <Input
+            value={context?.companyData.email}
+            onChange={(e) =>
+              context?.dispatch({
+                type: "change_email",
+                value: e.target.value
+              })
+            }
+            readOnly={context?.isReadOnly}
+          />
         </Form.Item>
       </Col>
       <Col span={8}>
-        <Form.Item label="Почта">
-          <Input placeholder="Soon..." readOnly={context?.isReadOnly} />
-        </Form.Item>
         <Form.Item label="Номер телефона">
-          <Input placeholder="Soon..." readOnly={context?.isReadOnly} />
+          <Input
+            value={context?.companyData.phone}
+            onChange={(e) =>
+              context?.dispatch({
+                type: "change_phone",
+                value: e.target.value
+              })
+            }
+            readOnly={context?.isReadOnly}
+          />
+        </Form.Item>
+        <Form.Item label="Адрес">
+          <Input
+            value={context?.companyData.address}
+            onChange={(e) =>
+              context?.dispatch({
+                type: "change_address",
+                value: e.target.value
+              })
+            }
+            readOnly={context?.isReadOnly}
+          />
         </Form.Item>
       </Col>
       <Col span={8}>
@@ -100,13 +127,19 @@ export const ReadonlyHeader: React.FC<IReadonlyHeaderProps> = () => {
           <Typography.Text>
             {"Название: " + context?.companyData.name}
           </Typography.Text>
-          <Typography.Text>{"Адрес: Некий адрес"}</Typography.Text>
+          <Typography.Text>
+            {"Адрес: " + context?.companyData.address}
+          </Typography.Text>
         </Space>
       </Col>
       <Col span={6}>
         <Space direction="vertical" size={1}>
-          <Typography.Text>{"Телефон: Некий номер телефона"}</Typography.Text>
-          <Typography.Text>{"Почта: Некая почта"}</Typography.Text>
+          <Typography.Text>
+            {"Почта: " + context?.companyData.email}
+          </Typography.Text>
+          <Typography.Text>
+            {"Телефон: " + context?.companyData.phone}
+          </Typography.Text>
         </Space>
       </Col>
     </Row>

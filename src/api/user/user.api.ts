@@ -70,12 +70,26 @@ export const userApi = {
   ): Promise<ProfileInfoDto> {
     const { firstName, lastName, statusId, role, id } = context;
     try {
-      const response = await axios.put<ProfileInfoDto>(`/users/${role}/${id}`, {
-        first_name: firstName,
-        last_name: lastName,
-        status_id: statusId
-      });
-      return unpack(response);
+      if (role === Role.Applicants) {
+        const response = await axios.put<ProfileInfoDto>(
+          `/users/${role}/${id}`,
+          {
+            first_name: firstName,
+            last_name: lastName,
+            status_id: statusId
+          }
+        );
+        return unpack(response);
+      } else {
+        const response = await axios.put<ProfileInfoDto>(
+          `/users/${role}/${id}`,
+          {
+            first_name: firstName,
+            last_name: lastName
+          }
+        );
+        return unpack(response);
+      }
     } catch (err) {
       throw new UpdateProfileError(err as Error);
     }

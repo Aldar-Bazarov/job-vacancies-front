@@ -17,7 +17,7 @@ export interface UpdateProfileContext extends GetProfileContext {
   id: number;
   firstName: string;
   lastName: string;
-  statusId: 0 | 1 | 2;
+  statusId?: 0 | 1 | 2;
 }
 
 export interface ProfileInfoDto {
