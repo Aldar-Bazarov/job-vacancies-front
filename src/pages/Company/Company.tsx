@@ -15,6 +15,7 @@ import { Role } from "@interfaces/user";
 import { EditableAbout, ReadonlyAbout } from "./Company.About";
 import { EditableHeader, ReadonlyHeader } from "./Company.Header";
 import styles from "./Company.module.scss";
+import { Vacancies } from "./Company.Vacancies";
 import { CompanyContext } from "./CompanyContext";
 import { CompanyReducer } from "./CompanyReducer";
 
@@ -155,7 +156,7 @@ export const Company = () => {
                   readonly={isReadOnly}
                 >
                   <EditableFormItem.NotAlternatePart>
-                    <p>"Soon..."</p>
+                    <Vacancies />
                   </EditableFormItem.NotAlternatePart>
                 </EditableFormItem>
               </Col>

@@ -17,6 +17,7 @@ export interface IEditableHeaderProps {
 export interface IReadonlyHeaderProps {}
 export interface IReadonlyAboutProps {}
 export interface IEditableAboutProps {}
+export interface IVacanciesProps {}
 
 export interface ICompanyContext {
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
