@@ -3,6 +3,12 @@
     border: 1px #7E7E7E solid;
 }
 
-.button-container{
+.button-container {
     margin-top: 50px;
+}
+
+.vacancies {
+    min-height: inherit;
+    display: flex;
+    flex-direction: column;
 }

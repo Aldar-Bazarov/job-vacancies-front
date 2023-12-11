@@ -1,0 +1,22 @@
+{
+    "id": 0,
+    "name": "Вакансия",
+    "owner_id": 0,
+    "created_at": "01.12.2023",
+    "employees_count": 88,
+    "address": "Перекопская 15А",
+    "phone": "88005553535",
+    "response_count": 120,
+    "email": "pi@tyumgu.ru",
+    "avarage_salary": 126555,
+    "logo": "data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAQPSURBVGhD7Zi9jhNBEITtOyf8vBgkPANk8AaQkfEGEJJBQECCICQgIOYFjgQhRICEhAjNlOWyyuWa2dn1+uSA4BO3Pd09XdO9P2ZxcXGxVi4vL/fw9XNC6/wv5BzQOs9eyJ3lcn21WKzXAq7vF7vWeVZCUtE1/hYelBjWeSBkKioeJJ/EmOIdiGGekwgZWr9brscW/6IIRp7H5V+1M/+1CRlTPItmtwDuCeZSX9pPLqR3dFi88l3WdYzwt9tPJqRHgBav8QAdrPn6eKErswsZGiEUpAXX0G4A38+7MpuQuQQQj/X9vCuzCMEY/ZKkSipiCOTTHMkHqJgDIX4yQ+uYzyTCBcAXXftY7PoEYp5lsQHYfKywTn+HI3aUkEflWjcEtQ7AnwVic4phLhXi+bCuuRR2ZbIQnK53wkXoewCfE+oLMbquXVI/72ACfpOEJBFfC14QrtXHqb0n1MfXEvAZLSSJ+CN/69j4k2UIxGBP5EhrCT4YRglJTyeMk16D1um24J5PQpzWobCr3UKSiN92raAbiEunW4N7PrXDeVVgHQq7AbqEYFTGiADsSu94vSt+uLGvzP6+cKPYtUbgB3sgRIGzJwYYp54C3xQfHIaOSoqFzd8d4EOx39oe6Gq12sADdv+qkDRKwB+xQ4L4K05jkNsfqz6Cr8vazWJn4QoeOOr7vBCFJBFMnPxb9wHWIEb99cVIm3eNdheRaoNfFOJtw/xixEB6OQ11BQWzC8/MF/m+FH5ur9MeFIA1jQUQjfU9IcnZ51dPUWl1BaR7oAZyoTjmTg8bQBE7ITytNE6pyHRq3pXPBY7LN7H3gAJxH6QOEB0/sEgzB/SeqI2OC9I1nmpPJ3QvxKSvB8IucE+Aj81FrWXqCGpidNQ+mQ821GvF9+CXb00ExN6Wx6/GbYSosyZngAcmQVy7V9Z+bG1vy9/+mCTpoECaDvet1bUTkpKnAIANdTPa/bHqY0W/RI8IoDVpXTshPu8ehI3goxsR+qvNxda6QFx0zV9rArTvjRZOUsVoQE2Ebqh2P136JMaI1poA7XtCgIrRgHRv+Ia+TlqFpZFKfkRrArRv3iNeJMWkgBaI0zwAImrxvfeFojVp3t2bPYnR/7anXwvPQREpfooIwHyed+8TpSVG/XpJG4KpIoDm1Lx7QkBtzNzPqW2gQMCV5Ca9IlocCAFTxLRE1ASAOUSAKASMFZOEwL8mAMwlAlSFgCTmYWVzCBj6YiVzCiBNIcDFHMMpBJBBIeAYMa2fyHPSJQSgmJedgk558jW6hQyRbvbrZCdEC/Fi+KOnRYpr2R36TfXvEtJDLa43H/16fInGRCHq3Estdo6cTvI9EKKLY2jF9uT18WU9NdR385tdDYkUOMSUmOOELNf/ACzcBHHhRrCKAAAAAElFTkSuQmCC",
+    "vacancies": [
+        {
+            "id": 0,
+            "description": "Мы очень крутая компания",
+            "created_at": "01.12.2023",
+            "company_id": 0,
+            "status_id": 1
+        }
+    ]
+}
