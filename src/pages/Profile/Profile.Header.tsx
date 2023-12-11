@@ -79,23 +79,26 @@ export const EditableHeader: React.FC<IEditableHeaderProps> = ({
         <Form.Item label="Номер телефона">
           <Input placeholder="Soon..." readOnly={context?.isReadOnly} />
         </Form.Item>
-        <Form.Item label="Статус">
-          <Radio.Group
-            value={context?.profileData.status_id}
-            onChange={(e) =>
-              context?.dispatch({
-                type: "change_status",
-                value: e.target.value
-              })
-            }
-          >
-            <Space direction="vertical">
-              <Radio value={0}>Ищет работу</Radio>
-              <Radio value={1}>Рассматривает предложения</Radio>
-              <Radio value={2}>Не ищет работу</Radio>
-            </Space>
-          </Radio.Group>
-        </Form.Item>
+
+        {context?.userIsApplicant && (
+          <Form.Item label="Статус">
+            <Radio.Group
+              value={context?.profileData.status_id}
+              onChange={(e) =>
+                context?.dispatch({
+                  type: "change_status",
+                  value: e.target.value
+                })
+              }
+            >
+              <Space direction="vertical">
+                <Radio value={1}>Ищет работу</Radio>
+                <Radio value={2}>Рассматривает предложения</Radio>
+                <Radio value={3}>Не ищет работу</Radio>
+              </Space>
+            </Radio.Group>
+          </Form.Item>
+        )}
       </Col>
       <Col span={8}>
         {!context?.isReadOnly && (
@@ -127,11 +130,11 @@ export const ReadonlyHeader: React.FC<IReadonlyHeaderProps> = () => {
 
   const getStatusTitle = (status_id: number) => {
     switch (status_id) {
-      case 0:
-        return "Ищет работу";
       case 1:
-        return "Рассматривает предложения";
+        return "Ищет работу";
       case 2:
+        return "Рассматривает предложения";
+      case 3:
         return "Не ищет работу";
     }
     return "-";
@@ -142,9 +145,11 @@ export const ReadonlyHeader: React.FC<IReadonlyHeaderProps> = () => {
       <Col span={6}>
         <Space direction="vertical" size={1}>
           <Typography.Text>{"Некий пол, некая дата рождения"}</Typography.Text>
-          <Typography.Text>
-            {getStatusTitle(context?.profileData.status_id ?? 2)}
-          </Typography.Text>
+          {context?.userIsApplicant && (
+            <Typography.Text>
+              {getStatusTitle(context?.profileData.status_id ?? 2)}
+            </Typography.Text>
+          )}
         </Space>
       </Col>
       <Col span={6}>
