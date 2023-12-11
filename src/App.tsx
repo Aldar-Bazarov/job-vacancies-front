@@ -1,5 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 
+import { CreateVacancy } from "@components/CreateVacancy/CreateVacancy";
 import { Layout } from "@components/Layout/Layout";
 import { Vacancies } from "@components/Vacancies/Vacancies";
 import { RequireAuth } from "@hoc/RequireAuth";
@@ -37,6 +38,7 @@ const App: React.FC = () => {
         />
         <Route path="vacancies" element={<Vacancies />} />
         <Route path="companies" element={<Companies />} />
+        <Route path="create-vacancy" element={<CreateVacancy />} />
         <Route path="*" element={<NotFound />} />
       </Route>
       <Route path="register" element={<Registration />} />

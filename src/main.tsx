@@ -33,6 +33,14 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
               activeBg: "#252525",
               colorTextPlaceholder: "#C9C9C9"
             },
+            InputNumber: {
+              lineWidth: 1,
+              colorBorder: "rgba(255, 255, 255, 0.14)",
+              colorBgContainer: "#252525",
+              hoverBg: "#252525",
+              activeBg: "#252525",
+              colorTextPlaceholder: "#C9C9C9"
+            },
             Button: {
               primaryShadow: "none",
               primaryColor: "#FFF"
