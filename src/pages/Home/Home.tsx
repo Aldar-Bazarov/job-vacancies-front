@@ -36,13 +36,14 @@ export const Home: React.FC = () => {
     searchApi
       .getCompanyByProperties({
         name: inputValue,
-        ownerId: 0,
-        description: "Cool"
+        ownerId: null,
+        description: null
       })
       .then((data) => {
-        navigate("/search", {
+        navigate("/companies", {
           state: {
-            companies: data
+            companies: data,
+            inputValue
           }
         });
       });

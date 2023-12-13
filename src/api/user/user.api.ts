@@ -43,7 +43,7 @@ export const userApi = {
         last_name: lastName
       };
       if (role === Role.Applicants) {
-        requestData.status_id = 0;
+        requestData.status_id = 1;
       }
       const response = await axios.post<ProfileInfoDto>(
         `/users/${role}`,

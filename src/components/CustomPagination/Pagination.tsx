@@ -6,7 +6,7 @@ import styles from "./CustomPagination.module.scss";
 
 interface CustomPaginationProps {
   total: number;
-  handleSearch: () => void;
+  handleSearch: (val: number) => void;
 }
 
 export const CustomPagination: FC<CustomPaginationProps> = ({

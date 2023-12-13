@@ -23,14 +23,14 @@ export interface UpdateCompanyContext {
 
 export interface CompanyInfoDto {
   id?: number;
-  name?: string;
+  name: string;
   owner_id?: number;
-  description?: string;
+  description: string;
   created_at?: Date;
   employees_count?: number;
   address?: string;
   phone?: string;
-  response_count?: number;
+  responses_count?: number;
   email?: string;
   avarage_salary?: number;
   logo_path?: string;
