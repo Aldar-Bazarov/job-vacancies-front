@@ -1,7 +1,17 @@
+import { DataURIToBlob } from "@infrastructure/image-upload";
 import { AxiosBuilder, unpack, authInterceptor } from "@infrastructure/index";
 
-import { GetCompanyError, UpdateCompanyError } from "./errors";
-import { CompanyInfoDto, UpdateCompanyContext } from "./types";
+import {
+  CreateCompanyError,
+  GetCompanyError,
+  LoadPhotoError,
+  UpdateCompanyError
+} from "./errors";
+import {
+  CompanyInfoDto,
+  UpdateCompanyContext,
+  CreateCompanyContext
+} from "./types";
 
 export * from "./types";
 export * from "./errors";
@@ -24,16 +34,51 @@ export const companyApi = {
   },
 
   async updateCompany(context: UpdateCompanyContext): Promise<CompanyInfoDto> {
-    const { name, owner_id, description, id } = context;
     try {
-      const response = await axios.put<CompanyInfoDto>(`/users/${id}`, {
-        owner_id: owner_id,
-        name: name,
-        description: description
-      });
+      const response = await axios.put<CompanyInfoDto>(
+        `/companies/${context.id}`,
+        {
+          ...context
+        }
+      );
       return unpack(response);
     } catch (err) {
       throw new UpdateCompanyError(err as Error);
+    }
+  },
+
+  async createCompany(context: CreateCompanyContext): Promise<CompanyInfoDto> {
+    try {
+      const response = await axios.post<CompanyInfoDto>(`/companies/`, {
+        ...context
+      });
+      return unpack(response);
+    } catch (err) {
+      throw new CreateCompanyError(err as Error);
+    }
+  },
+
+  async loadPhoto(id: number, uri: string): Promise<CompanyInfoDto> {
+    try {
+      const formData = new FormData();
+      const blob = DataURIToBlob(uri);
+      formData.append(
+        "logo_file",
+        blob,
+        `company_logo${id}.${blob.type.split("/")[1]}`
+      );
+      const response = await axios.postForm<CompanyInfoDto>(
+        `/companies/${id}/logo`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data"
+          }
+        }
+      );
+      return unpack(response);
+    } catch (err) {
+      throw new LoadPhotoError(err as Error);
     }
   },
 

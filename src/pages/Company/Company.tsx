@@ -1,9 +1,13 @@
 import { Avatar, Button, Col, Divider, Flex, Form, Row, message } from "antd";
 
 import { useEffect, useState, useReducer } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 
-import { UpdateCompanyError, companyApi } from "@api/company/company.api";
+import {
+  CreateCompanyError,
+  UpdateCompanyError,
+  companyApi
+} from "@api/company/company.api";
 import { CompanyInfoDto } from "@api/company/types";
 import { userApi } from "@api/user/user.api";
 import { EditableFormItem } from "@components/EditableFormItem/EditableFormItem";
@@ -22,13 +26,49 @@ import { CompanyReducer } from "./CompanyReducer";
 export const Company = () => {
   const [companyData, dispatch] = useReducer(CompanyReducer, null);
   const { companyId } = useParams();
+  const location = useLocation();
+  const navigator = useNavigate();
+  const [createMode, setCreateMode] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isReadOnly, setIsReadOnly] = useState(true);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [companyName, setCompanyName] = useState("");
+  const [userId, setUserId] = useState<number | null>(null);
+  const BACKEND_URL = "https://jobhunter.woopwoopserver.com";
 
   useEffect(() => {
-    if (companyId !== undefined) {
+    setIsLoading(true);
+    userApi
+      .getMyProfile({ role: Role.Recruiter })
+      .then((user_data) => {
+        // колхозный способ получения текущего владельца
+        setUserId(user_data.user_id);
+      })
+      .catch((e: Error) => {
+        message.error(e.message);
+        setUserId(null);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+    if (location.pathname === "/company/create") {
+      setCreateMode(true);
+      setIsReadOnly(false);
+      const emptyCompany: CompanyInfoDto = {
+        address: "",
+        description: "",
+        email: "",
+        name: "",
+        phone: "",
+        population: 0,
+        owner_id: userId ?? -1
+      };
+      dispatch({
+        type: "set_company",
+        value: emptyCompany
+      });
+    } else if (companyId !== undefined) {
+      setCreateMode(false);
       setIsLoading(true);
       companyApi
         .getCompany(parseInt(companyId))
@@ -37,19 +77,17 @@ export const Company = () => {
             type: "set_company",
             value: data
           });
-          setCompanyName(data.name);
-          userApi
-            .getMyProfile({ role: Role.Recruiter })
-            .then((user_data) => {
-              if (user_data.user_id === data.owner_id) {
-                setIsReadOnly(false);
-              } else {
-                setIsReadOnly(true);
-              }
-            })
-            .catch((e: Error) => {
-              message.error(e.message);
-            });
+          setCompanyName(data.name ?? "");
+          if (data.logo_path === "" || data.logo_path === null) {
+            setImageUrl(null);
+          } else {
+            setImageUrl(BACKEND_URL + data.logo_path?.substring(0));
+          }
+          if (userId === data.owner_id) {
+            setIsReadOnly(false);
+          } else {
+            setIsReadOnly(true);
+          }
         })
         .catch((e: UpdateCompanyError) => {
           message.error(e.message);
@@ -58,31 +96,60 @@ export const Company = () => {
           setIsLoading(false);
         });
     }
-  }, [companyId]);
+  }, [companyId, location.pathname, userId]);
 
   const handleSave = () => {
     if (!companyData) return;
-    // setIsLoading(true);
-    // companyApi
-    //   .updateCompany({
-    //     id: companyData.id,
-    //     description: companyData.description,
-    //     name: companyData.name,
-    //     owner_id: companyData.owner_id
-    //   })
-    //   .then((data) => {
-    //     dispatch({
-    //       type: "set_company",
-    //       value: data
-    //     });
-    //     setIsReadOnly(false);
-    //   })
-    //   .catch((e: UpdateCompanyError) => {
-    //     message.error(e.message);
-    //   })
-    //   .finally(() => {
-    //     setIsLoading(false);
-    //   });
+    let method = companyApi.updateCompany({
+      id: companyData.id ?? -1,
+      description: companyData.description ?? "",
+      name: companyData.name ?? "",
+      owner_id: companyData.owner_id ?? -1,
+      phone: companyData.phone ?? "",
+      email: companyData.email ?? "",
+      population: companyData.population ?? 0,
+      address: companyData.address ?? ""
+    });
+    if (createMode) {
+      method = companyApi.createCompany({
+        description: companyData.description ?? "",
+        name: companyData.name ?? "",
+        owner_id: companyData.owner_id ?? -1,
+        phone: companyData.phone ?? "",
+        email: companyData.email ?? "",
+        population: companyData.population ?? 0,
+        address: companyData.address ?? ""
+      });
+    }
+    setIsLoading(true);
+    method
+      .then((data) => {
+        dispatch({
+          type: "set_company",
+          value: data
+        });
+        setCompanyName(data.name ?? "");
+        if (
+          data.logo_path !== imageUrl &&
+          data.id != null &&
+          imageUrl !== null
+        ) {
+          companyApi.loadPhoto(data.id, imageUrl);
+        }
+        setIsReadOnly(false);
+        if (createMode) {
+          navigator(`/company/${data.id}`);
+        }
+      })
+      .catch((e: UpdateCompanyError) => {
+        message.error(e.message);
+      })
+      .catch((e: CreateCompanyError) => {
+        message.error(e.message);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   return (
@@ -148,19 +215,21 @@ export const Company = () => {
             </Row>
             <Divider style={{ borderColor: "#7E7E7E66" }} />
 
-            <Row>
-              <Col span={24}>
-                <EditableFormItem
-                  icon={<MultipleItemsIcon />}
-                  title={"Вакансии"}
-                  readonly={isReadOnly}
-                >
-                  <EditableFormItem.NotAlternatePart>
-                    <Vacancies />
-                  </EditableFormItem.NotAlternatePart>
-                </EditableFormItem>
-              </Col>
-            </Row>
+            {!createMode && (
+              <Row>
+                <Col span={24}>
+                  <EditableFormItem
+                    icon={<MultipleItemsIcon />}
+                    title={"Вакансии"}
+                    readonly={isReadOnly}
+                  >
+                    <EditableFormItem.NotAlternatePart>
+                      <Vacancies />
+                    </EditableFormItem.NotAlternatePart>
+                  </EditableFormItem>
+                </Col>
+              </Row>
+            )}
             <Divider style={{ borderColor: "#7E7E7E66" }} />
 
             {!isReadOnly && (
