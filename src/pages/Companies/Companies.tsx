@@ -1,8 +1,10 @@
 import { Col, Divider, Row } from "antd";
 
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 
 import { CompanyInfoDto } from "@api/company/types";
+import { searchApi } from "@api/search/search.api";
 import { Card } from "@components/Card";
 import { CustomPagination } from "@components/CustomPagination/Pagination";
 import { EmployeesIcon, ResponseIcon } from "@components/Icons";
@@ -15,14 +17,38 @@ export const Companies = () => {
   const [inputValue, setInputValue] = useState<string>("");
 
   const [companies, setCompanies] = useState<CompanyInfoDto[]>([]);
+  const [page, setPage] = useState<number>(1);
+  const [total, setTotal] = useState<number>(1);
+  const { state } = useLocation();
 
   useEffect(() => {
-    setCompanies(data);
-  }, []);
+    state?.companies?.companies
+      ? setCompanies(state.companies.companies as CompanyInfoDto[])
+      : setCompanies(data);
+  }, [state]);
+
+  useEffect(() => {
+    state?.companies?.inputValue
+      ? setInputValue(state?.companies?.inputValue)
+      : setInputValue("");
+  }, [state]);
 
   const handleSearch = () => {
-    //TODO поиск компаний
+    searchApi
+      .getCompanyByProperties({
+        name: inputValue,
+        ownerId: null,
+        description: null,
+        page: page
+      })
+      .then((data) => {
+        setPage(data.page);
+        setTotal(data.total);
+        setCompanies(data.companies);
+      });
   };
+
+  const handleChangePage = (val: number) => setPage(val);
 
   return (
     <div className={styles["companies"]}>
@@ -50,16 +76,21 @@ export const Companies = () => {
         {companies.map((company) => {
           return (
             <Col span={12} key={company.id}>
-              <Card imageSrc={company.logo}>
+              <Card
+                imageSrc={
+                  import.meta.env.VITE_BASE_API_URL +
+                  company?.logo_path?.slice(1)
+                }
+              >
                 <Card.Title>{company.name}</Card.Title>
                 <Card.Title level="2">
                   Средняя з/п {company.avarage_salary} тыс. руб
                 </Card.Title>
                 <Card.Property icon={<EmployeesIcon />}>
-                  {company.employees_count} сотрудников
+                  {company.population} сотрудников
                 </Card.Property>
                 <Card.Property icon={<ResponseIcon />}>
-                  {company.response_count} откликов
+                  {company.responses_count} откликов
                 </Card.Property>
                 <Card.Content>{company.description}</Card.Content>
               </Card>
@@ -67,7 +98,7 @@ export const Companies = () => {
           );
         })}
       </Row>
-      <CustomPagination total={data.length + 500} handleSearch={handleSearch} />
+      <CustomPagination total={total + 120} handleSearch={handleChangePage} />
     </div>
   );
 };

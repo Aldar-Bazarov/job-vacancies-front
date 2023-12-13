@@ -11,5 +11,10 @@ export const vacanciesApi = {
   async getVacancies() {
     const response = await axios.get<VacancyInfo[]>("/vacancies");
     return unpack(response);
+  },
+
+  async getVacnciesByName() {
+    const response = await axios.get<VacancyInfo[]>("/vacancies");
+    return unpack(response);
   }
 };

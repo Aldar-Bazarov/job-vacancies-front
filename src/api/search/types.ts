@@ -8,6 +8,7 @@ export interface CompanyInfo {
 
 export interface CompanyBody {
   name: string;
-  ownerId: number;
-  description: string;
+  ownerId: number | null;
+  description: string | null;
+  page: number | null;
 }
