@@ -1,7 +1,15 @@
 import { AxiosBuilder, unpack, authInterceptor } from "@infrastructure/index";
 
-import { GetCompanyError, UpdateCompanyError } from "./errors";
-import { CompanyInfoDto, UpdateCompanyContext } from "./types";
+import {
+  CreateCompanyError,
+  GetCompanyError,
+  UpdateCompanyError
+} from "./errors";
+import {
+  CompanyInfoDto,
+  UpdateCompanyContext,
+  CreateCompanyContext
+} from "./types";
 
 export * from "./types";
 export * from "./errors";
@@ -24,16 +32,27 @@ export const companyApi = {
   },
 
   async updateCompany(context: UpdateCompanyContext): Promise<CompanyInfoDto> {
-    const { name, owner_id, description, id } = context;
     try {
-      const response = await axios.put<CompanyInfoDto>(`/users/${id}`, {
-        owner_id: owner_id,
-        name: name,
-        description: description
-      });
+      const response = await axios.put<CompanyInfoDto>(
+        `/companies/${context.id}`,
+        {
+          ...context
+        }
+      );
       return unpack(response);
     } catch (err) {
       throw new UpdateCompanyError(err as Error);
+    }
+  },
+
+  async createCompany(context: CreateCompanyContext): Promise<CompanyInfoDto> {
+    try {
+      const response = await axios.put<CompanyInfoDto>(`/companies/`, {
+        ...context
+      });
+      return unpack(response);
+    } catch (err) {
+      throw new CreateCompanyError(err as Error);
     }
   },
 

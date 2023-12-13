@@ -28,6 +28,7 @@ const App: React.FC = () => {
         />
         <Route path="profile/:profileId" element={<Profile />} />
         <Route path="company/:companyId" element={<Company />} />
+        <Route path="company/create" element={<Company />} />
         <Route
           path="applicants"
           element={
