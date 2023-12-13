@@ -7,6 +7,7 @@ export interface CreateCompanyContext {
   email: string;
   phone: string;
   address: string;
+  population: number;
 }
 
 export interface UpdateCompanyContext {
@@ -17,6 +18,7 @@ export interface UpdateCompanyContext {
   email: string;
   phone: string;
   address: string;
+  population: number;
 }
 
 export interface CompanyInfoDto {
@@ -33,4 +35,5 @@ export interface CompanyInfoDto {
   avarage_salary?: number;
   logo_path?: string;
   vacancies?: VacancyInfo[];
+  population?: number;
 }

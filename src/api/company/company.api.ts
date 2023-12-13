@@ -47,7 +47,7 @@ export const companyApi = {
 
   async createCompany(context: CreateCompanyContext): Promise<CompanyInfoDto> {
     try {
-      const response = await axios.put<CompanyInfoDto>(`/companies/`, {
+      const response = await axios.post<CompanyInfoDto>(`/companies/`, {
         ...context
       });
       return unpack(response);

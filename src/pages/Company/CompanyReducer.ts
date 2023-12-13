@@ -27,6 +27,18 @@ export function CompanyReducer(
       data!.description = action.value;
       break;
     }
+    case "change_phone": {
+      data!.phone = action.value;
+      break;
+    }
+    case "change_email": {
+      data!.email = action.value;
+      break;
+    }
+    case "change_address": {
+      data!.address = action.value;
+      break;
+    }
   }
   return data;
 }

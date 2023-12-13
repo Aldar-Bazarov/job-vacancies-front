@@ -1,7 +1,7 @@
 import { Avatar, Button, Col, Divider, Flex, Form, Row, message } from "antd";
 
 import { useEffect, useState, useReducer } from "react";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 
 import {
   CreateCompanyError,
@@ -27,6 +27,7 @@ export const Company = () => {
   const [companyData, dispatch] = useReducer(CompanyReducer, null);
   const { companyId } = useParams();
   const location = useLocation();
+  const navigator = useNavigate();
   const [createMode, setCreateMode] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isReadOnly, setIsReadOnly] = useState(true);
@@ -35,6 +36,7 @@ export const Company = () => {
   const [userId, setUserId] = useState<number | null>(null);
 
   useEffect(() => {
+    setIsLoading(true);
     userApi
       .getMyProfile({ role: Role.Recruiter })
       .then((user_data) => {
@@ -44,15 +46,20 @@ export const Company = () => {
       .catch((e: Error) => {
         message.error(e.message);
         setUserId(null);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
     if (location.pathname === "/company/create") {
       setCreateMode(true);
+      setIsReadOnly(false);
       const emptyCompany: CompanyInfoDto = {
         address: "",
         description: "",
         email: "",
         name: "",
         phone: "",
+        population: 0,
         owner_id: userId ?? -1
       };
       dispatch({
@@ -94,6 +101,7 @@ export const Company = () => {
       owner_id: companyData.owner_id ?? -1,
       phone: companyData.phone ?? "",
       email: companyData.email ?? "",
+      population: companyData.population ?? 0,
       address: companyData.address ?? ""
     });
     if (createMode) {
@@ -103,6 +111,7 @@ export const Company = () => {
         owner_id: companyData.owner_id ?? -1,
         phone: companyData.phone ?? "",
         email: companyData.email ?? "",
+        population: companyData.population ?? 0,
         address: companyData.address ?? ""
       });
     }
@@ -113,7 +122,11 @@ export const Company = () => {
           type: "set_company",
           value: data
         });
+        setCompanyName(data.name ?? "");
         setIsReadOnly(false);
+        if (createMode) {
+          navigator(`/company/${data.id}`);
+        }
       })
       .catch((e: UpdateCompanyError) => {
         message.error(e.message);
@@ -189,19 +202,21 @@ export const Company = () => {
             </Row>
             <Divider style={{ borderColor: "#7E7E7E66" }} />
 
-            <Row>
-              <Col span={24}>
-                <EditableFormItem
-                  icon={<MultipleItemsIcon />}
-                  title={"Вакансии"}
-                  readonly={isReadOnly}
-                >
-                  <EditableFormItem.NotAlternatePart>
-                    <Vacancies />
-                  </EditableFormItem.NotAlternatePart>
-                </EditableFormItem>
-              </Col>
-            </Row>
+            {!createMode && (
+              <Row>
+                <Col span={24}>
+                  <EditableFormItem
+                    icon={<MultipleItemsIcon />}
+                    title={"Вакансии"}
+                    readonly={isReadOnly}
+                  >
+                    <EditableFormItem.NotAlternatePart>
+                      <Vacancies />
+                    </EditableFormItem.NotAlternatePart>
+                  </EditableFormItem>
+                </Col>
+              </Row>
+            )}
             <Divider style={{ borderColor: "#7E7E7E66" }} />
 
             {!isReadOnly && (
