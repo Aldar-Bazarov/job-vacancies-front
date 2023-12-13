@@ -34,6 +34,7 @@ export const Company = () => {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [companyName, setCompanyName] = useState("");
   const [userId, setUserId] = useState<number | null>(null);
+  const BACKEND_URL = "https://jobhunter.woopwoopserver.com";
 
   useEffect(() => {
     setIsLoading(true);
@@ -77,7 +78,11 @@ export const Company = () => {
             value: data
           });
           setCompanyName(data.name ?? "");
-          setImageUrl(data.logo_path === "" ? null : data.logo_path ?? null);
+          if (data.logo_path === "" || data.logo_path === null) {
+            setImageUrl(null);
+          } else {
+            setImageUrl(BACKEND_URL + data.logo_path?.substring(0));
+          }
           if (userId === data.owner_id) {
             setIsReadOnly(false);
           } else {

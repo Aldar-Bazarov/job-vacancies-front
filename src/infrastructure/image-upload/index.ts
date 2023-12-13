@@ -29,6 +29,5 @@ export function DataURIToBlob(dataURI: string) {
 
   const ia = new Uint8Array(byteString.length);
   for (let i = 0; i < byteString.length; i++) ia[i] = byteString.charCodeAt(i);
-
   return new Blob([ia], { type: mimeString });
 }

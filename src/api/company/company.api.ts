@@ -61,7 +61,12 @@ export const companyApi = {
   async loadPhoto(id: number, uri: string): Promise<CompanyInfoDto> {
     try {
       const formData = new FormData();
-      formData.append("logo_file", DataURIToBlob(uri));
+      const blob = DataURIToBlob(uri);
+      formData.append(
+        "logo_file",
+        blob,
+        `company_logo${id}.${blob.type.split("/")[1]}`
+      );
       const response = await axios.postForm<CompanyInfoDto>(
         `/companies/${id}/logo`,
         formData,
