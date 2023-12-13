@@ -77,6 +77,7 @@ export const Company = () => {
             value: data
           });
           setCompanyName(data.name ?? "");
+          setImageUrl(data.logo_path === "" ? null : data.logo_path ?? null);
           if (userId === data.owner_id) {
             setIsReadOnly(false);
           } else {
@@ -123,6 +124,13 @@ export const Company = () => {
           value: data
         });
         setCompanyName(data.name ?? "");
+        if (
+          data.logo_path !== imageUrl &&
+          data.id != null &&
+          imageUrl !== null
+        ) {
+          companyApi.loadPhoto(data.id, imageUrl);
+        }
         setIsReadOnly(false);
         if (createMode) {
           navigator(`/company/${data.id}`);

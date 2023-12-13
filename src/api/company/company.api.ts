@@ -1,8 +1,10 @@
+import { DataURIToBlob } from "@infrastructure/image-upload";
 import { AxiosBuilder, unpack, authInterceptor } from "@infrastructure/index";
 
 import {
   CreateCompanyError,
   GetCompanyError,
+  LoadPhotoError,
   UpdateCompanyError
 } from "./errors";
 import {
@@ -53,6 +55,25 @@ export const companyApi = {
       return unpack(response);
     } catch (err) {
       throw new CreateCompanyError(err as Error);
+    }
+  },
+
+  async loadPhoto(id: number, uri: string): Promise<CompanyInfoDto> {
+    try {
+      const formData = new FormData();
+      formData.append("logo_file", DataURIToBlob(uri));
+      const response = await axios.postForm<CompanyInfoDto>(
+        `/companies/${id}/logo`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data"
+          }
+        }
+      );
+      return unpack(response);
+    } catch (err) {
+      throw new LoadPhotoError(err as Error);
     }
   },
 
