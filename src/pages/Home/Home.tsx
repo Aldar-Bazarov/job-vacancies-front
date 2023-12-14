@@ -57,7 +57,7 @@ export const Home: React.FC = () => {
         </Typography.Title>
         <Search
           size="large"
-          inputPlaceholder="Профессия, должность или компания..."
+          inputPlaceholder="Поиск по компаниям..."
           inputValue={inputValue}
           setInputValue={setInputValue}
           handleSearch={handleSearch}

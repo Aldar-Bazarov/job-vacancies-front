@@ -11,6 +11,12 @@
     align-items: start;
     flex-direction: row;
     column-gap: 30px;
+    transition: all ease-in-out .2s;
+
+    &:hover{
+        cursor: pointer;
+        transform: scale(102%);
+    }
 
     .avatar {
         width: 80px;
@@ -21,7 +27,8 @@
     }
 
     .info {
-        max-width: calc(100% - 110px);
+        max-width: 100%;
+        width: 100%;
 
         .title {
             font-size: 25px;

@@ -1,47 +1,73 @@
 import { Col, Row } from "antd";
 
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
+import { searchApi } from "@api/search/search.api";
 import { VacancyInfo } from "@api/vacancies/types";
-// import { vacanciesApi } from "@api/vacancies/vacancies.api";
+import { vacanciesApi } from "@api/vacancies/vacancies.api";
+import { Card } from "@components/Card";
 import { CustomPagination } from "@components/CustomPagination/Pagination";
 import { Search } from "@components/Search/Search";
+import { HardSkills } from "@pages/Profile/Profile.Skills";
 
 import data from "./mock-vacancies.json";
 import styles from "./Vacancies.module.scss";
-import { VacancyCard } from "./VacancyCard";
 
 export const Vacancies = () => {
   const [inputValue, setInputValue] = useState<string>("");
   const [vacancies, setVacancies] = useState<VacancyInfo[]>([]);
-  // const [currentPage, setCurrentPage] = useState<number>(1);
-  // const [totalCount, setTotalCount] = useState<number>(1);
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
-  const handleSearch = () => {
-    //TODO сделать поиск по компании. Опять же непонятно, а как именно искать то?
-  };
+  //Мне честно ок, мы уже все равно не можем ждать, пока они сделают норм поиск)))
+  const handleSearch = async () => {
+    let result: VacancyInfo[] = [];
 
-  const handleChangePage = () => {
-    //TODO а нам нужны уже какие-то данные собственно для этого
+    await searchApi
+      .getVacanciesBySearch({
+        description: inputValue,
+        rate_id: 1
+      })
+      .then((data) => {
+        result = result.concat(data.vacancies);
+      });
+
+    await searchApi
+      .getVacanciesBySearch({
+        description: inputValue,
+        rate_id: 2
+      })
+      .then((data) => {
+        result = result.concat(data.vacancies);
+      });
+
+    await searchApi
+      .getVacanciesBySearch({
+        description: inputValue,
+        rate_id: 3
+      })
+      .then((data) => {
+        result = result.concat(data.vacancies);
+      });
+
+    setVacancies(result);
   };
 
   useEffect(() => {
-    setVacancies(
-      data.map((v) => ({ ...v, created_at: new Date(v.created_at) }))
-    );
+    console.log(vacancies);
+  }, [vacancies]);
+
+  useEffect(() => {
+    vacanciesApi.getVacancies().then((data) => {
+      setVacancies(data);
+    });
   }, []);
 
-  // useEffect(() => {
-  //   vacanciesApi.getVacancies().then((data) => {
-  //     setTotalCount(data.length);
-  //     setVacancies(data);
-  //   });
-  // }, []);
+  const handleChangePage = () => {
+    setCurrentPage((prev) => prev + 1);
+  };
 
-  // const handleDownload = () => {
-  //   setCurrentPage((prev) => prev + 1);
-  // };
-
+  //TODO сменить описание на имя бы
   return (
     <div className={styles["vacancies"]}>
       <Search
@@ -54,17 +80,31 @@ export const Vacancies = () => {
       <Row gutter={[32, 32]}>
         {vacancies.map((el) => (
           <Col span={12} key={el.id}>
-            <VacancyCard
-              key={el.id}
-              company_id={el.company_id}
-              description={el.description}
-              id={el.id}
-            />
+            <Link to={`/vacancies/${el.id}`}>
+              <Card imageSrc="">
+                <Card.Title>
+                  {el.description.length > 15
+                    ? el.description.slice(0, 12) + "..."
+                    : el.description}
+                </Card.Title>
+                <Card.Title level="2">
+                  Оплата {el.salary_min} - {el.salary_max} тыс. руб
+                </Card.Title>
+                <Card.Title level="2">
+                  Опыт от {el.experience_min} до {el.experience_max} лет
+                </Card.Title>
+                <Card.Content>Занятость: {el.rate.name}</Card.Content>
+                <Card.Content>
+                  Требуемые навыки:
+                  <HardSkills tags={el.personal_qualities.split(",")} />
+                </Card.Content>
+              </Card>
+            </Link>
           </Col>
         ))}
       </Row>
       <CustomPagination
-        total={data.length + 500}
+        total={vacancies.length}
         handleSearch={handleChangePage}
       />
     </div>

@@ -85,5 +85,10 @@ export const companyApi = {
   async getCompanies() {
     const response = await axios.get<CompanyInfoDto[]>("/companies");
     return unpack(response);
+  },
+
+  async getCompanyById(id: number) {
+    const response = await axios.get<CompanyInfoDto>(`/companies/${id}`);
+    return unpack(response);
   }
 };
