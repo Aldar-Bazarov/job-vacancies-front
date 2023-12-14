@@ -15,7 +15,7 @@ export const CompanyCard = ({ id, name, description }: ICompanyCardProps) => {
   const titleComponent = (
     <Flex className={styles["header"]} justify="space-between" align="center">
       {/* TODO изображения в базе нет, будет?
-      <img src={imgSrc} width={50} height={50} /> */}
+      // <img src={imgSrc} width={50} height={50} /> */}
       <Typography>{name}</Typography>
       <Link to={`/companies/${id}`}>
         <img src={linkSvg} />

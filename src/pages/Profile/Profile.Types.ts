@@ -17,7 +17,7 @@ export interface IEditableHeaderProps {
   setImageUrl: React.Dispatch<React.SetStateAction<string | null>>;
 }
 export interface IHardSkillsProps {
-  setTags: React.Dispatch<React.SetStateAction<string[]>>;
+  setTags?: React.Dispatch<React.SetStateAction<string[]>>;
   tags: string[];
 }
 export interface IReadonlyHeaderProps {}

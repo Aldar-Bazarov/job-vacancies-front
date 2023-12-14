@@ -13,8 +13,8 @@ export const vacanciesApi = {
     return unpack(response);
   },
 
-  async getVacnciesByName() {
-    const response = await axios.get<VacancyInfo[]>("/vacancies");
+  async getVacancyById(id: number) {
+    const response = await axios.get<VacancyInfo>(`/vacancies/${id}`);
     return unpack(response);
   }
 };

@@ -8,7 +8,7 @@ import { Property } from "./Property";
 import { Title } from "./Title";
 
 interface CardProps {
-  imageSrc: string;
+  imageSrc?: string;
   children: ReactNode;
 }
 
@@ -19,11 +19,13 @@ type ICard = FC<CardProps> & { Title: typeof Title } & {
 export const Card: ICard = ({ imageSrc, children }) => {
   return (
     <div className={styles["card"]}>
-      <Avatar
-        shape="square"
-        src={<img src={imageSrc} alt="avatar" />}
-        className={styles["avatar"]}
-      />
+      {imageSrc && (
+        <Avatar
+          shape="square"
+          src={<img src={imageSrc} alt="avatar" />}
+          className={styles["avatar"]}
+        />
+      )}
       <div className={styles["info"]}>{children}</div>
     </div>
   );

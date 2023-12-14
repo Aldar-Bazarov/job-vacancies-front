@@ -12,3 +12,8 @@ export interface CompanyBody {
   description: string | null;
   page: number | null;
 }
+
+export interface VacancyBody {
+  description: string;
+  rate_id: number;
+}

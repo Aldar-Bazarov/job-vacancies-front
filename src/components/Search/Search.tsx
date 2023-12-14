@@ -25,6 +25,12 @@ export const Search: FC<SearchProps> & { FilterItem: typeof FilterItem } = ({
 }) => {
   const [showFilters, setShowFilters] = useState(false);
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
+  };
+
   return (
     <>
       <div className={styles[`search-${size}`]}>
@@ -33,6 +39,7 @@ export const Search: FC<SearchProps> & { FilterItem: typeof FilterItem } = ({
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           placeholder={inputPlaceholder}
+          onKeyDown={handleKeyDown}
         />
         <Button className={styles["btn"]} onClick={handleSearch}>
           Искать

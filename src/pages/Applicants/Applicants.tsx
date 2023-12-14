@@ -29,6 +29,7 @@ export const Applicants = () => {
 
   const handleSearch = () => {
     //TODO поиск исполнителей
+    //Посмотри на примере других поисков, там дурацкая система
   };
 
   return (
