@@ -54,7 +54,7 @@ export default class AxiosBuilder {
       if (error.response && error.response.status === 401) {
         try {
           const { access_token } = await authApi.refresh();
-          setAuthenticate(access_token);
+          setAuthenticate(access_token, localStorage.getItem("role") ?? "");
           this.options.headers = this.options.headers || {};
           this.options.headers.Authorization = `Bearer ${access_token}`;
           const config = { ...error.config, headers: this.options.headers };

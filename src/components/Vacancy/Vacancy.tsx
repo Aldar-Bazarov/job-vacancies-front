@@ -45,12 +45,16 @@ export const Vacancy = () => {
   }, []);
 
   const handleRespond = async () => {
-    const resumes = await resumeApi.getResumes();
-    const currentResume = resumes.flter((el) => +el.applicant_id === +userId);
-    await resumeApi.response({
-      resume_id: currentResume[0].id,
-      vacancy_id: vacancy?.id
-    });
+    if (getRole() === Role.Applicants) {
+      const resumes = await resumeApi.getResumes();
+      const currentResume = resumes.filter(
+        (el) => +el.applicant_id === +userId
+      );
+      await resumeApi.response({
+        resume_id: currentResume[0].id,
+        vacancy_id: vacancy?.id
+      });
+    }
   };
 
   return (
