@@ -10,7 +10,7 @@ const axios = new AxiosBuilder()
 
 export const resumeApi = {
   async response(data: RsponseData) {
-    const response = await axios.post("/vacancy_response", data);
+    const response = await axios.post("/vacancy_responses", data);
     return unpack(response);
   },
 
