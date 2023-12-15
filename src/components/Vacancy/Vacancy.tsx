@@ -9,7 +9,6 @@ import { vacanciesApi } from "@api/vacancies/vacancies.api";
 import { Card } from "@components/Card";
 import { getRole } from "@infrastructure/axios/auth";
 import { HardSkills } from "@pages/Profile/Profile.Skills";
-import { cutText } from "@utils/utils";
 
 import styles from "./Vacancy.module.scss";
 
@@ -43,7 +42,7 @@ export const Vacancy = () => {
         <Row gutter={[32, 32]}>
           <Col span={12}>
             <Card imageSrc="">
-              <Card.Title>{cutText(vacancy.description, 100)}</Card.Title>
+              <Card.Title>{vacancy.name}</Card.Title>
               <Card.Title level="2">
                 От {vacancy.salary_min} 000 до {vacancy.salary_max} 000 на руки
               </Card.Title>

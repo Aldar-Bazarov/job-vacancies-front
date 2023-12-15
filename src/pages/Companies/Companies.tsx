@@ -1,7 +1,7 @@
 import { Col, Divider, Row } from "antd";
 
-import { useCallback, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 
 import { companyApi } from "@api/company/company.api";
 import { CompanyInfoDto } from "@api/company/types";
@@ -22,13 +22,36 @@ export const Companies = () => {
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
 
+  const { state } = useLocation();
+
+  useEffect(() => {
+    state?.companies?.companies
+      ? setCompanies(state.companies.companies as CompanyInfoDto[])
+      : companyApi.getCompanies().then((data) => {
+          setTotal(data.length);
+          fetchCompanies(page);
+        });
+
+    state?.inputValue ? setName(state.inputValue) : null;
+  }, []);
+
+  const handleSearch = () => {
+    setPage(1);
+    fetchCompanies(1);
+  };
+
+  const handleChangePage = (val: number) => {
+    fetchCompanies(val);
+    setPage(val);
+  };
+
   const fetchCompanies = async (page: number) => {
     setLoading(true);
-    searchApi
+    await searchApi
       .getCompanyByProperties({
         name,
-        ownerId: 0,
-        description: "",
+        ownerId: null,
+        description: null,
         page
       })
       .then((data) => {
@@ -36,22 +59,6 @@ export const Companies = () => {
       })
       .finally(() => setLoading(false));
   };
-
-  useEffect(() => {
-    companyApi.getCompanies().then((data) => {
-      setTotal(data.length);
-      fetchCompanies(page);
-    });
-  }, []);
-
-  useEffect(() => {
-    fetchCompanies(page);
-  }, [page]);
-
-  const handleSearch = useCallback(() => {
-    setPage(1);
-    fetchCompanies(1);
-  }, []);
 
   return (
     <div className={styles["companies"]}>
@@ -68,8 +75,10 @@ export const Companies = () => {
             <Link to={`/company/${company.id}`}>
               <Card
                 imageSrc={
-                  import.meta.env.VITE_BASE_API_URL +
                   company?.logo_path?.slice(1)
+                    ? import.meta.env.VITE_BASE_API_URL +
+                      company?.logo_path?.slice(1)
+                    : "/images/default-avatar.jpg"
                 }
               >
                 <Card.Title>{company.name}</Card.Title>
@@ -91,7 +100,7 @@ export const Companies = () => {
       <CustomPagination
         current={page}
         total={total}
-        handleSearch={(val: number) => setPage(val)}
+        handleSearch={handleChangePage}
       />
       <Loader active={loading} />
     </div>
