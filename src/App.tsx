@@ -1,6 +1,5 @@
 import { Route, Routes } from "react-router-dom";
 
-import { CreateVacancy } from "@components/CreateVacancy/CreateVacancy";
 import { Layout } from "@components/Layout/Layout";
 import { Vacancies } from "@components/Vacancies/Vacancies";
 import { Vacancy } from "@components/Vacancy/Vacancy";
@@ -13,6 +12,8 @@ import { Home } from "@pages/Home/Home";
 import { NotFound } from "@pages/NotFound/NotFound";
 import { Profile } from "@pages/Profile/Profile";
 import { Registration } from "@pages/Registration/Registration";
+// eslint-disable-next-line import/order
+import { CreateVacancy } from "@components/CreateVacancy/CreateVacancy";
 
 const App: React.FC = () => {
   return (
@@ -48,7 +49,14 @@ const App: React.FC = () => {
         <Route path="vacancies" element={<Vacancies />} />
         <Route path="vacancies/:vacancyId" element={<Vacancy />} />
         <Route path="companies" element={<Companies />} />
-        <Route path="create-vacancy" element={<CreateVacancy />} />
+        <Route
+          path="create-vacancy"
+          element={
+            <RequireAuth>
+              <CreateVacancy />
+            </RequireAuth>
+          }
+        />
         <Route path="*" element={<NotFound />} />
       </Route>
       <Route path="register" element={<Registration />} />

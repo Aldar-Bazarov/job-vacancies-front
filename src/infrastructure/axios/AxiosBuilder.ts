@@ -23,7 +23,8 @@ export default class AxiosBuilder {
         Pragma: "no-cache",
         "Cache-Control": "no-cache",
         Expires: "0",
-        Lang: "ru"
+        Lang: "ru",
+        "Content-Type": "application/json"
       }
     };
   }
