@@ -11,13 +11,13 @@ import { CustomPagination } from "@components/CustomPagination/Pagination";
 import { Search } from "@components/Search/Search";
 import { HardSkills } from "@pages/Profile/Profile.Skills";
 
-import data from "./mock-vacancies.json";
 import styles from "./Vacancies.module.scss";
 
 export const Vacancies = () => {
   const [inputValue, setInputValue] = useState<string>("");
   const [vacancies, setVacancies] = useState<VacancyInfo[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [total, setTotal] = useState<number>(0);
 
   //Мне честно ок, мы уже все равно не можем ждать, пока они сделают норм поиск)))
   const handleSearch = async () => {
@@ -51,6 +51,7 @@ export const Vacancies = () => {
       });
 
     setVacancies(result);
+    setTotal(result.length);
   };
 
   useEffect(() => {
@@ -83,9 +84,7 @@ export const Vacancies = () => {
             <Link to={`/vacancies/${el.id}`}>
               <Card imageSrc="">
                 <Card.Title>
-                  {el.description.length > 15
-                    ? el.description.slice(0, 12) + "..."
-                    : el.description}
+                  {el.name.length > 15 ? el.name.slice(0, 12) + "..." : el.name}
                 </Card.Title>
                 <Card.Title level="2">
                   Оплата {el.salary_min} - {el.salary_max} тыс. руб
@@ -104,8 +103,9 @@ export const Vacancies = () => {
         ))}
       </Row>
       <CustomPagination
-        total={vacancies.length}
-        handleSearch={handleChangePage}
+        total={total}
+        handleSearch={(val: number) => setCurrentPage(val)}
+        current={currentPage}
       />
     </div>
   );

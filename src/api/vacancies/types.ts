@@ -1,5 +1,6 @@
 export interface VacancyInfo {
   id: number;
+  name: string;
   description: string;
   created_at: Date;
   company_id: number;
