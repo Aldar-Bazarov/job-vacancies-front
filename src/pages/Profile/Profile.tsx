@@ -27,7 +27,7 @@ export const Profile: React.FC = () => {
   const { profileId } = useParams();
   const [isLoading, setIsLoading] = useState(false);
   const [isReadOnly, setIsReadOnly] = useState(true);
-  const [tags, setTags] = useState(["Placeholder1", "Placeholder2"]);
+  const [tags, setTags] = useState<string[]>([]);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [fullUserName, setFullUserName] = useState<string>("");
   const [userIsApplicant, setUserIsApplicant] = useState(true);
@@ -147,7 +147,7 @@ export const Profile: React.FC = () => {
               <>
                 <Divider style={{ borderColor: "#7E7E7E66" }} />
 
-                <Row>
+                {/* <Row>
                   <Col span={12}>
                     <EditableFormItem
                       icon={<InfoIcon />}
@@ -163,10 +163,10 @@ export const Profile: React.FC = () => {
                     </EditableFormItem>
                   </Col>
                 </Row>
-                <Divider style={{ borderColor: "#7E7E7E66" }} />
+                <Divider style={{ borderColor: "#7E7E7E66" }} /> */}
 
                 <Row>
-                  <Col span={12}>
+                  {/* <Col span={12}>
                     <EditableFormItem
                       icon={<EducationIcon />}
                       title={"Образование"}
@@ -179,7 +179,7 @@ export const Profile: React.FC = () => {
                         <ReadonlyEducation />
                       </EditableFormItem.ReadOnlyPart>
                     </EditableFormItem>
-                  </Col>
+                  </Col> */}
                   <Col span={12}>
                     <EditableFormItem
                       icon={<SkillsIcon />}

@@ -44,8 +44,7 @@ export const Company = () => {
         // колхозный способ получения текущего владельца
         setUserId(user_data.user_id);
       })
-      .catch((e: Error) => {
-        message.error(e.message);
+      .catch(() => {
         setUserId(null);
       })
       .finally(() => {
@@ -89,8 +88,8 @@ export const Company = () => {
             setIsReadOnly(true);
           }
         })
-        .catch((e: UpdateCompanyError) => {
-          message.error(e.message);
+        .catch(() => {
+          setIsReadOnly(true);
         })
         .finally(() => {
           setIsLoading(false);

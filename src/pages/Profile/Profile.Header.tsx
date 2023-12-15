@@ -65,9 +65,6 @@ export const EditableHeader: React.FC<IEditableHeaderProps> = ({
             readOnly={context?.isReadOnly}
           />
         </Form.Item>
-        <Form.Item label="Telegram">
-          <Input placeholder="Soon..." readOnly={context?.isReadOnly} />
-        </Form.Item>
       </Col>
       <Col span={8}>
         <Form.Item label="Почта">
@@ -75,9 +72,6 @@ export const EditableHeader: React.FC<IEditableHeaderProps> = ({
             value={context?.profileData.user.email}
             readOnly={context?.isReadOnly}
           />
-        </Form.Item>
-        <Form.Item label="Номер телефона">
-          <Input placeholder="Soon..." readOnly={context?.isReadOnly} />
         </Form.Item>
 
         {context?.userIsApplicant && (
@@ -144,18 +138,11 @@ export const ReadonlyHeader: React.FC<IReadonlyHeaderProps> = () => {
     <Row>
       <Col span={6}>
         <Space direction="vertical" size={1}>
-          <Typography.Text>{"Некий пол, некая дата рождения"}</Typography.Text>
           {context?.userIsApplicant && (
             <Typography.Text>
               {getStatusTitle(context?.profileData.status_id ?? 2)}
             </Typography.Text>
           )}
-        </Space>
-      </Col>
-      <Col span={6}>
-        <Space direction="vertical" size={1}>
-          <Typography.Text>{"Адрес: Некий адрес"}</Typography.Text>
-          <Typography.Text>{"Телефон: Некий номер телефона"}</Typography.Text>
           <Typography.Text>
             {"Почта: " + context?.profileData.user.email}
           </Typography.Text>
