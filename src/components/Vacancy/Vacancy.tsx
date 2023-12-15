@@ -4,10 +4,13 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
 import { CompanyInfoDto, companyApi } from "@api/company/company.api";
+import { resumeApi } from "@api/resume/resume.api";
+import { userApi } from "@api/user/user.api";
 import { VacancyInfo } from "@api/vacancies/types";
 import { vacanciesApi } from "@api/vacancies/vacancies.api";
 import { Card } from "@components/Card";
 import { getRole } from "@infrastructure/axios/auth";
+import { Role } from "@interfaces/user";
 import { HardSkills } from "@pages/Profile/Profile.Skills";
 
 import styles from "./Vacancy.module.scss";
@@ -17,6 +20,7 @@ export const Vacancy = () => {
   const [vacancy, setVacancy] = useState<VacancyInfo | null>(null);
   const [company, setCompany] = useState<CompanyInfoDto | null>(null);
   const navigate = useNavigate();
+  const [userId, setUserId] = useState<number | null>(null);
 
   useEffect(() => {
     if (vacancyId)
@@ -30,9 +34,23 @@ export const Vacancy = () => {
         .then((data) => setCompany(data));
   }, [vacancy]);
 
-  const handleRespond = () => {
-    //TODO сделать откликнуться
-    console.log("Я откликнулся!");
+  const apiGetUser = (role: Role) => {
+    return userApi.getMyProfile({ role: role }).then((data) => {
+      setUserId(data.user_id);
+    });
+  };
+
+  useEffect(() => {
+    apiGetUser(getRole() as Role);
+  }, []);
+
+  const handleRespond = async () => {
+    const resumes = await resumeApi.getResumes();
+    const currentResume = resumes.flter((el) => +el.applicant_id === +userId);
+    await resumeApi.response({
+      resume_id: currentResume[0].id,
+      vacancy_id: vacancy?.id
+    });
   };
 
   return (
@@ -50,7 +68,7 @@ export const Vacancy = () => {
                 Требуемый опыт работы {vacancy.experience_min} -{" "}
                 {vacancy.experience_max} года
               </Card.Content>
-              <Card.Content>{vacancy.rate.name}</Card.Content>
+              <Card.Content>{vacancy?.rate.name}</Card.Content>
             </Card>
           </Col>
           <Col span={12}>
@@ -76,11 +94,14 @@ export const Vacancy = () => {
           <Button type="text" size="large" onClick={() => navigate(-1)}>
             Назад
           </Button>
-          {getRole() === "applicants" && (
+          {/* {getRole() === "applicants" && (
             <Button type="primary" size="large" onClick={handleRespond}>
               Откликнуться
             </Button>
-          )}
+          )} */}
+          <Button type="primary" size="large" onClick={handleRespond}>
+            Откликнуться
+          </Button>
         </Flex>
       </div>
     )
