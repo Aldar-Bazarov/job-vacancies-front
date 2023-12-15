@@ -55,10 +55,6 @@ export const Vacancies = () => {
   };
 
   useEffect(() => {
-    console.log(vacancies);
-  }, [vacancies]);
-
-  useEffect(() => {
     vacanciesApi.getVacancies().then((data) => {
       setVacancies(data);
     });
