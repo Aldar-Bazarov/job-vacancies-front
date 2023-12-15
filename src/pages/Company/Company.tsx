@@ -1,7 +1,7 @@
 import { Avatar, Button, Col, Divider, Flex, Form, Row, message } from "antd";
 
 import { useEffect, useState, useReducer } from "react";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 import {
   CreateCompanyError,

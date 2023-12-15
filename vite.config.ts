@@ -13,7 +13,8 @@ export default defineConfig({
       "@pages": "/src/pages",
       "@components": "/src/components",
       "@interfaces": "/src/interfaces",
-      "@infrastructure": "/src/infrastructure"
+      "@infrastructure": "/src/infrastructure",
+      "@utils": "/src/utils"
     }
   },
   server: {

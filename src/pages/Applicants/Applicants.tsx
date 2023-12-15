@@ -2,6 +2,7 @@ import { Col, Divider, Row } from "antd";
 
 import { useEffect, useState } from "react";
 
+import { respondersApi } from "@api/responders/responders.api";
 import { ProfileInfoDto } from "@api/user/types";
 import { Card } from "@components/Card";
 import { CustomPagination } from "@components/CustomPagination/Pagination";
@@ -17,14 +18,9 @@ export const Applicants = () => {
   const [applicants, setApplicants] = useState<ProfileInfoDto[]>([]);
 
   useEffect(() => {
-    setApplicants(
-      data.map((applicant) => {
-        return {
-          ...applicant,
-          status_id: 1
-        };
-      })
-    );
+    respondersApi
+      .getRespondersByCompany({ company_id: 2 })
+      .then((data) => console.log(data));
   }, []);
 
   const handleSearch = () => {
@@ -74,7 +70,11 @@ export const Applicants = () => {
           );
         })}
       </Row>
-      <CustomPagination total={data.length + 500} handleSearch={handleSearch} />
+      <CustomPagination
+        current={1}
+        total={data.length + 500}
+        handleSearch={handleSearch}
+      />
     </div>
   );
 };

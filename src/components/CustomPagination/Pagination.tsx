@@ -6,16 +6,19 @@ import styles from "./CustomPagination.module.scss";
 
 interface CustomPaginationProps {
   total: number;
+  current: number;
   handleSearch: (val: number) => void;
 }
 
 export const CustomPagination: FC<CustomPaginationProps> = ({
   total,
+  current,
   handleSearch
 }) => {
   return (
     <Pagination
       total={total}
+      current={current}
       defaultCurrent={1}
       showSizeChanger={false}
       showQuickJumper={false}

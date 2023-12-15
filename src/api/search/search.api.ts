@@ -61,5 +61,22 @@ export const searchApi = {
       }
     );
     return unpack(response);
+  },
+
+  async getApplicants() {
+    // const response = await axios.post<VacanciesResponse>(
+    //   "/search/get_vacancies",
+    //   {
+    //     description,
+    //     company_id: 0,
+    //     rate_id: rate_id,
+    //     experience_min: 0,
+    //     experience_max: 0,
+    //     salary_min: 0,
+    //     salary_max: 0,
+    //     personal_qualities: ""
+    //   }
+    // );
+    // return unpack(response);
   }
 };

@@ -44,7 +44,7 @@ export const Search: FC<SearchProps> & { FilterItem: typeof FilterItem } = ({
         <Button className={styles["btn"]} onClick={handleSearch}>
           Искать
         </Button>
-        {size === "small" && (
+        {size === "small" && showFilters && (
           <Button
             className={styles["filter-btn"]}
             onClick={() => setShowFilters(!showFilters)}

@@ -21,10 +21,11 @@ export const Authorization: React.FC = () => {
   const onFinish = useCallback(() => {
     setLoading(true);
     const userData = authorizationForm.getFieldsValue();
+    const role = authorizationForm.getFieldValue("role");
     authApi
       .authorize(userData)
       .then((data) => {
-        setAuthenticate(data.access_token);
+        setAuthenticate(data.access_token, role);
         navigate(fromPage, { replace: true });
       })
       .catch((error) => {

@@ -29,6 +29,7 @@
       "@components/*": ["components/*"],
       "@interfaces/*": ["interfaces/*"],
       "@infrastructure/*": ["infrastructure/*"],
+      "@utils/*": ["utils/*"],
     }
   },
   "include": ["src"],

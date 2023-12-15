@@ -1,13 +1,15 @@
 import { Button, Col, Flex, Row, Typography } from "antd";
 
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 import { CompanyInfoDto, companyApi } from "@api/company/company.api";
 import { VacancyInfo } from "@api/vacancies/types";
 import { vacanciesApi } from "@api/vacancies/vacancies.api";
 import { Card } from "@components/Card";
+import { getRole } from "@infrastructure/axios/auth";
 import { HardSkills } from "@pages/Profile/Profile.Skills";
+import { cutText } from "@utils/utils";
 
 import styles from "./Vacancy.module.scss";
 
@@ -41,7 +43,7 @@ export const Vacancy = () => {
         <Row gutter={[32, 32]}>
           <Col span={12}>
             <Card imageSrc="">
-              <Card.Title>{vacancy.description}</Card.Title>
+              <Card.Title>{cutText(vacancy.description, 100)}</Card.Title>
               <Card.Title level="2">
                 От {vacancy.salary_min} 000 до {vacancy.salary_max} 000 на руки
               </Card.Title>
@@ -53,13 +55,15 @@ export const Vacancy = () => {
             </Card>
           </Col>
           <Col span={12}>
-            <Card imageSrc={company.logo_path}>
-              <Card.Title>{company.name}</Card.Title>
-              <Card.Title level="2">
-                Численность сотрудников более {company.population}
-              </Card.Title>
-              <Card.Content>Адрес: {company.address}</Card.Content>
-            </Card>
+            <Link to={`/company/${company.id}`}>
+              <Card imageSrc={company.logo_path}>
+                <Card.Title>{company.name}</Card.Title>
+                <Card.Title level="2">
+                  Численность сотрудников более {company.population}
+                </Card.Title>
+                <Card.Content>Адрес: {company.address}</Card.Content>
+              </Card>
+            </Link>
           </Col>
         </Row>
         <hr className={styles["hr"]} />
@@ -73,9 +77,11 @@ export const Vacancy = () => {
           <Button type="text" size="large" onClick={() => navigate(-1)}>
             Назад
           </Button>
-          <Button type="primary" size="large" onClick={handleRespond}>
-            Откликнуться
-          </Button>
+          {getRole() === "applicants" && (
+            <Button type="primary" size="large" onClick={handleRespond}>
+              Откликнуться
+            </Button>
+          )}
         </Flex>
       </div>
     )
