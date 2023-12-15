@@ -5,6 +5,7 @@ import { VacancyInfo } from "./types";
 const axios = new AxiosBuilder()
   .addBusinessErrorHandler()
   .addNotFoundErrorHandler()
+  .addUnauthorizedHandler()
   .build();
 
 export const vacanciesApi = {
@@ -16,5 +17,14 @@ export const vacanciesApi = {
   async getVacancyById(id: number) {
     const response = await axios.get<VacancyInfo>(`/vacancies/${id}`);
     return unpack(response);
+  },
+
+  async createVacancy(data: VacancyInfo) {
+    try {
+      const response = await axios.post<VacancyInfo>("/vacancies/", data);
+      return unpack(response);
+    } catch (e) {
+      console.error(e);
+    }
   }
 };

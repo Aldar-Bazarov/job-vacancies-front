@@ -152,6 +152,10 @@ export const Company = () => {
       });
   };
 
+  const handleCreateVacancy = () => {
+    navigator("/create-vacancy", { state: { company_id: companyId } });
+  };
+
   return (
     <>
       <Loader active={isLoading} />
@@ -215,20 +219,27 @@ export const Company = () => {
             </Row>
             <Divider style={{ borderColor: "#7E7E7E66" }} />
 
-            {!createMode && (
+            {!createMode && companyId && (
               <Row>
                 <Col span={24}>
                   <EditableFormItem
-                    icon={<MultipleItemsIcon />}
+                    icon={<></>}
                     title={"Вакансии"}
                     readonly={isReadOnly}
                   >
-                    <EditableFormItem.NotAlternatePart>
-                      <Vacancies />
-                    </EditableFormItem.NotAlternatePart>
+                    <Vacancies company_id={+companyId} />
                   </EditableFormItem>
                 </Col>
               </Row>
+            )}
+            {!isReadOnly && (
+              <Button
+                type="primary"
+                style={{ marginTop: "15px" }}
+                onClick={handleCreateVacancy}
+              >
+                Создать вакансию
+              </Button>
             )}
             <Divider style={{ borderColor: "#7E7E7E66" }} />
 

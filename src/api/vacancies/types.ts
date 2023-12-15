@@ -9,7 +9,8 @@ export interface VacancyInfo {
   salary_max: number;
   experience_min: number;
   experience_max: number;
-  rate: {
+  rate_id: number;
+  rate?: {
     id: number;
     name: string;
   };
