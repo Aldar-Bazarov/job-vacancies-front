@@ -12,7 +12,6 @@ import { CompanyInfoDto } from "@api/company/types";
 import { userApi } from "@api/user/user.api";
 import { EditableFormItem } from "@components/EditableFormItem/EditableFormItem";
 import { AboutCompanyIcon } from "@components/Icons/AboutCompanyIcon";
-import { MultipleItemsIcon } from "@components/Icons/MultipleItemsIcon";
 import { Loader } from "@components/Loader/Loader";
 import { Role } from "@interfaces/user";
 

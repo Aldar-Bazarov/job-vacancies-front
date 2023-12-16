@@ -7,6 +7,7 @@ export type CompanyReducerAction = {
     | "change_description"
     | "change_address"
     | "change_phone"
+    | "change_population"
     | "change_email"; // eslint-disable-next-line
   value?: any;
 };

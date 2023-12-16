@@ -39,6 +39,10 @@ export function CompanyReducer(
       data!.address = action.value;
       break;
     }
+    case "change_population": {
+      data!.population = action.value;
+      break;
+    }
   }
   return data;
 }

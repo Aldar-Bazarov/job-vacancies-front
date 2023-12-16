@@ -1,4 +1,13 @@
-import { Button, Form, Col, Row, Input, Space, Typography } from "antd";
+import {
+  Button,
+  Form,
+  Col,
+  Row,
+  Input,
+  Space,
+  Typography,
+  InputNumber
+} from "antd";
 import { Upload } from "antd";
 import { UploadChangeParam } from "antd/es/upload";
 import { RcFile, UploadFile, UploadProps } from "antd/es/upload/interface";
@@ -60,6 +69,18 @@ export const EditableHeader: React.FC<IEditableHeaderProps> = ({
               context?.dispatch({
                 type: "change_email",
                 value: e.target.value
+              })
+            }
+            readOnly={context?.isReadOnly}
+          />
+        </Form.Item>
+        <Form.Item label="Количество сотрудников">
+          <InputNumber
+            value={context?.companyData.population}
+            onChange={(e) =>
+              context?.dispatch({
+                type: "change_population",
+                value: e
               })
             }
             readOnly={context?.isReadOnly}
@@ -129,6 +150,9 @@ export const ReadonlyHeader: React.FC<IReadonlyHeaderProps> = () => {
           </Typography.Text>
           <Typography.Text>
             {"Адрес: " + context?.companyData.address}
+          </Typography.Text>
+          <Typography.Text>
+            {"Количество сотрудников: " + context?.companyData.population}
           </Typography.Text>
         </Space>
       </Col>
