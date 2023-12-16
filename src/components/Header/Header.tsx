@@ -1,15 +1,26 @@
-import { Popover, Typography } from "antd";
+import { Button, Drawer, Popover, Typography } from "antd";
 
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-import { UserOutlined } from "@ant-design/icons";
+import { UserOutlined, BellOutlined } from "@ant-design/icons";
+import { notificationApi } from "@api/notifications/notifications.api";
 import LogoutButton from "@components/LogoutButton/LogoutButton";
 import { getRole, isAuthenticated } from "@infrastructure/axios/auth";
 
 import styles from "./Header.module.scss";
 
 export const Header: React.FC = () => {
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  // eslint-disable-next-line
+  const [notifications, setNotifications] = useState<any[]>([]);
+
+  useEffect(() => {
+    notificationApi.getAll().then((data) => {
+      setNotifications(data);
+    });
+  }, [drawerOpen]);
+
   return (
     <div className={styles["header"]}>
       <div className={styles["items"]}>
@@ -42,6 +53,37 @@ export const Header: React.FC = () => {
         )}
       </div>
       <div className={styles["profile"]}>
+        {getRole() === "applicants" && (
+          <>
+            <Button
+              icon={<BellOutlined />}
+              type="text"
+              style={{ marginRight: 10 }}
+              onClick={() => setDrawerOpen(!drawerOpen)}
+            />
+            <Drawer
+              title="Уведомления"
+              placement="right"
+              onClose={() => setDrawerOpen(!drawerOpen)}
+              open={drawerOpen}
+            >
+              {notifications.length > 0 ? (
+                <>
+                  {notifications.map((el) => (
+                    <div style={{ marginBottom: 30 }}>
+                      <Typography style={{ color: "#39CD7D" }}>
+                        {el.created_at.slice(0, 10)}
+                      </Typography>
+                      <Typography>{el.text}</Typography>
+                    </div>
+                  ))}
+                </>
+              ) : (
+                <Typography>У вас нет уведомлений</Typography>
+              )}
+            </Drawer>
+          </>
+        )}
         <Popover
           trigger="click"
           placement="bottomRight"

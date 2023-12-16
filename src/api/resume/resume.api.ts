@@ -1,5 +1,5 @@
 import { LoadPhotoError } from "@api/company/errors";
-import { AxiosBuilder, unpack } from "@infrastructure/axios";
+import { AxiosBuilder, authInterceptor, unpack } from "@infrastructure/axios";
 import { DataURIToBlob } from "@infrastructure/image-upload";
 
 import { ResponseData, UpdateResponseData } from "./types";
@@ -10,6 +10,8 @@ const axios = new AxiosBuilder()
   .addUnauthorizedHandler()
   .build();
 
+axios.interceptors.request.use(authInterceptor);
+
 export const resumeApi = {
   async response(data: ResponseData) {
     const response = await axios.post("/vacancy_responses", data);
@@ -18,7 +20,7 @@ export const resumeApi = {
 
   async updateResponse(context: UpdateResponseData) {
     const { vacancy_id, resume_id, status_id } = context;
-    const response = await axios.post(
+    const response = await axios.put(
       `/vacancy_responses/${vacancy_id}/${resume_id}/status`,
       { status_id }
     );

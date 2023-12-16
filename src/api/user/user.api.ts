@@ -65,6 +65,17 @@ export const userApi = {
     }
   },
 
+  async getApplicantById(id: number): Promise<ProfileInfoDto> {
+    try {
+      const response = await axios.get<ProfileInfoDto>(
+        `/users/applicants/${id}`
+      );
+      return unpack(response);
+    } catch (err) {
+      throw new GetProfileError(err as Error);
+    }
+  },
+
   async updateMyProfile(
     context: UpdateProfileContext
   ): Promise<ProfileInfoDto> {

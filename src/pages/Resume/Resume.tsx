@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 
 import { resumeApi } from "@api/resume/resume.api";
+import { userApi } from "@api/user/user.api";
 import { Loader } from "@components/Loader/Loader";
 
 const contactType = [
@@ -35,15 +36,10 @@ export const Resume = () => {
         if (data.photo === "" || data.photo === null) {
           setImageUrl(null);
         } else {
-          setImageUrl(BACKEND_URL + data.photo?.substring(0));
+          setImageUrl(BACKEND_URL + data.photo);
         }
-        resumeApi.getResumes().then((resumes) => {
-          const userId = resumes.find((el) => el.id === resumeId);
-          // TODO: Тут будет запрос на получение юзера по id
-          setApplicant({
-            first_name: "Иван",
-            last_name: "Сидоров"
-          });
+        userApi.getApplicantById(data.applicant_id).then((userData) => {
+          setApplicant(userData.user);
         });
       })
       .finally(() => setLoading(false));
@@ -67,12 +63,12 @@ export const Resume = () => {
     <>
       <Loader active={loading} />
       <Col span={12}>
+        <Row align={"middle"}>
+          <Avatar size={100} src={imageUrl ?? "/images/default-avatar.jpg"} />
+        </Row>
         <Typography.Title>
           {applicant.first_name + " " + applicant.last_name}
         </Typography.Title>
-        <Row>
-          <Avatar size={100} src={imageUrl ?? "/images/default-avatar.jpg"} />
-        </Row>
         <Typography.Title level={5}>Название должности</Typography.Title>
         <Typography>{resume.job_title}</Typography>
         <Typography.Title level={5}>Описание резюме</Typography.Title>
@@ -111,7 +107,7 @@ export const Resume = () => {
           <Typography.Title level={4}>Проффесиональные навыки</Typography.Title>
           {resume.personal_qualities !== "" &&
             resume.personal_qualities.split(",").map((el) => {
-              <Typography>{el}</Typography>;
+              return <Typography>{el}</Typography>;
             })}
         </Col>
       </Row>

@@ -23,6 +23,7 @@ export const Resumes = () => {
       .getResumes()
       .then((data) => {
         setResumes(data);
+        console.log("data", data);
       })
       .finally(() => setLoading(false));
   }, []);
@@ -43,9 +44,9 @@ export const Resumes = () => {
               <Link to={`/resume/${resume.id}`} state={{ responsible: false }}>
                 <Card
                   imageSrc={
-                    resume?.logo_path?.slice(1)
+                    resume?.photo?.slice(0)
                       ? import.meta.env.VITE_BASE_API_URL +
-                        resume?.logo_path?.slice(1)
+                        resume?.photo?.slice(0)
                       : "/images/default-avatar.jpg"
                   }
                 >

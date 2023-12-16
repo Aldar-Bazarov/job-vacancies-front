@@ -19,6 +19,7 @@ import Upload, {
   UploadFile,
   UploadProps
 } from "antd/es/upload";
+import dayjs from "dayjs";
 
 import { useEffect, useState } from "react";
 
@@ -85,13 +86,27 @@ export const CreateResume = () => {
             // eslint-disable-next-line
             (el: any) => +el.applicant_id === +data.user_id
           );
-          console.log("currentResume", currentResume);
           if (currentResume) {
-            createResumeForm.setFieldsValue(currentResume);
+            console.log("currnetResume", currentResume);
+            createResumeForm.setFieldsValue({
+              ...currentResume,
+              employment_records: currentResume.employment_records.length
+                ? currentResume.employment_records.map((el) => {
+                    return {
+                      ...el,
+                      start_date: dayjs(el.start_date),
+                      end_date: dayjs(el.end_date)
+                    };
+                  })
+                : []
+            });
             createResumeForm.setFieldValue(
               "education",
               currentResume.educations
             );
+            // createResumeForm.setFieldValue("employment_records",
+            // currentResume.employment_records.map
+            // )
             if (currentResume.personal_qualities !== "") {
               setTags(currentResume.personal_qualities.split(","));
             } else {
@@ -102,7 +117,7 @@ export const CreateResume = () => {
             if (currentResume.photo === "" || currentResume.photo === null) {
               setImageUrl(null);
             } else {
-              setImageUrl(BACKEND_URL + currentResume.photo?.substring(0));
+              setImageUrl(BACKEND_URL + currentResume.photo);
             }
           }
         });
@@ -111,13 +126,23 @@ export const CreateResume = () => {
   }, []);
 
   const onFinish = () => {
+    const records = createResumeForm.getFieldValue("employment_records")
+      ? createResumeForm.getFieldValue("employment_records").map((el) => {
+          return {
+            ...el,
+            start_date: dayjs(el.start_date).format("YYYY-MM-DDTHH:mm:ss"),
+            end_date: dayjs(el.start_date).format("YYYY-MM-DDTHH:mm:ss"),
+            still_working: false
+          };
+        })
+      : [];
+    console.log(records);
     setLoading(true);
     const data = {
       applicant_id: userId,
       ...createResumeForm.getFieldsValue(),
       contacts: createResumeForm.getFieldValue("contacts") ?? [],
-      employment_records:
-        createResumeForm.getFieldValue("employment_records") ?? [],
+      employment_records: records,
       education: createResumeForm.getFieldValue("education") ?? [],
       personal_qualities: tags.join(",")
     };

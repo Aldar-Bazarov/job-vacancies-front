@@ -16,7 +16,7 @@ export default class AxiosBuilder {
 
   private errorInterceptors: any[] = [];
 
-  constructor() {
+  constructor(token?: string) {
     this.options = {
       withCredentials: true,
       headers: {
@@ -24,7 +24,8 @@ export default class AxiosBuilder {
         "Cache-Control": "no-cache",
         Expires: "0",
         Lang: "ru",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
       }
     };
   }

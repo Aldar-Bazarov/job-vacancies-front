@@ -1,4 +1,4 @@
-import { AxiosBuilder, unpack } from "@infrastructure/axios";
+import { AxiosBuilder, authInterceptor, unpack } from "@infrastructure/axios";
 
 import { VacancyInfo } from "./types";
 
@@ -7,6 +7,8 @@ const axios = new AxiosBuilder()
   .addNotFoundErrorHandler()
   .addUnauthorizedHandler()
   .build();
+
+axios.interceptors.request.use(authInterceptor);
 
 export const vacanciesApi = {
   async getVacancies() {

@@ -1,5 +1,5 @@
 import { VacancyInfo } from "@api/vacancies/types";
-import { AxiosBuilder, unpack } from "@infrastructure/axios";
+import { AxiosBuilder, authInterceptor, unpack } from "@infrastructure/axios";
 
 import { CompanyBody, CompanyInfo, VacancyBody } from "./types";
 
@@ -21,6 +21,8 @@ const axios = new AxiosBuilder()
   .addBusinessErrorHandler()
   .addNotFoundErrorHandler()
   .build();
+
+axios.interceptors.request.use(authInterceptor);
 
 export const searchApi = {
   async getCompanyByProperties({
