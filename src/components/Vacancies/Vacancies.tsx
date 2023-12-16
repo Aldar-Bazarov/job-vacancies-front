@@ -17,60 +17,37 @@ import styles from "./Vacancies.module.scss";
 export const Vacancies = () => {
   const [inputValue, setInputValue] = useState<string>("");
   const [vacancies, setVacancies] = useState<VacancyInfo[]>([]);
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const [total, setTotal] = useState<number>(0);
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
 
-  //Мне честно ок, мы уже все равно не можем ждать, пока они сделают норм поиск)))
   const handleSearch = async () => {
     setLoading(true);
-    let result: VacancyInfo[] = [];
-
     await searchApi
       .getVacanciesBySearch({
-        description: inputValue,
-        rate_id: 1
+        name: inputValue,
+        page
       })
       .then((data) => {
-        result = result.concat(data.vacancies);
-      });
-
-    await searchApi
-      .getVacanciesBySearch({
-        description: inputValue,
-        rate_id: 2
-      })
-      .then((data) => {
-        result = result.concat(data.vacancies);
-      });
-
-    await searchApi
-      .getVacanciesBySearch({
-        description: inputValue,
-        rate_id: 3
-      })
-      .then((data) => {
-        result = result.concat(data.vacancies);
+        setVacancies(data.vacancies);
+        setTotal(data.total);
       })
       .finally(() => setLoading(false));
-
-    setVacancies(result);
-    setTotal(result.length);
   };
 
   useEffect(() => {
     setLoading(true);
-    vacanciesApi
-      .getVacancies()
+    searchApi
+      .getVacanciesBySearch({
+        name: "",
+        page
+      })
       .then((data) => {
-        setVacancies(data);
+        setVacancies(data.vacancies);
+        setTotal(data.total);
       })
       .finally(() => setLoading(false));
-  }, []);
-
-  const handleChangePage = () => {
-    setCurrentPage((prev) => prev + 1);
-  };
+  }, [page]);
 
   return (
     <>
@@ -111,8 +88,8 @@ export const Vacancies = () => {
         </Row>
         <CustomPagination
           total={total}
-          handleSearch={(val: number) => setCurrentPage(val)}
-          current={currentPage}
+          handleSearch={(val: number) => setPage(val)}
+          current={page}
         />
       </div>
     </>

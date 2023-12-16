@@ -48,13 +48,14 @@ export const searchApi = {
     }
   },
 
-  async getVacanciesBySearch({ description, rate_id }: Partial<VacancyBody>) {
+  async getVacanciesBySearch({ name, page }: { name: string; page: number }) {
     const response = await axios.post<VacanciesResponse>(
-      "/search/get_vacancies",
+      "/search/get_vacancies?limit=10&" + (page ? `page=${page}` : ""),
       {
-        description,
+        name,
+        description: "",
         company_id: 0,
-        rate_id: rate_id,
+        rate_id: -1,
         experience_min: 0,
         experience_max: 0,
         salary_min: 0,
