@@ -1,4 +1,4 @@
-import { Col, Row } from "antd";
+import { Col, Divider, Row } from "antd";
 
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
@@ -69,11 +69,11 @@ export const Vacancies = () => {
     <div className={styles["vacancies"]}>
       <Search
         handleSearch={handleSearch}
-        inputPlaceholder={"Введите вакансию..."}
+        inputPlaceholder={"Начните вводить название для поиска..."}
         inputValue={inputValue}
         setInputValue={setInputValue}
       />
-      <hr className={styles["hr"]} />
+      <Divider />
       <Row gutter={[32, 32]}>
         {vacancies.map((el) => (
           <Col span={12} key={el.id}>

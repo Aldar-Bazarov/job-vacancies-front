@@ -77,7 +77,14 @@ export const Vacancy = () => {
           </Col>
           <Col span={12}>
             <Link to={`/company/${company.id}`}>
-              <Card imageSrc={company.logo_path}>
+              <Card
+                imageSrc={
+                  company?.logo_path?.slice(1)
+                    ? import.meta.env.VITE_BASE_API_URL +
+                      company?.logo_path?.slice(1)
+                    : "/images/default-avatar.jpg"
+                }
+              >
                 <Card.Title>{company.name}</Card.Title>
                 <Card.Title level="2">
                   Численность сотрудников более {company.population}
@@ -98,14 +105,11 @@ export const Vacancy = () => {
           <Button type="text" size="large" onClick={() => navigate(-1)}>
             Назад
           </Button>
-          {/* {getRole() === "applicants" && (
+          {getRole() === "applicants" && (
             <Button type="primary" size="large" onClick={handleRespond}>
               Откликнуться
             </Button>
-          )} */}
-          <Button type="primary" size="large" onClick={handleRespond}>
-            Откликнуться
-          </Button>
+          )}
         </Flex>
       </div>
     )

@@ -35,7 +35,7 @@ export const Header: React.FC = () => {
             </Link>
             <Link to={"/applicants"}>
               <Typography.Title level={5} className={styles["item"]}>
-                Исполнители
+                Отклики
               </Typography.Title>
             </Link>
           </>
@@ -70,11 +70,12 @@ const PopoverContent = () => {
           <Link to={"/profile"}>
             <Typography>Мой профиль</Typography>
           </Link>
-          {role === "applicants" ? (
-            <Link to={"/company/create"}>
-              <Typography>Создать резюме</Typography>
+          {role === "applicants" && (
+            <Link to={"/resume/create"}>
+              <Typography>Моё резюме</Typography>
             </Link>
-          ) : (
+          )}{" "}
+          {role === "recruiters" && (
             <Link to={"/company/create"}>
               <Typography>Компания</Typography>
             </Link>

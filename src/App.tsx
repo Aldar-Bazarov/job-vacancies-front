@@ -8,12 +8,15 @@ import { Applicants } from "@pages/Applicants/Applicants";
 import { Authorization } from "@pages/Authorization/Authorization";
 import { Companies } from "@pages/Companies/Companies";
 import { Company } from "@pages/Company/Company";
+import { CreateResume } from "@pages/CreateResume/CreateResume";
 import { Home } from "@pages/Home/Home";
 import { NotFound } from "@pages/NotFound/NotFound";
 import { Profile } from "@pages/Profile/Profile";
 import { Registration } from "@pages/Registration/Registration";
+import { Resume } from "@pages/Resume/Resume";
 // eslint-disable-next-line import/order
 import { CreateVacancy } from "@components/CreateVacancy/CreateVacancy";
+import { Resumes } from "@pages/Resumes/Resumes";
 
 const App: React.FC = () => {
   return (
@@ -41,9 +44,9 @@ const App: React.FC = () => {
         <Route
           path="applicants"
           element={
-            // <RequireAuth>
-            <Applicants />
-            // </RequireAuth>
+            <RequireAuth>
+              <Applicants />
+            </RequireAuth>
           }
         />
         <Route path="vacancies" element={<Vacancies />} />
@@ -54,6 +57,30 @@ const App: React.FC = () => {
           element={
             <RequireAuth>
               <CreateVacancy />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="resume/create"
+          element={
+            <RequireAuth>
+              <CreateResume />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="resumes"
+          element={
+            <RequireAuth>
+              <Resumes />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="resume/:resumeId"
+          element={
+            <RequireAuth>
+              <Resume />
             </RequireAuth>
           }
         />

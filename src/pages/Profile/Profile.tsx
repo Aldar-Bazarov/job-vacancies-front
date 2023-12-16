@@ -27,7 +27,7 @@ export const Profile: React.FC = () => {
   const { profileId } = useParams();
   const [isLoading, setIsLoading] = useState(false);
   const [isReadOnly, setIsReadOnly] = useState(true);
-  const [tags, setTags] = useState<string[]>([]);
+  const [tags, setTags] = useState(["Placeholder1", "Placeholder2"]);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [fullUserName, setFullUserName] = useState<string>("");
   const [userIsApplicant, setUserIsApplicant] = useState(true);
@@ -120,12 +120,6 @@ export const Profile: React.FC = () => {
             <Row>
               <Col span={24}>
                 <Row align="middle" justify="start">
-                  <Col flex="110px" style={{ marginBottom: "auto" }}>
-                    <Avatar
-                      size={100}
-                      src={imageUrl ?? "/images/default-avatar.jpg"}
-                    />
-                  </Col>
                   <Col flex="auto">
                     <EditableFormItem
                       icon={<></>}
@@ -143,77 +137,6 @@ export const Profile: React.FC = () => {
                 </Row>
               </Col>
             </Row>
-            {userIsApplicant && (
-              <>
-                <Divider style={{ borderColor: "#7E7E7E66" }} />
-
-                {/* <Row>
-                  <Col span={12}>
-                    <EditableFormItem
-                      icon={<InfoIcon />}
-                      title={"Основная информация"}
-                      readonly={isReadOnly}
-                    >
-                      <EditableFormItem.EditablePart>
-                        <EditableMainInfo />
-                      </EditableFormItem.EditablePart>
-                      <EditableFormItem.ReadOnlyPart>
-                        <ReadonlyMainInfo />
-                      </EditableFormItem.ReadOnlyPart>
-                    </EditableFormItem>
-                  </Col>
-                </Row>
-                <Divider style={{ borderColor: "#7E7E7E66" }} /> */}
-
-                <Row>
-                  {/* <Col span={12}>
-                    <EditableFormItem
-                      icon={<EducationIcon />}
-                      title={"Образование"}
-                      readonly={isReadOnly}
-                    >
-                      <EditableFormItem.EditablePart>
-                        <EditableEducation />
-                      </EditableFormItem.EditablePart>
-                      <EditableFormItem.ReadOnlyPart>
-                        <ReadonlyEducation />
-                      </EditableFormItem.ReadOnlyPart>
-                    </EditableFormItem>
-                  </Col> */}
-                  <Col span={12}>
-                    <EditableFormItem
-                      icon={<SkillsIcon />}
-                      title={"Ключ. навыки"}
-                      readonly={isReadOnly}
-                      notAlternate={true}
-                    >
-                      <EditableFormItem.NotAlternatePart>
-                        <HardSkills setTags={setTags} tags={tags} />
-                      </EditableFormItem.NotAlternatePart>
-                    </EditableFormItem>
-                  </Col>
-                </Row>
-                <Divider style={{ borderColor: "#7E7E7E66" }} />
-
-                <Row>
-                  <Col span={24}>
-                    <EditableFormItem
-                      icon={<AboutIcon />}
-                      title={"Обо мне"}
-                      readonly={isReadOnly}
-                    >
-                      <EditableFormItem.EditablePart>
-                        <EditableAbout />
-                      </EditableFormItem.EditablePart>
-                      <EditableFormItem.ReadOnlyPart>
-                        <ReadonlyAbout />
-                      </EditableFormItem.ReadOnlyPart>
-                    </EditableFormItem>
-                  </Col>
-                </Row>
-              </>
-            )}
-            <Divider style={{ borderColor: "#7E7E7E66" }} />
 
             {!isReadOnly && (
               <Flex style={{ width: "100%" }} justify={"end"} align={"end"}>

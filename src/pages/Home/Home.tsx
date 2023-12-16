@@ -27,6 +27,7 @@ export const Home: React.FC = () => {
     companyApi
       .getCompanies()
       .then((data) => {
+        data.sort((p1, p2) => p2.responses_count - p1.responses_count);
         setCompanies(data.length < 7 ? data : data.slice(0, 6));
       })
       .catch((error) => message.error(error.message));

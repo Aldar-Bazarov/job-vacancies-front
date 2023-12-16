@@ -68,10 +68,11 @@ export const EditableHeader: React.FC<IEditableHeaderProps> = ({
       </Col>
       <Col span={8}>
         <Form.Item label="Почта">
-          <Input
+          <Typography>{context?.profileData.user.email}</Typography>
+          {/* <Input
             value={context?.profileData.user.email}
             readOnly={context?.isReadOnly}
-          />
+          /> */}
         </Form.Item>
 
         {context?.userIsApplicant && (
@@ -94,7 +95,7 @@ export const EditableHeader: React.FC<IEditableHeaderProps> = ({
           </Form.Item>
         )}
       </Col>
-      <Col span={8}>
+      {/* <Col span={8}>
         {!context?.isReadOnly && (
           <Space
             direction="vertical"
@@ -114,7 +115,7 @@ export const EditableHeader: React.FC<IEditableHeaderProps> = ({
             </Upload>
           </Space>
         )}
-      </Col>
+      </Col> */}
     </Row>
   );
 };
@@ -138,14 +139,18 @@ export const ReadonlyHeader: React.FC<IReadonlyHeaderProps> = () => {
     <Row>
       <Col span={6}>
         <Space direction="vertical" size={1}>
+          <Typography.Text>
+            {"Почта: " + context?.profileData.user.email}
+          </Typography.Text>
+        </Space>
+      </Col>
+      <Col span={6}>
+        <Space direction="vertical" size={1}>
           {context?.userIsApplicant && (
             <Typography.Text>
               {getStatusTitle(context?.profileData.status_id ?? 2)}
             </Typography.Text>
           )}
-          <Typography.Text>
-            {"Почта: " + context?.profileData.user.email}
-          </Typography.Text>
         </Space>
       </Col>
     </Row>

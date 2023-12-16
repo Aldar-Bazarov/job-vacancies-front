@@ -10,6 +10,7 @@ export interface Responder {
   applicant_name: string;
   applicant_description: string;
   resume_id: number;
+  vacancy_id: number;
   vacancy_title: string;
 }
 

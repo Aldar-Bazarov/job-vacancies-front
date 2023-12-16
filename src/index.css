@@ -36,6 +36,8 @@ a {
 }
 
 .ant-select .ant-select-arrow,
-.ant-pagination-item-ellipsis {
+.ant-pagination-item-ellipsis,
+.ant-select-selection-placeholder,
+.ant-select-selection-placeholder:where(.css-dev-only-do-not-override-6otnvf).ant-select {
   color: #fff;
 }
