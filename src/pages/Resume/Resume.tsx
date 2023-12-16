@@ -1,4 +1,4 @@
-import { Button, Col, Row, Divider, Typography } from "antd";
+import { Button, Col, Row, Divider, Typography, Avatar } from "antd";
 import { Flex } from "antd";
 
 import { useCallback, useEffect, useState } from "react";
@@ -17,12 +17,14 @@ const contactType = [
 export const Resume = () => {
   const { state } = useLocation();
   const { resumeId } = useParams();
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
 
   // eslint-disable-next-line
   const [resume, setResume] = useState<any>(null);
   // eslint-disable-next-line
   const [applicant, setApplicant] = useState<any>(null);
   const [loading, setLoading] = useState(false);
+  const BACKEND_URL = "https://jobhunter.woopwoopserver.com";
 
   useEffect(() => {
     if (resumeId) setLoading(true);
@@ -30,6 +32,11 @@ export const Resume = () => {
       .getOneResume(+resumeId)
       .then((data) => {
         setResume(data);
+        if (data.photo === "" || data.photo === null) {
+          setImageUrl(null);
+        } else {
+          setImageUrl(BACKEND_URL + data.photo?.substring(0));
+        }
         resumeApi.getResumes().then((resumes) => {
           const userId = resumes.find((el) => el.id === resumeId);
           // TODO: Тут будет запрос на получение юзера по id
@@ -63,6 +70,9 @@ export const Resume = () => {
         <Typography.Title>
           {applicant.first_name + " " + applicant.last_name}
         </Typography.Title>
+        <Row>
+          <Avatar size={100} src={imageUrl ?? "/images/default-avatar.jpg"} />
+        </Row>
         <Typography.Title level={5}>Название должности</Typography.Title>
         <Typography>{resume.job_title}</Typography>
         <Typography.Title level={5}>Описание резюме</Typography.Title>
@@ -106,7 +116,7 @@ export const Resume = () => {
         </Col>
       </Row>
       <Divider style={{ borderColor: "#7E7E7E66" }} />
-      {state.responsible && (
+      {state?.responsible && (
         <Flex
           style={{ width: "100%", columnGap: "20px" }}
           justify={"end"}

@@ -1,4 +1,6 @@
+import { LoadPhotoError } from "@api/company/errors";
 import { AxiosBuilder, unpack } from "@infrastructure/axios";
+import { DataURIToBlob } from "@infrastructure/image-upload";
 
 import { ResponseData, UpdateResponseData } from "./types";
 
@@ -45,5 +47,31 @@ export const resumeApi = {
     const { resumeId, resume } = data;
     const response = await axios.put(`/resumes/${resumeId}`, resume);
     return unpack(response);
+  },
+
+  // eslint-disable-next-line
+  async loadPhoto(id: number, uri: string): Promise<any> {
+    try {
+      const formData = new FormData();
+      const blob = DataURIToBlob(uri);
+      formData.append(
+        "photo",
+        blob,
+        `resume_logo${id}.${blob.type.split("/")[1]}`
+      );
+      // eslint-disable-next-line
+      const response = await axios.postForm<any>(
+        `/resumes/${id}/photo`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data"
+          }
+        }
+      );
+      return unpack(response);
+    } catch (err) {
+      throw new LoadPhotoError(err as Error);
+    }
   }
 };

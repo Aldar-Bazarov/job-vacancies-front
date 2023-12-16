@@ -8,18 +8,27 @@ import {
   Input,
   Select,
   InputNumber,
-  DatePicker
+  DatePicker,
+  Avatar
 } from "antd";
 import { Flex } from "antd";
 import TextArea from "antd/es/input/TextArea";
+import Upload, {
+  RcFile,
+  UploadChangeParam,
+  UploadFile,
+  UploadProps
+} from "antd/es/upload";
 
 import { useEffect, useState } from "react";
 
+import { UploadOutlined } from "@ant-design/icons";
 import { resumeApi } from "@api/resume/resume.api";
 import { userApi } from "@api/user/user.api";
 import { EditableFormItem } from "@components/EditableFormItem/EditableFormItem";
 import { Loader } from "@components/Loader/Loader";
 import { getRole } from "@infrastructure/axios/auth";
+import { beforeUpload, getBase64 } from "@infrastructure/image-upload";
 import { Role } from "@interfaces/user";
 
 import styles from "./CreateResume.module.scss";
@@ -46,6 +55,24 @@ export const CreateResume = () => {
   const [userId, setUserId] = useState<number>();
   const [resumeExist, setResumeExist] = useState(false);
   const [resumeId, setResumeId] = useState<number>();
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const BACKEND_URL = "https://jobhunter.woopwoopserver.com";
+
+  const handleChange: UploadProps["onChange"] = (
+    info: UploadChangeParam<UploadFile>
+  ) => {
+    if (info.file.status === "done") {
+      getBase64(info.file.originFileObj as RcFile, (url) => {
+        setImageUrl(url);
+      });
+    }
+  };
+  // eslint-disable-next-line
+  const dummyRequest = (options: any) => {
+    setTimeout(() => {
+      options.onSuccess("ok");
+    }, 0);
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -72,6 +99,11 @@ export const CreateResume = () => {
             }
             setResumeId(currentResume.id);
             setResumeExist(true);
+            if (currentResume.photo === "" || currentResume.photo === null) {
+              setImageUrl(null);
+            } else {
+              setImageUrl(BACKEND_URL + currentResume.photo?.substring(0));
+            }
           }
         });
       })
@@ -92,10 +124,20 @@ export const CreateResume = () => {
     if (resumeExist) {
       resumeApi
         .updateResumes({ resumeId: resumeId, resume: data })
+        .then(() => {
+          if (imageUrl !== null) {
+            resumeApi.loadPhoto(resumeId!, imageUrl);
+          }
+        })
         .finally(() => setLoading(false));
     } else {
       resumeApi
         .createResumes({ resume: data })
+        .then(() => {
+          if (imageUrl !== null) {
+            resumeApi.loadPhoto(data.id, imageUrl);
+          }
+        })
         .finally(() => setLoading(false));
     }
   };
@@ -114,6 +156,29 @@ export const CreateResume = () => {
       >
         <Col span={24}>
           <Typography.Title>Моё резюме</Typography.Title>
+          <Row
+            style={{
+              marginBottom: "1rem"
+            }}
+          >
+            <Avatar
+              size={100}
+              src={imageUrl ?? "/images/default-avatar.jpg"}
+              style={{
+                marginRight: "2rem"
+              }}
+            />
+            <Upload
+              showUploadList={false}
+              customRequest={dummyRequest}
+              beforeUpload={beforeUpload}
+              onChange={handleChange}
+            >
+              <Button icon={<UploadOutlined />} type="primary" size="large">
+                Добавить фото
+              </Button>
+            </Upload>
+          </Row>
           <Typography.Title level={5}>Название должности</Typography.Title>
           <Form.Item
             name="job_title"
