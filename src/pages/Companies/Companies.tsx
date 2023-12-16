@@ -91,7 +91,7 @@ export const Companies = () => {
                 <Card.Property icon={<ResponseIcon />}>
                   {company.responses_count} откликов
                 </Card.Property>
-                <Card.Content>{cutText(company.description, 130)}</Card.Content>
+                <Card.Content>{cutText(company.description, 80)}</Card.Content>
               </Card>
             </Link>
           </Col>
