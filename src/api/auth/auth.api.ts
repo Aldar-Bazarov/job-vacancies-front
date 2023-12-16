@@ -34,6 +34,7 @@ export const authApi = {
   },
   async logout(): Promise<void> {
     try {
+      localStorage.clear();
       await axios.delete<void>("/auth/tokens");
     } catch (err) {
       throw new LogoutError(err as Error);

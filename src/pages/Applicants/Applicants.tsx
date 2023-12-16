@@ -1,80 +1,72 @@
-import { Col, Divider, Row } from "antd";
+import { Col, Row } from "antd";
 
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
-import { respondersApi } from "@api/responders/responders.api";
-import { ProfileInfoDto } from "@api/user/types";
+import { companyApi } from "@api/company/company.api";
+import { Responder, respondersApi } from "@api/responders/responders.api";
+import { userApi } from "@api/user/user.api";
 import { Card } from "@components/Card";
-import { CustomPagination } from "@components/CustomPagination/Pagination";
-import { WorkIcon } from "@components/Icons";
-import { Search } from "@components/Search/Search";
-
-import styles from "./Applicants.module.scss";
-import data from "./mock-applicants.json";
+import { getRole } from "@infrastructure/axios/auth";
+import { Role } from "@interfaces/user";
+import { cutText } from "@utils/utils";
 
 export const Applicants = () => {
-  const [inputValue, setInputValue] = useState<string>("");
+  const [responds, setResponds] = useState<Responder[]>([]);
 
-  const [applicants, setApplicants] = useState<ProfileInfoDto[]>([]);
+  const [userId, setUserId] = useState<number | null>(null);
+  const [companyId, setCompanyId] = useState<number | undefined | null>(null);
 
-  useEffect(() => {
-    respondersApi
-      .getRespondersByCompany({ company_id: 2 })
-      .then((data) => console.log(data));
-  }, []);
-
-  const handleSearch = () => {
-    //TODO поиск исполнителей
-    //Посмотри на примере других поисков, там дурацкая система
+  const apiGetUser = (role: Role) => {
+    return userApi.getMyProfile({ role: role }).then((data) => {
+      setUserId(data.user_id);
+    });
   };
 
+  useEffect(() => {
+    apiGetUser(getRole() as Role);
+  }, []);
+
+  useEffect(() => {
+    if (userId)
+      companyApi
+        .getCompanies()
+        .then((companies) => {
+          return companies.filter((el) => el.owner_id === userId)[0].id;
+        })
+        .then((company_id) => {
+          setCompanyId(company_id);
+          return;
+        });
+  }, [userId]);
+
+  useEffect(() => {
+    if (companyId)
+      respondersApi
+        .getRespondersByCompany({ company_id: companyId })
+        .then((resumes) => {
+          setResponds(resumes);
+          return;
+        });
+  }, [companyId]);
+
   return (
-    <div className={styles["applicants"]}>
-      <Search
-        inputPlaceholder="Начните вводить ФИО для поиска..."
-        inputValue={inputValue}
-        setInputValue={setInputValue}
-        handleSearch={handleSearch}
-      >
-        <Search.FilterItem
-          title="Сортировка по"
-          handleChange={(value: string) => {
-            value;
-          }}
-          options={[
-            {
-              value: "name",
-              label: "Имени"
-            }
-          ]}
-        />
-      </Search>
-      <Divider />
+    <>
       <Row gutter={[48, 24]}>
-        {applicants.map((applicant) => {
-          return (
-            <Col span={12} key={applicant.user_id}>
-              <Card imageSrc={applicant.user.avatar}>
-                <Card.Title>
-                  {applicant.user.first_name + " " + applicant.user.last_name}
-                </Card.Title>
-                <Card.Title level="2">
-                  {applicant.user.salary} тыс. руб
-                </Card.Title>
-                <Card.Property icon={<WorkIcon />}>
-                  {applicant.user.experience} года
-                </Card.Property>
-                <Card.Content>{applicant.user.about}</Card.Content>
+        {responds.map((respond) => (
+          <Col span={12} key={respond.resume_id}>
+            <Link to={`/resume/${respond.resume_id}`}>
+              <Card imageSrc="">
+                <Card.Title>{respond.applicant_name}</Card.Title>
+                <Card.Title level="2">{respond.vacancy_title}</Card.Title>
+                <Card.Content>
+                  {cutText(respond.applicant_description, 30)}
+                </Card.Content>
               </Card>
-            </Col>
-          );
-        })}
+            </Link>
+          </Col>
+        ))}
       </Row>
-      <CustomPagination
-        current={1}
-        total={data.length + 500}
-        handleSearch={handleSearch}
-      />
-    </div>
+    </>
   );
 };

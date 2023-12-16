@@ -14,6 +14,7 @@ import { Profile } from "@pages/Profile/Profile";
 import { Registration } from "@pages/Registration/Registration";
 // eslint-disable-next-line import/order
 import { CreateVacancy } from "@components/CreateVacancy/CreateVacancy";
+import { Resumes } from "@pages/Resumes/Resumes";
 
 const App: React.FC = () => {
   return (
@@ -49,6 +50,7 @@ const App: React.FC = () => {
         <Route path="vacancies" element={<Vacancies />} />
         <Route path="vacancies/:vacancyId" element={<Vacancy />} />
         <Route path="companies" element={<Companies />} />
+        <Route path="resumes" element={<Resumes />} />
         <Route
           path="create-vacancy"
           element={
